@@ -69,6 +69,7 @@ import com.florence.app.presentation.company.CompanyDetailScreen
 import com.florence.app.presentation.economy.EconomyScreen
 import com.florence.app.presentation.home.DashboardScreen
 import com.florence.app.presentation.ipo.IpoScreen
+import com.florence.app.presentation.portfolio.PortfolioDetailScreen
 import com.florence.app.presentation.portfolio.PortfolioScreen
 import com.florence.app.presentation.profile.ProfileScreen
 import com.florence.app.presentation.reports.ReportsScreen
@@ -181,7 +182,8 @@ private fun MainScaffold(viewModel: RootViewModel) {
     val scope = rememberCoroutineScope()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
-    val isDetail = currentRoute?.startsWith("company/") == true
+    val isDetail = currentRoute?.startsWith("company/") == true ||
+        currentRoute?.startsWith("portfolio/") == true
     val creditsViewModel: CreditsViewModel = hiltViewModel()
     val creditsState by creditsViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -371,7 +373,19 @@ private fun MainScaffold(viewModel: RootViewModel) {
                         },
                     )
                 }
-                composable("portfolio") { PortfolioScreen() }
+                composable("portfolio") {
+                    PortfolioScreen(
+                        onOpenPortfolio = { portfolioId ->
+                            navController.navigate("portfolio/$portfolioId")
+                        },
+                    )
+                }
+                composable(
+                    route = "portfolio/{portfolioId}",
+                    arguments = listOf(navArgument("portfolioId") { type = NavType.StringType }),
+                ) {
+                    PortfolioDetailScreen(onBack = { navController.popBackStack() })
+                }
                 composable("reports") { ReportsScreen() }
                 composable("advisor") { AdvisorScreen() }
                 composable("ipos") { IpoScreen() }

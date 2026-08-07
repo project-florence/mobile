@@ -19,6 +19,9 @@ import com.florence.app.data.model.MaintenanceResponse
 import com.florence.app.data.model.NewsItem
 import com.florence.app.data.model.Portfolio
 import com.florence.app.data.model.PortfolioSnapshot
+import com.florence.app.data.model.PortfolioTransaction
+import com.florence.app.data.model.AddTransactionRequest
+import com.florence.app.data.model.AddTransactionResponse
 import com.florence.app.data.model.Quote
 import com.florence.app.data.model.ReportHistoryItem
 import com.florence.app.data.model.ReportsInfoResponse
@@ -127,6 +130,15 @@ interface FlorenceApi : AuthEndpoints {
 
     @GET("api/v1/portfolios/{id}/snapshot")
     suspend fun portfolioSnapshot(@Path("id") id: String): PortfolioSnapshot
+
+    @GET("api/v1/portfolios/{id}/transactions")
+    suspend fun portfolioTransactions(@Path("id") id: String): List<PortfolioTransaction>
+
+    @POST("api/v1/portfolios/{id}/transactions")
+    suspend fun addTransaction(
+        @Path("id") id: String,
+        @Body body: AddTransactionRequest,
+    ): AddTransactionResponse
 
     // ---- IPO ----
     @GET("api/v1/ipos/active")

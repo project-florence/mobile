@@ -44,6 +44,7 @@ import java.util.Locale
 
 @Composable
 fun PortfolioScreen(
+    onOpenPortfolio: (String) -> Unit,
     viewModel: PortfolioViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -93,7 +94,10 @@ fun PortfolioScreen(
                         )
                     }
                     items(uiState.portfolios, key = { it.metadata?.id ?: it.hashCode() }) { pf ->
-                        PortfolioCard(pf)
+                        PortfolioCard(
+                            pf = pf,
+                            onClick = { pf.metadata?.id?.let(onOpenPortfolio) },
+                        )
                     }
                     if (uiState.error != null) {
                         item {
@@ -135,9 +139,9 @@ fun PortfolioScreen(
 }
 
 @Composable
-private fun PortfolioCard(pf: com.florence.app.data.model.Portfolio) {
+private fun PortfolioCard(pf: com.florence.app.data.model.Portfolio, onClick: () -> Unit) {
     val meta = pf.metadata
-    FlorenceCard(modifier = Modifier.fillMaxWidth()) {
+    FlorenceCard(onClick = onClick, modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.weight(1f)) {

@@ -121,8 +121,22 @@ data class PortfolioTransaction(
     val type: String? = null,
     val quantity: Double? = null,
     val price: Double? = null,
+    val commission: Double? = null,
     val total: Double? = null,
+    val date: String? = null,
     @SerialName("created_at") val createdAt: String? = null,
+)
+
+@Serializable
+data class PortfolioAsset(
+    val ticker: String? = null,
+    val amount: Double? = null,
+    @SerialName("current_price") val currentPrice: Double? = null,
+    @SerialName("total_value") val totalValue: Double? = null,
+    @SerialName("total_cost") val totalCost: Double? = null,
+    @SerialName("weighted_avg_cost") val weightedAvgCost: Double? = null,
+    @SerialName("unrealized_pnl") val unrealizedPnl: Double? = null,
+    @SerialName("unrealized_pnl_pct") val unrealizedPnlPct: Double? = null,
 )
 
 @Serializable
@@ -133,6 +147,7 @@ data class PortfolioValuation(
     @SerialName("total_pnl") val totalPnl: Double? = null,
     @SerialName("pnl_percentage") val pnlPercentage: Double? = null,
     @SerialName("as_of") val asOf: String? = null,
+    val assets: List<PortfolioAsset> = emptyList(),
 )
 
 @Serializable
@@ -146,6 +161,18 @@ data class CreatePortfolioRequest(
     val name: String,
     val currency: String = "TRY",
     @SerialName("initial_balance") val initialBalance: Double,
+)
+
+@Serializable
+data class AddTransactionRequest(
+    val ticker: String,
+    val type: String = "BUY",
+    val quantity: Double,
+)
+
+@Serializable
+data class AddTransactionResponse(
+    val message: String? = null,
 )
 
 // ---- IPO ----

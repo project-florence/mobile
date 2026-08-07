@@ -1,10 +1,12 @@
 package com.florence.app.data.repository
 
 import com.florence.app.data.api.FlorenceApi
+import com.florence.app.data.model.AddTransactionRequest
 import com.florence.app.data.model.CreatePortfolioRequest
 import com.florence.app.data.model.IpoItem
 import com.florence.app.data.model.Portfolio
 import com.florence.app.data.model.PortfolioSnapshot
+import com.florence.app.data.model.PortfolioTransaction
 import com.florence.app.data.model.ReportHistoryItem
 import com.florence.app.data.model.ReportsInfoResponse
 import javax.inject.Inject
@@ -23,6 +25,22 @@ class PortfolioRepository @Inject constructor(private val api: FlorenceApi) {
 
     suspend fun snapshot(portfolioId: String): Result<PortfolioSnapshot> =
         runCatching { api.portfolioSnapshot(portfolioId) }
+
+    suspend fun transactions(portfolioId: String): Result<List<PortfolioTransaction>> =
+        runCatching { api.portfolioTransactions(portfolioId) }
+
+    suspend fun addTransaction(
+        portfolioId: String,
+        ticker: String,
+        type: String,
+        quantity: Double,
+    ): Result<Unit> =
+        runCatching {
+            api.addTransaction(
+                portfolioId,
+                AddTransactionRequest(ticker = ticker, type = type, quantity = quantity),
+            )
+        }
 }
 
 @Singleton
