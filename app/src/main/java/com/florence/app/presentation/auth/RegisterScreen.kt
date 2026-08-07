@@ -41,6 +41,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.florence.app.R
 import com.florence.app.core.theme.TextSecondary
 import com.florence.app.presentation.components.LogoMark
+import com.florence.app.presentation.components.ShaderBackground
 
 @Composable
 fun RegisterScreen(
@@ -54,16 +55,7 @@ fun RegisterScreen(
     var confirm by rememberSaveable { mutableStateOf("") }
     var validationError by rememberSaveable { mutableStateOf<Int?>(null) }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(Color(0xFF0E1A33), MaterialTheme.colorScheme.background),
-                    startY = 0f, endY = 1400f,
-                ),
-            ),
-    ) {
+    ShaderBackground {
         Column(
             modifier = Modifier
                 .fillMaxSize()

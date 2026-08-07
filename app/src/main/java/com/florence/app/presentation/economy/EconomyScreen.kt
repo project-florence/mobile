@@ -1,0 +1,112 @@
+package com.florence.app.presentation.economy
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.florence.app.core.theme.TextSecondary
+import com.florence.app.presentation.components.EmptyState
+import com.florence.app.presentation.components.FlorenceCard
+import com.florence.app.presentation.components.formatPrice
+
+@Composable
+fun EconomyScreen(
+    viewModel: EconomyViewModel = hiltViewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    when {
+        uiState.loading -> {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            }
+        }
+        uiState.currency.isEmpty() -> {
+            EmptyState(
+                title = "Döviz verisi bekleniyor",
+                subtitle = "Kur verisi sağlayıcısı şu an yanıt vermiyor. Kısa süre sonra tekrar dene.",
+            )
+        }
+        else -> {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(
+                    start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp,
+                ),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                item {
+                    Text(
+                        text = "Döviz Kurları",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Text(
+                        text = "Güncel kur bilgileri",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                items(uiState.currency.size) { index ->
+                    val (symbol, quote) = uiState.currency.entries.elementAt(index)
+                    CurrencyRow(symbol, quote)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CurrencyRow(symbol: String, quote: com.florence.app.data.model.CurrencyQuote) {
+    FlorenceCard(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = symbol,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(
+                    text = quote.name ?: "",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = TextSecondary,
+                )
+            }
+            Column(horizontalAlignment = Alignment.End) {
+                Text(
+                    text = formatPrice(quote.rate ?: 0.0),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                quote.changePct?.let {
+                    Text(
+                        text = if (it >= 0) "+%.2f%%".format(it) else "%.2f%%".format(it),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = if (it >= 0) com.florence.app.core.theme.UpColor else com.florence.app.core.theme.DownColor,
+                    )
+                }
+            }
+        }
+    }
+}

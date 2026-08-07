@@ -3,10 +3,16 @@
     <string name="app_name">Florence</string>
 
     <!-- Navigation -->
-    <string name="nav_market">Market</string>
-    <string name="nav_search">Search</string>
+    <string name="nav_market">Market Overview</string>
+    <string name="nav_search">Search Stocks</string>
     <string name="nav_portfolio">Portfolio</string>
     <string name="nav_profile">Profile</string>
+    <string name="nav_watchlist">Watchlist</string>
+    <string name="nav_reports">AI Reports</string>
+    <string name="nav_advisor">AI Advisor</string>
+    <string name="nav_ipos">IPOs</string>
+    <string name="nav_economy">FX &amp; Metals</string>
+    <string name="nav_logout">Sign out</string>
 
     <!-- Auth -->
     <string name="auth_tagline">Your smart investment assistant</string>

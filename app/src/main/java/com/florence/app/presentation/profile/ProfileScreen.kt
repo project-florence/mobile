@@ -1,86 +1,142 @@
 package com.florence.app.presentation.profile
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.florence.app.BuildConfig
-import com.florence.app.R
+import com.florence.app.core.theme.DownColor
+import com.florence.app.core.theme.FlorencePalettes
+import com.florence.app.presentation.components.EmptyState
+import com.florence.app.presentation.components.FlorenceCard
+import com.florence.app.presentation.components.LogoMark
 
 @Composable
 fun ProfileScreen(
-    onGoToLogin: () -> Unit,
+    onLoggedOut: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
-    val session by viewModel.session.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = androidx.compose.foundation.layout.PaddingValues(
+            start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp,
+        ),
+        verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
-        Text(
-            text = stringResource(R.string.profile_title),
-            style = MaterialTheme.typography.titleLarge,
-        )
-
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(
-                    text = stringResource(R.string.app_name),
-                    style = MaterialTheme.typography.titleMedium,
-                )
-                Text(
-                    text = "v${BuildConfig.VERSION_NAME} (${BuildConfig.BUILD_TYPE}/${BuildConfig.FLAVOR})",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+        item {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                LogoMark(size = 40.dp)
+                Spacer(Modifier.size(12.dp))
+                Column {
+                    Text(
+                        text = "Florence",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Text(
+                        text = "Yatırım Asistanı · API v${BuildConfig.VERSION_NAME}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
         }
 
-        if (session) {
-            OutlinedButton(
-                onClick = viewModel::logout,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(stringResource(R.string.auth_logout))
+        item {
+            Text("Duyurular", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+        }
+
+        if (uiState.loading) {
+            item {
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                }
+            }
+        } else if (uiState.announcements.isEmpty()) {
+            item {
+                EmptyState(
+                    title = "Duyuru yok",
+                    subtitle = "Yeni duyurular burada görünecek.",
+                )
             }
         } else {
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = stringResource(R.string.profile_guest),
-                        style = MaterialTheme.typography.titleSmall,
-                    )
-                    Text(
-                        text = stringResource(R.string.profile_sign_in_hint),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(top = 4.dp),
-                    )
-                    Button(
-                        onClick = onGoToLogin,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 12.dp),
-                    ) {
-                        Text(stringResource(R.string.auth_login))
+            items(uiState.announcements, key = { it.id ?: it.hashCode() }) { ann ->
+                FlorenceCard(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.padding(14.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Filled.Notifications,
+                                contentDescription = null,
+                                tint = FlorencePalettes.Florence.primary,
+                                modifier = Modifier.size(18.dp),
+                            )
+                            Spacer(Modifier.size(8.dp))
+                            Text(
+                                text = ann.title ?: "Duyuru",
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Medium,
+                            )
+                        }
+                        ann.body?.let {
+                            Spacer(Modifier.size(6.dp))
+                            Text(
+                                text = it,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                        ann.created_at?.let {
+                            Spacer(Modifier.size(6.dp))
+                            Text(
+                                text = it.take(10),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
                     }
                 }
+            }
+        }
+
+        item {
+            Spacer(Modifier.size(8.dp))
+            OutlinedButton(
+                onClick = { viewModel.logout(onLoggedOut) },
+                enabled = !uiState.loggingOut,
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = DownColor),
+            ) {
+                Icon(Icons.Filled.ExitToApp, contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.size(8.dp))
+                Text(if (uiState.loggingOut) "Çıkılıyor…" else "Oturumu Kapat")
             }
         }
     }

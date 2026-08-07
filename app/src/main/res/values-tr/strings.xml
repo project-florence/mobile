@@ -3,10 +3,16 @@
     <string name="app_name">Florence</string>
 
     <!-- Navigation -->
-    <string name="nav_market">Pano</string>
-    <string name="nav_search">Ara</string>
+    <string name="nav_market">Piyasa Panosu</string>
+    <string name="nav_search">Hisse Ara</string>
     <string name="nav_portfolio">Portföy</string>
     <string name="nav_profile">Profil</string>
+    <string name="nav_watchlist">İzleme Listesi</string>
+    <string name="nav_reports">AI Raporları</string>
+    <string name="nav_advisor">AI Danışman</string>
+    <string name="nav_ipos">Halka Arzlar</string>
+    <string name="nav_economy">Döviz &amp; Metaller</string>
+    <string name="nav_logout">Oturumu Kapat</string>
 
     <!-- Auth -->
     <string name="auth_tagline">Akıllı yatırım asistanın</string>

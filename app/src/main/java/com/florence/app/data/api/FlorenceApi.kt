@@ -1,14 +1,23 @@
 package com.florence.app.data.api
 
 import com.florence.app.data.model.AnalyticsEvent
+import com.florence.app.data.model.AnnouncementsResponse
 import com.florence.app.data.model.Candle
 import com.florence.app.data.model.CompanyInfo
 import com.florence.app.data.model.CompanySearchResult
+import com.florence.app.data.model.CreatePortfolioRequest
 import com.florence.app.data.model.CurrencyQuote
 import com.florence.app.data.model.FavoritesResponse
+import com.florence.app.data.model.GenerateReportRequest
+import com.florence.app.data.model.GenerateReportResponse
+import com.florence.app.data.model.IpoItem
 import com.florence.app.data.model.MaintenanceResponse
 import com.florence.app.data.model.NewsItem
+import com.florence.app.data.model.Portfolio
+import com.florence.app.data.model.PortfolioSnapshot
 import com.florence.app.data.model.Quote
+import com.florence.app.data.model.ReportHistoryItem
+import com.florence.app.data.model.ReportsInfoResponse
 import com.florence.app.data.model.Ticker
 import com.florence.app.data.model.VersionResponse
 import retrofit2.http.Body
@@ -85,6 +94,33 @@ interface FlorenceApi : AuthEndpoints {
     suspend fun currency(@Query("symbols") symbols: String?): Map<String, CurrencyQuote>
 
     // ---- Analitik (web'deki usePageTracking eşleniği) ----
+    @GET("api/v1/announcements")
+    suspend fun announcements(): AnnouncementsResponse
+
+    // ---- Sanal Portföy ----
+    @GET("api/v1/portfolios")
+    suspend fun portfolios(): List<Portfolio>
+
+    @POST("api/v1/portfolios")
+    suspend fun createPortfolio(@Body body: CreatePortfolioRequest): Portfolio
+
+    @GET("api/v1/portfolios/{id}/snapshot")
+    suspend fun portfolioSnapshot(@Path("id") id: String): PortfolioSnapshot
+
+    // ---- IPO ----
+    @GET("api/v1/ipos/active")
+    suspend fun iposActive(): List<IpoItem>
+
+    // ---- Raporlar ----
+    @GET("api/v1/reports/history")
+    suspend fun reportsHistory(): List<ReportHistoryItem>
+
+    @GET("api/v1/reports/info")
+    suspend fun reportsInfo(): ReportsInfoResponse
+
+    @POST("api/v1/reports/generate")
+    suspend fun generateReport(@Body body: GenerateReportRequest): GenerateReportResponse
+
     @POST("api/v1/analytics/event")
-    suspend fun trackEvent(@Body event: AnalyticsEvent)
+    suspend fun trackEvent(@Body event: AnalyticsEvent): Unit
 }

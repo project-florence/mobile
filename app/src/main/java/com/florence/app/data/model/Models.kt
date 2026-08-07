@@ -96,6 +96,126 @@ data class AnalyticsEvent(
     val properties: Map<String, String> = emptyMap(),
 )
 
+// ---- Sanal Portföy ----
+@Serializable
+data class PortfolioMetadata(
+    val id: String? = null,
+    @SerialName("user_id") val userId: Long? = null,
+    val name: String? = null,
+    @SerialName("initial_balance") val initialBalance: Double? = null,
+    val balance: Double? = null,
+    @SerialName("created_at") val createdAt: String? = null,
+    @SerialName("updated_at") val updatedAt: String? = null,
+)
+
+@Serializable
+data class Portfolio(
+    val metadata: PortfolioMetadata? = null,
+    val transactions: List<PortfolioTransaction> = emptyList(),
+)
+
+@Serializable
+data class PortfolioTransaction(
+    val id: String? = null,
+    val ticker: String? = null,
+    val type: String? = null,
+    val quantity: Double? = null,
+    val price: Double? = null,
+    val total: Double? = null,
+    @SerialName("created_at") val createdAt: String? = null,
+)
+
+@Serializable
+data class PortfolioValuation(
+    @SerialName("total_value") val totalValue: Double? = null,
+    @SerialName("cash_balance") val cashBalance: Double? = null,
+    @SerialName("holdings_value") val holdingsValue: Double? = null,
+    @SerialName("total_pnl") val totalPnl: Double? = null,
+    @SerialName("pnl_percentage") val pnlPercentage: Double? = null,
+    @SerialName("as_of") val asOf: String? = null,
+)
+
+@Serializable
+data class PortfolioSnapshot(
+    val portfolio: PortfolioMetadata? = null,
+    val valuation: PortfolioValuation? = null,
+)
+
+@Serializable
+data class CreatePortfolioRequest(
+    val name: String,
+    val currency: String = "TRY",
+    @SerialName("initial_balance") val initialBalance: Double,
+)
+
+// ---- IPO ----
+@Serializable
+data class IpoItem(
+    val id: Long? = null,
+    val slug: String? = null,
+    val title: String? = null,
+    val link: String? = null,
+    val date: String? = null,
+    val status: String? = null,
+)
+
+// ---- Raporlar ----
+@Serializable
+data class ReportHistoryItem(
+    @SerialName("report_id") val reportId: String? = null,
+    val ticker: String? = null,
+    @SerialName("report_type") val reportType: String? = null,
+    val title: String? = null,
+    val status: String? = null,
+    val cost: Double? = null,
+    @SerialName("created_at") val createdAt: String? = null,
+)
+
+@Serializable
+data class ReportTypeInfo(
+    val type: String? = null,
+    @SerialName("name_en") val nameEn: String? = null,
+    @SerialName("name_tr") val nameTr: String? = null,
+    val description: String? = null,
+    val cost: Double? = null,
+    @SerialName("credit_cost") val creditCost: Double? = null,
+    @SerialName("estimated_seconds") val estimatedSeconds: Int? = null,
+)
+
+@Serializable
+data class ReportsInfoResponse(
+    @SerialName("quick_report") val quickReport: ReportTypeInfo? = null,
+    @SerialName("deep_report") val deepReport: ReportTypeInfo? = null,
+    @SerialName("simulation") val simulation: ReportTypeInfo? = null,
+)
+
+@Serializable
+data class GenerateReportRequest(
+    val ticker: String,
+    @SerialName("report_type") val reportType: String = "quick_report",
+)
+
+@Serializable
+data class GenerateReportResponse(
+    @SerialName("report_id") val reportId: String? = null,
+    val status: String? = null,
+    val message: String? = null,
+)
+
+// ---- Duyurular ----
+@Serializable
+data class AnnouncementItem(
+    val id: Long? = null,
+    val title: String? = null,
+    val body: String? = null,
+    val created_at: String? = null,
+)
+
+@Serializable
+data class AnnouncementsResponse(
+    val announcements: List<AnnouncementItem> = emptyList(),
+)
+
 // ---- Şirket detayı ----
 // GET /api/v1/companies/info/{ticker}  (yfinance profil verisi)
 @Serializable

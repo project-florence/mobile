@@ -38,10 +38,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.florence.app.core.theme.BrandGradient
+import com.florence.app.core.theme.UpColor
 import com.florence.app.core.theme.DownColor
 import com.florence.app.core.theme.TextSecondary
-import com.florence.app.core.theme.UpColor
+import com.florence.app.core.theme.FlorencePalettes
 import java.util.Locale
+import kotlin.math.abs
 
 /** Yuvarlatılmış, ince çerçeveli Florence kartı. */
 @Composable
@@ -92,6 +94,32 @@ fun LogoMark(size: Dp = 40.dp) {
 }
 
 /** Fiyat + yüzde değişim; renk otomatik (yeşil/kırmızı). */
+/**
+ * Ticker için 2 harfli renkli avatar (web'deki şirket logolarının kompakt karşılığı).
+ */
+@Composable
+fun TickerAvatar(ticker: String, size: androidx.compose.ui.unit.Dp = 40.dp) {
+    val avatarColors = listOf(
+        Color(0xFF1E3A8A), Color(0xFF0F766E), Color(0xFF7C3AED),
+        Color(0xFFB45309), Color(0xFFBE123C), Color(0xFF1D4ED8),
+        Color(0xFF15803D), Color(0xFF9D174D),
+    )
+    val color = avatarColors[abs(ticker.hashCode()) % avatarColors.size]
+    Box(
+        modifier = Modifier
+            .size(size)
+            .background(color.copy(alpha = 0.85f), RoundedCornerShape(size / 4)),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = ticker.take(2),
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+        )
+    }
+}
+
 @Composable
 fun PriceText(
     price: Double?,
@@ -237,6 +265,30 @@ fun EmptyState(text: String, modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(text = text, style = MaterialTheme.typography.bodyMedium, color = TextSecondary)
+    }
+}
+
+/** Başlık + alt açıklamalı boş durum (listeler için). */
+@Composable
+fun EmptyState(title: String, subtitle: String, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+        Spacer(Modifier.size(6.dp))
+        Text(
+            text = subtitle,
+            style = MaterialTheme.typography.bodySmall,
+            color = TextSecondary,
+        )
     }
 }
 
