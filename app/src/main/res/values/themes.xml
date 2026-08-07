@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Florence" parent="android:Theme.Material.NoActionBar">
+    <!-- AppCompatActivity + AppCompatDelegate.setApplicationLocales için AppCompat tabanlı tema -->
+    <style name="Theme.Florence" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:windowBackground">#0A0A0F</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>

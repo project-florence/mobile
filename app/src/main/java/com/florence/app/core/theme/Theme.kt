@@ -108,9 +108,9 @@ fun FlorenceTheme(
 ) {
     val scheme = if (palette.isDark) {
         darkColorScheme(
-            primary = Color(0xFF3B82F6),
+            primary = palette.primary,
             onPrimary = Color.White,
-            primaryContainer = Color(0xFF1D4ED8),
+            primaryContainer = palette.primary.copy(alpha = 0.35f),
             onPrimaryContainer = Color(0xFFDBEAFE),
             secondary = palette.secondary,
             onSecondary = Color(0xFF1A1206),

@@ -1,11 +1,15 @@
 package com.florence.app.data.api
 
 import com.florence.app.data.model.AnalyticsEvent
+import com.florence.app.data.model.AdminUsersResponse
 import com.florence.app.data.model.AnnouncementsResponse
 import com.florence.app.data.model.Candle
 import com.florence.app.data.model.CompanyInfo
 import com.florence.app.data.model.CompanySearchResult
 import com.florence.app.data.model.CreatePortfolioRequest
+import com.florence.app.data.model.CreditTransferRequest
+import com.florence.app.data.model.CreditTransferResponse
+import com.florence.app.data.model.CreditsResponse
 import com.florence.app.data.model.CurrencyQuote
 import com.florence.app.data.model.FavoritesResponse
 import com.florence.app.data.model.GenerateReportRequest
@@ -19,6 +23,7 @@ import com.florence.app.data.model.Quote
 import com.florence.app.data.model.ReportHistoryItem
 import com.florence.app.data.model.ReportsInfoResponse
 import com.florence.app.data.model.Ticker
+import com.florence.app.data.model.UserProfile
 import com.florence.app.data.model.VersionResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -96,6 +101,22 @@ interface FlorenceApi : AuthEndpoints {
     // ---- Analitik (web'deki usePageTracking eşleniği) ----
     @GET("api/v1/announcements")
     suspend fun announcements(): AnnouncementsResponse
+
+    // ---- Kullanıcı / Kredi / Admin ----
+    @GET("api/v1/profile")
+    suspend fun profile(): UserProfile
+
+    @GET("api/v1/credits")
+    suspend fun credits(): CreditsResponse
+
+    @GET("api/v1/admin/users")
+    suspend fun adminUsers(): AdminUsersResponse
+
+    @POST("api/v1/admin/users/{userId}/credits")
+    suspend fun adminTransferCredits(
+        @Path("userId") userId: Long,
+        @Body body: CreditTransferRequest,
+    ): CreditTransferResponse
 
     // ---- Sanal Portföy ----
     @GET("api/v1/portfolios")

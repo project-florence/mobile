@@ -216,6 +216,48 @@ data class AnnouncementsResponse(
     val announcements: List<AnnouncementItem> = emptyList(),
 )
 
+// ---- Kullanıcı / Kredi (coin) / Admin ----
+@Serializable
+data class UserProfile(
+    val username: String? = null,
+    val email: String? = null,
+    @SerialName("user_type") val userType: String? = null,
+    @SerialName("created_at") val createdAt: String? = null,
+    val credits: Double? = null,
+)
+
+@Serializable
+data class CreditsResponse(
+    val credits: Double? = null,
+)
+
+@Serializable
+data class AdminUser(
+    val id: Long? = null,
+    val username: String? = null,
+    val email: String? = null,
+    @SerialName("user_type") val userType: String? = null,
+    @SerialName("created_at") val createdAt: String? = null,
+    val credits: Double? = null,
+)
+
+@Serializable
+data class AdminUsersResponse(
+    val users: List<AdminUser> = emptyList(),
+)
+
+@Serializable
+data class CreditTransferRequest(
+    val amount: Double,
+)
+
+@Serializable
+data class CreditTransferResponse(
+    @SerialName("user_id") val userId: Long? = null,
+    val credits: Double? = null,
+    val message: String? = null,
+)
+
 // ---- Şirket detayı ----
 // GET /api/v1/companies/info/{ticker}  (yfinance profil verisi)
 @Serializable

@@ -13,6 +13,10 @@
     <string name="nav_ipos">Halka Arzlar</string>
     <string name="nav_economy">Döviz &amp; Metaller</string>
     <string name="nav_logout">Oturumu Kapat</string>
+    <string name="nav_settings">Ayarlar</string>
+    <string name="nav_admin">Admin Paneli</string>
+    <string name="nav_section_market">Piyasa</string>
+    <string name="nav_section_account">Hesap</string>
 
     <!-- Auth -->
     <string name="auth_tagline">Akıllı yatırım asistanın</string>
