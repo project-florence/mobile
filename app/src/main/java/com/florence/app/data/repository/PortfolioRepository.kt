@@ -7,6 +7,8 @@ import com.florence.app.data.model.IpoItem
 import com.florence.app.data.model.Portfolio
 import com.florence.app.data.model.PortfolioSnapshot
 import com.florence.app.data.model.PortfolioTransaction
+import com.florence.app.data.model.ReportDetail
+import com.florence.app.data.model.ReportGenerateResponse
 import com.florence.app.data.model.ReportHistoryItem
 import com.florence.app.data.model.ReportsInfoResponse
 import javax.inject.Inject
@@ -55,16 +57,12 @@ class MiscRepository @Inject constructor(private val api: FlorenceApi) {
     suspend fun reportsHistory(): Result<List<ReportHistoryItem>> =
         runCatching { api.reportsHistory() }
 
+    suspend fun reportDetail(reportId: Int): Result<ReportDetail> =
+        runCatching { api.reportDetail(reportId) }
+
+    suspend fun generateReport(ticker: String, type: String): Result<ReportGenerateResponse> =
+        runCatching { api.generateReport(ticker, type) }
+
     suspend fun reportsInfo(): Result<ReportsInfoResponse> =
         runCatching { api.reportsInfo() }
-
-    suspend fun generateReport(ticker: String, reportType: String): Result<Unit> =
-        runCatching {
-            api.generateReport(
-                com.florence.app.data.model.GenerateReportRequest(
-                    ticker = ticker,
-                    reportType = reportType,
-                )
-            )
-        }
 }

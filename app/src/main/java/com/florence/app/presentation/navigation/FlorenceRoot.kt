@@ -72,6 +72,7 @@ import com.florence.app.presentation.ipo.IpoScreen
 import com.florence.app.presentation.portfolio.PortfolioDetailScreen
 import com.florence.app.presentation.portfolio.PortfolioScreen
 import com.florence.app.presentation.profile.ProfileScreen
+import com.florence.app.presentation.reports.ReportDetailScreen
 import com.florence.app.presentation.reports.ReportsScreen
 import com.florence.app.presentation.search.SearchScreen
 import com.florence.app.presentation.settings.CreditsViewModel
@@ -386,7 +387,19 @@ private fun MainScaffold(viewModel: RootViewModel) {
                 ) {
                     PortfolioDetailScreen(onBack = { navController.popBackStack() })
                 }
-                composable("reports") { ReportsScreen() }
+                composable("reports") {
+                    ReportsScreen(
+                        onOpenReport = { reportId ->
+                            navController.navigate("report/$reportId")
+                        },
+                    )
+                }
+                composable(
+                    route = "report/{reportId}",
+                    arguments = listOf(navArgument("reportId") { type = NavType.IntType }),
+                ) {
+                    ReportDetailScreen(onBack = { navController.popBackStack() })
+                }
                 composable("advisor") { AdvisorScreen() }
                 composable("ipos") { IpoScreen() }
                 composable("economy") { EconomyScreen() }

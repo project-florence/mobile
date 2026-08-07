@@ -41,6 +41,7 @@ import com.florence.app.presentation.components.formatCompact
 
 @Composable
 fun ReportsScreen(
+    onOpenReport: (Int) -> Unit,
     viewModel: ReportsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -146,15 +147,18 @@ fun ReportsScreen(
                 EmptyState(title = "Henüz rapor yok", subtitle = "Yukarıdan ilk raporunu oluştur.")
             }
         } else {
-            items(uiState.history, key = { it.reportId ?: it.hashCode() }) { report ->
-                FlorenceCard(modifier = Modifier.fillMaxWidth()) {
+            items(uiState.history, key = { it.id ?: it.hashCode() }) { report ->
+                FlorenceCard(
+                    onClick = { report.id?.let(onOpenReport) },
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
                     Row(
                         modifier = Modifier.padding(14.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = report.title ?: "${report.ticker} — ${report.reportType}",
+                                text = report.title ?: "${report.ticker} — ${report.type}",
                                 style = MaterialTheme.typography.bodyLarge,
                                 fontWeight = FontWeight.Medium,
                             )

@@ -23,6 +23,8 @@ import com.florence.app.data.model.PortfolioTransaction
 import com.florence.app.data.model.AddTransactionRequest
 import com.florence.app.data.model.AddTransactionResponse
 import com.florence.app.data.model.Quote
+import com.florence.app.data.model.ReportDetail
+import com.florence.app.data.model.ReportGenerateResponse
 import com.florence.app.data.model.ReportHistoryItem
 import com.florence.app.data.model.ReportsInfoResponse
 import com.florence.app.data.model.Ticker
@@ -147,6 +149,15 @@ interface FlorenceApi : AuthEndpoints {
     // ---- Raporlar ----
     @GET("api/v1/reports/history")
     suspend fun reportsHistory(): List<ReportHistoryItem>
+
+    @GET("api/v1/reports/{reportId}")
+    suspend fun reportDetail(@Path("reportId") reportId: Int): ReportDetail
+
+    @POST("api/v1/reports/generate")
+    suspend fun generateReport(
+        @Query("ticker") ticker: String,
+        @Query("type") type: String,
+    ): ReportGenerateResponse
 
     @GET("api/v1/reports/info")
     suspend fun reportsInfo(): ReportsInfoResponse

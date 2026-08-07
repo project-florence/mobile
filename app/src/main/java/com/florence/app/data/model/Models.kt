@@ -189,13 +189,40 @@ data class IpoItem(
 // ---- Raporlar ----
 @Serializable
 data class ReportHistoryItem(
-    @SerialName("report_id") val reportId: String? = null,
+    val id: Int? = null,
     val ticker: String? = null,
-    @SerialName("report_type") val reportType: String? = null,
+    val type: String? = null,
     val title: String? = null,
     val status: String? = null,
     val cost: Double? = null,
     @SerialName("created_at") val createdAt: String? = null,
+)
+
+@Serializable
+data class ReportDetail(
+    @SerialName("report_id") val reportId: Int? = null,
+    val ticker: String? = null,
+    val title: String? = null,
+    val about: String? = null,
+    val date: String? = null,
+    val report: String? = null,
+    val sentiments: List<ReportSentiment> = emptyList(),
+    @SerialName("token_usage") val tokenUsage: Map<String, Int>? = null,
+)
+
+@Serializable
+data class ReportSentiment(
+    val source: String? = null,
+    val title: String? = null,
+    val sentiment: String? = null,
+    val summary: String? = null,
+)
+
+@Serializable
+data class ReportGenerateResponse(
+    @SerialName("report_id") val reportId: Int? = null,
+    val status: String? = null,
+    val detail: String? = null,
 )
 
 @Serializable
