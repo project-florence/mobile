@@ -21,3 +21,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Demo ekran görüntüleri
+screenshots/

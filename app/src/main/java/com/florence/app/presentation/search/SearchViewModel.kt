@@ -50,5 +50,7 @@ class SearchViewModel @Inject constructor(
 
     fun onQueryChange(value: String) {
         _query.value = value
+        // Alan değeri anında yansımalı (kontrollü bileşen); debounce aramayı yönetir.
+        _uiState.update { it.copy(query = value) }
     }
 }

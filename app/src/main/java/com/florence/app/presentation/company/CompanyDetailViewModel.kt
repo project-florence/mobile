@@ -39,7 +39,8 @@ data class CompanyDetailUiState(
     val candles: List<Candle> = emptyList(),
     val news: List<NewsItem> = emptyList(),
     val newsError: Boolean = false,
-    val range: RangeOption = CHART_RANGES[3],
+    // Varsayılan: 1Ay/30dk — cron 5m+30m mumları doldurur; 1d aralığı isteğe bağlı gelir.
+    val range: RangeOption = CHART_RANGES[1],
     val isFavorite: Boolean = false,
 )
 
@@ -64,7 +65,7 @@ class CompanyDetailViewModel @Inject constructor(
         }
         loadInfo()
         loadNews()
-        loadHistory(CHART_RANGES[3])
+        loadHistory(CHART_RANGES[1])
     }
 
     fun loadInfo() {
