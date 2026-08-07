@@ -1,19 +1,25 @@
 package com.florence.app.presentation.auth
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -23,14 +29,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.florence.app.R
+import com.florence.app.core.theme.TextSecondary
+import com.florence.app.presentation.components.LogoMark
 
 @Composable
 fun RegisterScreen(
@@ -44,106 +54,108 @@ fun RegisterScreen(
     var confirm by rememberSaveable { mutableStateOf("") }
     var validationError by rememberSaveable { mutableStateOf<Int?>(null) }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .imePadding()
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(Color(0xFF0E1A33), MaterialTheme.colorScheme.background),
+                    startY = 0f, endY = 1400f,
+                ),
+            ),
     ) {
-        Text(
-            text = stringResource(R.string.auth_register),
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = 24.dp),
-        )
-
-        OutlinedTextField(
-            value = username,
-            onValueChange = { username = it },
-            label = { Text(stringResource(R.string.auth_username)) },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            modifier = Modifier.fillMaxWidth(),
-        )
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text(stringResource(R.string.auth_email)) },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email,
-                imeAction = ImeAction.Next,
-            ),
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 12.dp),
-        )
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text(stringResource(R.string.auth_password)) },
-            singleLine = true,
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Next,
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 12.dp),
-        )
-        OutlinedTextField(
-            value = confirm,
-            onValueChange = { confirm = it },
-            label = { Text(stringResource(R.string.auth_confirm_password)) },
-            singleLine = true,
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done,
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 12.dp),
-        )
-
-        val errorRes = validationError ?: uiState.errorRes
-        errorRes?.let { res ->
-            Text(
-                text = stringResource(res),
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(top = 12.dp),
-            )
-        }
-
-        Button(
-            onClick = {
-                validationError = when {
-                    password.length < 10 -> R.string.auth_password_too_short
-                    password != confirm -> R.string.auth_passwords_dont_match
-                    else -> null
-                }
-                if (validationError == null) {
-                    viewModel.register(username, email, password)
-                }
-            },
-            enabled = !uiState.busy,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp),
+                .fillMaxSize()
+                .imePadding()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 28.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
         ) {
-            if (uiState.busy) {
-                CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
-            } else {
-                Text(stringResource(R.string.auth_register))
-            }
-        }
+            LogoMark(size = 56.dp)
+            Spacer(Modifier.height(12.dp))
+            Text(
+                text = stringResource(R.string.auth_register),
+                style = MaterialTheme.typography.headlineMedium,
+                color = Color.White,
+            )
+            Spacer(Modifier.height(24.dp))
 
-        TextButton(onClick = onNavigateToLogin, modifier = Modifier.padding(top = 8.dp)) {
-            Text(stringResource(R.string.auth_has_account))
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.85f))
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                AuthField(
+                    value = username,
+                    onValueChange = { username = it },
+                    label = stringResource(R.string.auth_username),
+                    icon = { Icon(Icons.Filled.Person, null, tint = TextSecondary) },
+                    imeAction = ImeAction.Next,
+                )
+                AuthField(
+                    value = email,
+                    onValueChange = { email = it },
+                    label = stringResource(R.string.auth_email),
+                    icon = { Icon(Icons.Filled.Email, null, tint = TextSecondary) },
+                    imeAction = ImeAction.Next,
+                    isEmail = true,
+                )
+                AuthField(
+                    value = password,
+                    onValueChange = { password = it },
+                    label = stringResource(R.string.auth_password),
+                    icon = { Icon(Icons.Filled.Lock, null, tint = TextSecondary) },
+                    imeAction = ImeAction.Next,
+                    isPassword = true,
+                )
+                AuthField(
+                    value = confirm,
+                    onValueChange = { confirm = it },
+                    label = stringResource(R.string.auth_confirm_password),
+                    icon = { Icon(Icons.Filled.Lock, null, tint = TextSecondary) },
+                    imeAction = ImeAction.Done,
+                    isPassword = true,
+                )
+
+                val errorRes = validationError ?: uiState.errorRes
+                errorRes?.let { res ->
+                    Text(
+                        text = stringResource(res),
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
+
+                GradientButton(
+                    text = stringResource(R.string.auth_register),
+                    enabled = !uiState.busy,
+                    loading = uiState.busy,
+                    onClick = {
+                        validationError = when {
+                            password.length < 10 -> R.string.auth_password_too_short
+                            password != confirm -> R.string.auth_passwords_dont_match
+                            else -> null
+                        }
+                        if (validationError == null) {
+                            viewModel.register(username, email, password)
+                        }
+                    },
+                )
+            }
+
+            Spacer(Modifier.height(8.dp))
+            TextButton(onClick = onNavigateToLogin) {
+                Text(
+                    text = stringResource(R.string.auth_has_account),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            }
         }
     }
 }

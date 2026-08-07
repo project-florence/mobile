@@ -1,15 +1,21 @@
 package com.florence.app.data.api
 
 import com.florence.app.data.model.AnalyticsEvent
+import com.florence.app.data.model.Candle
+import com.florence.app.data.model.CompanyInfo
 import com.florence.app.data.model.CompanySearchResult
 import com.florence.app.data.model.CurrencyQuote
+import com.florence.app.data.model.FavoritesResponse
 import com.florence.app.data.model.MaintenanceResponse
+import com.florence.app.data.model.NewsItem
 import com.florence.app.data.model.Quote
 import com.florence.app.data.model.Ticker
 import com.florence.app.data.model.VersionResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
@@ -51,6 +57,29 @@ interface FlorenceApi : AuthEndpoints {
         @Query("ticker") ticker: String,
         @Query("interval") interval: String,
     ): Quote
+
+    @GET("api/v1/companies/info/{ticker}")
+    suspend fun companyInfo(@Path("ticker") ticker: String): CompanyInfo
+
+    @GET("api/v1/price/history/{ticker}")
+    suspend fun priceHistory(
+        @Path("ticker") ticker: String,
+        @Query("period") period: String,
+        @Query("interval") interval: String,
+    ): List<Candle>
+
+    @GET("api/v1/news/{ticker}")
+    suspend fun news(@Path("ticker") ticker: String): List<NewsItem>
+
+    // ---- Favoriler ----
+    @GET("api/v1/favorites")
+    suspend fun favorites(): FavoritesResponse
+
+    @POST("api/v1/favorites/{ticker}")
+    suspend fun addFavorite(@Path("ticker") ticker: String)
+
+    @DELETE("api/v1/favorites/{ticker}")
+    suspend fun removeFavorite(@Path("ticker") ticker: String)
 
     @GET("api/v1/economy/currency")
     suspend fun currency(@Query("symbols") symbols: String?): Map<String, CurrencyQuote>

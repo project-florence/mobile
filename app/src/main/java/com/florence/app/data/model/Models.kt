@@ -95,3 +95,53 @@ data class AnalyticsEvent(
     @SerialName("user_id") val userId: Long? = null,
     val properties: Map<String, String> = emptyMap(),
 )
+
+// ---- Şirket detayı ----
+// GET /api/v1/companies/info/{ticker}  (yfinance profil verisi)
+@Serializable
+data class CompanyInfo(
+    val symbol: String? = null,
+    val name: String? = null,
+    val sector: String? = null,
+    val industry: String? = null,
+    val currency: String? = null,
+    val exchange: String? = null,
+    val market: MarketData? = null,
+)
+
+@Serializable
+data class MarketData(
+    @SerialName("currentPrice") val currentPrice: Double? = null,
+    @SerialName("previousClose") val previousClose: Double? = null,
+    @SerialName("marketCap") val marketCap: Double? = null,
+    @SerialName("dayHigh") val dayHigh: Double? = null,
+    @SerialName("dayLow") val dayLow: Double? = null,
+    @SerialName("regularMarketVolume") val volume: Double? = null,
+    @SerialName("fiftyTwoWeekHigh") val fiftyTwoWeekHigh: Double? = null,
+    @SerialName("fiftyTwoWeekLow") val fiftyTwoWeekLow: Double? = null,
+)
+
+// GET /api/v1/price/history/{ticker}  → [{ts, open, high, low, close, volume}]
+@Serializable
+data class Candle(
+    val ts: String? = null,
+    val open: Double? = null,
+    val high: Double? = null,
+    val low: Double? = null,
+    val close: Double? = null,
+    val volume: Double? = null,
+)
+
+// GET /api/v1/news/{ticker}
+@Serializable
+data class NewsItem(
+    val title: String? = null,
+    val url: String? = null,
+    val source: String? = null,
+    val date: String? = null,
+    val summary: String? = null,
+)
+
+// GET /api/v1/favorites → {"favorites": ["THYAO", ...]}
+@Serializable
+data class FavoritesResponse(val favorites: List<String> = emptyList())

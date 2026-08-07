@@ -2,10 +2,13 @@ package com.florence.app.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.florence.app.data.model.CurrencyQuote
+import com.florence.app.data.model.CompanyInfo
 import com.florence.app.data.model.Ticker
+import com.florence.app.data.repository.FavoritesRepository
 import com.florence.app.data.repository.MarketRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,19 +21,29 @@ data class DashboardUiState(
     val error: Boolean = false,
     val version: String? = null,
     val disabledFeatures: List<String> = emptyList(),
-    val currencies: List<Pair<String, CurrencyQuote>> = emptyList(),
-    val tickers: List<Ticker> = emptyList(),
+    val heroes: List<CompanyInfo> = emptyList(),
+    val companies: List<Ticker> = emptyList(),
+    val favorites: Set<String> = emptySet(),
 )
+
+/** Panoda öne çıkan hisseler (web'deki popüler widget karşılığı). */
+val POPULAR_TICKERS = listOf("THYAO", "ASELS", "GARAN", "AKBNK", "EREGL", "TUPRS")
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
     private val repo: MarketRepository,
+    private val favoritesRepo: FavoritesRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DashboardUiState())
     val uiState: StateFlow<DashboardUiState> = _uiState.asStateFlow()
 
     init {
+        viewModelScope.launch {
+            favoritesRepo.favorites.collect { favs ->
+                _uiState.update { it.copy(favorites = favs) }
+            }
+        }
         refresh()
     }
 
@@ -39,19 +52,26 @@ class DashboardViewModel @Inject constructor(
         viewModelScope.launch {
             val version = repo.version()
             val maintenance = repo.maintenance()
-            val currency = repo.currency()
             val companies = repo.companies(limit = 50)
+            val heroes = coroutineScope {
+                POPULAR_TICKERS.map { ticker -> async { repo.info(ticker) } }
+                    .mapNotNull { it.await().getOrNull() }
+            }
+            favoritesRepo.refresh()
             _uiState.update { st ->
                 st.copy(
                     loading = false,
-                    // Yalnızca tümü başarısızsa hata göster; kısmi veri kabul edilir.
-                    error = version.isFailure && currency.isFailure && companies.isFailure,
+                    error = version.isFailure && companies.isFailure,
                     version = version.getOrNull()?.version,
                     disabledFeatures = maintenance.getOrNull()?.disabledFeatures ?: emptyList(),
-                    currencies = currency.getOrNull()?.toList() ?: emptyList(),
-                    tickers = companies.getOrNull() ?: emptyList(),
+                    heroes = heroes,
+                    companies = companies.getOrNull() ?: emptyList(),
                 )
             }
         }
+    }
+
+    fun toggleFavorite(ticker: String) {
+        viewModelScope.launch { favoritesRepo.toggle(ticker) }
     }
 }

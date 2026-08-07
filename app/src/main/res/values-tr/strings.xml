@@ -9,6 +9,7 @@
     <string name="nav_profile">Profil</string>
 
     <!-- Auth -->
+    <string name="auth_tagline">Akıllı yatırım asistanın</string>
     <string name="auth_login">Giriş yap</string>
     <string name="auth_register">Hesap oluştur</string>
     <string name="auth_username">Kullanıcı adı</string>
@@ -28,6 +29,9 @@
 
     <!-- Dashboard -->
     <string name="dashboard_title">Piyasa Panosu</string>
+    <string name="dashboard_highlights">Öne Çıkanlar</string>
+    <string name="dashboard_all_stocks">Tüm Hisseler</string>
+    <string name="dashboard_no_data">Veri bekleniyor</string>
     <string name="dashboard_currencies">Döviz Kurları</string>
     <string name="dashboard_stocks">Hisseler</string>
     <string name="dashboard_version">API %1$s</string>
@@ -45,6 +49,32 @@
     <!-- Placeholders -->
     <string name="coming_soon">Yakında</string>
     <string name="coming_soon_desc">Bu ekran bir sonraki kilometre taşında eklenecek.</string>
+
+    <!-- Search -->
+    <string name="search_hint">Hisse ara…</string>
+    <string name="search_empty">Hisse adı veya kodu yazarak aramaya başla</string>
+    <string name="search_no_results">Sonuç bulunamadı</string>
+
+    <!-- Company detail -->
+    <string name="detail_price_history">Fiyat Geçmişi</string>
+    <string name="detail_no_history">Fiyat verisi henüz yok</string>
+    <string name="detail_market_cap">Piyasa Değeri</string>
+    <string name="detail_day_range">Gün Aralığı</string>
+    <string name="detail_52w">52 Hafta</string>
+    <string name="detail_volume">Hacim</string>
+    <string name="detail_sector">Sektör</string>
+    <string name="detail_industry">Endüstri</string>
+    <string name="detail_prev_close">Önceki kapanış: %1$s</string>
+    <string name="detail_news">Haberler</string>
+    <string name="detail_no_news">Haber bulunamadı</string>
+    <string name="detail_news_unavailable">Haber servisi şu an kullanılamıyor</string>
+    <string name="range_5m">5dk</string>
+    <string name="range_30m">30dk</string>
+    <string name="range_1h">1Saat</string>
+    <string name="range_6mo">6Ay</string>
+    <string name="range_1y">1Yıl</string>
+    <string name="common_back">Geri</string>
+    <string name="common_open">Aç</string>
 
     <!-- Common -->
     <string name="common_loading">Yükleniyor…</string>

@@ -1,15 +1,23 @@
 package com.florence.app.core.theme
 
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import com.florence.app.R
 
 /**
- * Web arayüzündeki (project-florence/web) el yapımı temalarla birebir eşleşen
- * Material 3 paletleri. Renkler src/config/themes.ts'ten alınmıştır.
+ * Web arayüzündeki (project-florence/web) temalarla birebir eşleşen paletler.
+ * Renkler src/config/themes.ts'ten alınmıştır.
  */
 @Immutable
 data class FlorencePalette(
@@ -61,19 +69,69 @@ object FlorencePalettes {
 val UpColor = Color(0xFF22C55E)
 val DownColor = Color(0xFFEF4444)
 
+/** Web'deki onSurfaceVariant karşılığı (ikincil metin). */
+val TextSecondary = Color(0xFF94A3B8)
+
+/** Marka gradyanı: web'in primary(#2563EB) → cyan geçişi. */
+val BrandGradient = Brush.linearGradient(
+    colors = listOf(Color(0xFF2563EB), Color(0xFF3B82F6), Color(0xFF06B6D4)),
+)
+
+val FlorenceFontFamily = FontFamily(
+    Font(R.font.inter, FontWeight.Light),
+    Font(R.font.inter, FontWeight.Normal),
+    Font(R.font.inter, FontWeight.Medium),
+    Font(R.font.inter, FontWeight.SemiBold),
+    Font(R.font.inter, FontWeight.Bold),
+    Font(R.font.inter, FontWeight.ExtraBold),
+)
+
+private val FlorenceTypography = Typography(
+    displaySmall = TextStyle(fontFamily = FlorenceFontFamily, fontWeight = FontWeight.ExtraBold, fontSize = 36.sp, letterSpacing = (-0.5).sp),
+    headlineMedium = TextStyle(fontFamily = FlorenceFontFamily, fontWeight = FontWeight.Bold, fontSize = 28.sp, letterSpacing = (-0.3).sp),
+    headlineSmall = TextStyle(fontFamily = FlorenceFontFamily, fontWeight = FontWeight.Bold, fontSize = 24.sp),
+    titleLarge = TextStyle(fontFamily = FlorenceFontFamily, fontWeight = FontWeight.SemiBold, fontSize = 20.sp),
+    titleMedium = TextStyle(fontFamily = FlorenceFontFamily, fontWeight = FontWeight.SemiBold, fontSize = 16.sp),
+    titleSmall = TextStyle(fontFamily = FlorenceFontFamily, fontWeight = FontWeight.SemiBold, fontSize = 14.sp),
+    bodyLarge = TextStyle(fontFamily = FlorenceFontFamily, fontWeight = FontWeight.Normal, fontSize = 16.sp, lineHeight = 24.sp),
+    bodyMedium = TextStyle(fontFamily = FlorenceFontFamily, fontWeight = FontWeight.Normal, fontSize = 14.sp, lineHeight = 20.sp),
+    bodySmall = TextStyle(fontFamily = FlorenceFontFamily, fontWeight = FontWeight.Normal, fontSize = 12.sp, lineHeight = 16.sp),
+    labelLarge = TextStyle(fontFamily = FlorenceFontFamily, fontWeight = FontWeight.SemiBold, fontSize = 14.sp),
+    labelMedium = TextStyle(fontFamily = FlorenceFontFamily, fontWeight = FontWeight.Medium, fontSize = 12.sp),
+    labelSmall = TextStyle(fontFamily = FlorenceFontFamily, fontWeight = FontWeight.Medium, fontSize = 10.sp, letterSpacing = 0.4.sp),
+)
+
 @Composable
 fun FlorenceTheme(
     palette: FlorencePalette = FlorencePalettes.Florence,
     content: @Composable () -> Unit,
 ) {
-    val colorScheme = if (palette.isDark) {
+    val scheme = if (palette.isDark) {
         darkColorScheme(
-            primary = palette.primary,
+            primary = Color(0xFF3B82F6),
+            onPrimary = Color.White,
+            primaryContainer = Color(0xFF1D4ED8),
+            onPrimaryContainer = Color(0xFFDBEAFE),
             secondary = palette.secondary,
+            onSecondary = Color(0xFF1A1206),
             tertiary = palette.tertiary,
             background = palette.background,
+            onBackground = Color(0xFFE8EAF0),
             surface = palette.surface,
-            surfaceVariant = palette.surface,
+            onSurface = Color(0xFFE8EAF0),
+            surfaceVariant = Color(0xFF1A1A24),
+            onSurfaceVariant = TextSecondary,
+            surfaceContainerLowest = Color(0xFF08080D),
+            surfaceContainerLow = Color(0xFF0F0F16),
+            surfaceContainer = Color(0xFF14141C),
+            surfaceContainerHigh = Color(0xFF1A1A24),
+            surfaceContainerHighest = Color(0xFF20202C),
+            outline = Color(0xFF2D2D4A),
+            outlineVariant = Color(0xFF23233A),
+            error = DownColor,
+            onError = Color.White,
+            errorContainer = Color(0xFF3B0D0D),
+            onErrorContainer = Color(0xFFFECACA),
         )
     } else {
         lightColorScheme(
@@ -85,5 +143,5 @@ fun FlorenceTheme(
             onPrimary = Color.White,
         )
     }
-    MaterialTheme(colorScheme = colorScheme, content = content)
+    MaterialTheme(colorScheme = scheme, typography = FlorenceTypography, content = content)
 }

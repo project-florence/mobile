@@ -1,6 +1,8 @@
 package com.florence.app.data.repository
 
 import com.florence.app.data.api.FlorenceApi
+import com.florence.app.data.model.CompanyInfo
+import com.florence.app.data.model.CompanySearchResult
 import com.florence.app.data.model.CurrencyQuote
 import com.florence.app.data.model.MaintenanceResponse
 import com.florence.app.data.model.Ticker
@@ -27,6 +29,12 @@ class MarketRepository @Inject constructor(
 
     suspend fun companies(limit: Int = 50): Result<List<Ticker>> =
         runCatching { api.companies(sort = "alphabetical", offset = 0, limit = limit) }
+
+    suspend fun search(query: String): Result<List<CompanySearchResult>> =
+        runCatching { api.searchCompanies(query) }
+
+    suspend fun info(ticker: String): Result<CompanyInfo> =
+        runCatching { api.companyInfo(ticker) }
 
     suspend fun currency(): Result<Map<String, CurrencyQuote>> =
         runCatching { api.currency(symbols = null) }

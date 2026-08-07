@@ -20,17 +20,21 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.florence.app.R
 import com.florence.app.data.repository.AuthRepository
 import com.florence.app.presentation.auth.LoginScreen
 import com.florence.app.presentation.auth.RegisterScreen
+import com.florence.app.presentation.company.CompanyDetailScreen
 import com.florence.app.presentation.home.ComingSoonScreen
 import com.florence.app.presentation.home.DashboardScreen
 import com.florence.app.presentation.profile.ProfileScreen
+import com.florence.app.presentation.search.SearchScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
@@ -133,10 +137,28 @@ private fun MainScaffold(onGoToLogin: () -> Unit) {
             startDestination = MainTab.Market.route,
             modifier = Modifier.padding(innerPadding),
         ) {
-            composable(MainTab.Market.route) { DashboardScreen() }
-            composable(MainTab.Search.route) { ComingSoonScreen() }
+            composable(MainTab.Market.route) {
+                DashboardScreen(
+                    onOpenCompany = { ticker ->
+                        navController.navigate("company/$ticker")
+                    },
+                )
+            }
+            composable(MainTab.Search.route) {
+                SearchScreen(
+                    onOpenCompany = { ticker ->
+                        navController.navigate("company/$ticker")
+                    },
+                )
+            }
             composable(MainTab.Portfolio.route) { ComingSoonScreen() }
             composable(MainTab.Profile.route) { ProfileScreen(onGoToLogin) }
+            composable(
+                route = "company/{ticker}",
+                arguments = listOf(navArgument("ticker") { type = NavType.StringType }),
+            ) {
+                CompanyDetailScreen(onBack = { navController.popBackStack() })
+            }
         }
     }
 }

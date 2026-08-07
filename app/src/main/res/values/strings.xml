@@ -9,6 +9,7 @@
     <string name="nav_profile">Profile</string>
 
     <!-- Auth -->
+    <string name="auth_tagline">Your smart investment assistant</string>
     <string name="auth_login">Sign in</string>
     <string name="auth_register">Create account</string>
     <string name="auth_username">Username</string>
@@ -28,6 +29,9 @@
 
     <!-- Dashboard -->
     <string name="dashboard_title">Market Overview</string>
+    <string name="dashboard_highlights">Highlights</string>
+    <string name="dashboard_all_stocks">All Stocks</string>
+    <string name="dashboard_no_data">No data yet</string>
     <string name="dashboard_currencies">Currencies</string>
     <string name="dashboard_stocks">Stocks</string>
     <string name="dashboard_version">API %1$s</string>
@@ -45,6 +49,32 @@
     <!-- Placeholders -->
     <string name="coming_soon">Coming soon</string>
     <string name="coming_soon_desc">This screen will be implemented in the next milestone.</string>
+
+    <!-- Search -->
+    <string name="search_hint">Search stocks…</string>
+    <string name="search_empty">Type a stock name or code to search</string>
+    <string name="search_no_results">No results found</string>
+
+    <!-- Company detail -->
+    <string name="detail_price_history">Price History</string>
+    <string name="detail_no_history">No price data yet</string>
+    <string name="detail_market_cap">Market Cap</string>
+    <string name="detail_day_range">Day Range</string>
+    <string name="detail_52w">52 Week</string>
+    <string name="detail_volume">Volume</string>
+    <string name="detail_sector">Sector</string>
+    <string name="detail_industry">Industry</string>
+    <string name="detail_prev_close">Prev close: %1$s</string>
+    <string name="detail_news">News</string>
+    <string name="detail_no_news">No news found</string>
+    <string name="detail_news_unavailable">News service is currently unavailable</string>
+    <string name="range_5m">5m</string>
+    <string name="range_30m">30m</string>
+    <string name="range_1h">1H</string>
+    <string name="range_6mo">6M</string>
+    <string name="range_1y">1Y</string>
+    <string name="common_back">Back</string>
+    <string name="common_open">Open</string>
 
     <!-- Common -->
     <string name="common_loading">Loading…</string>
