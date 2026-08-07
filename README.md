@@ -21,7 +21,7 @@ Bu depo, [project-florence/web](https://github.com/project-florence/web) arayüz
 ./gradlew :app:assembleProdDebug
 ```
 
-Not: Sistemde Java 8 kurulu olabilir; Gradle, `gradle.properties` içindeki `org.gradle.java.home` ile Android Studio'nun JBR (JDK 21) sürümünü kullanır.
+Not: Sistemde Java 8 kurulu olabilir; Gradle, `gradle.properties` içindeki `org.gradle.java.home` ile Android Studio'nun JBR (JDK 21) sürümünü kullanır. `GRADLE_USER_HOME` `C:/gradle-home` olarak ayarlıdır (gradlew içinde) — Windows kullanıcı adındaki kesme işareti (`GAMER'S`) Java'nın @argfile ayrıştırmasını bozduğu için Gradle home ve proje apostrophesiz yollarda tutulur.
 
 ## Emülatörde yerel backend
 

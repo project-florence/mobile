@@ -4,6 +4,7 @@
 
 - JDK: Android Studio JBR (21) — `gradle.properties` → `org.gradle.java.home=C:/Program Files/Android/Android Studio1/jbr`. System Java 8 is NOT sufficient for AGP 8.x.
 - SDK: `local.properties` → `sdk.dir` (ANDROID_HOME). `compileSdk = 36`.
+- **GRADLE_USER_HOME is `C:/gradle-home`** (set inside `gradlew`/`gradlew.bat`). This is a machine-specific workaround: the Windows user name (`GAMER'S`) contains an apostrophe, and Java's `@argfile` parser treats `'` as a quote — Gradle worker processes (unit-test executor) then fail with `Could not find or load main class GradleWorkerMain`. Keeping the Gradle home and project outside any apostrophe path avoids the bug.
 - Build variants: `dev` (emulator → `http://10.0.2.2:7055/`, appId suffix `.dev`) and `prod` (`https://api.florencex.com.tr/`).
 - Build: `./gradlew :app:assembleDevDebug` (dev) or `:app:assembleProdDebug`.
 - Unit tests: `./gradlew :app:testDevDebugUnitTest`.

@@ -16,6 +16,11 @@
 @rem SPDX-License-Identifier: Apache-2.0
 @rem
 
+@rem Machine workaround: GRADLE_USER_HOME must NOT contain an apostrophe.
+@rem Java's @argfile parser treats ' as a quote, which breaks Gradle worker
+@rem classpath files when the path lives under a user name like "GAMER'S".
+if "%GRADLE_USER_HOME%"=="" set GRADLE_USER_HOME=C:\gradle-home
+
 @if "%DEBUG%"=="" @echo off
 @rem ##########################################################################
 @rem

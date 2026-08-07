@@ -1,5 +1,14 @@
 #!/bin/sh
 
+# Machine workaround: GRADLE_USER_HOME must NOT contain an apostrophe.
+# Java's @argfile parser treats ' as a quote, which breaks Gradle worker
+# classpath files (e.g. "Could not find or load main class GradleWorkerMain")
+# when the path lives under a Windows user name like "GAMER'S".
+if [ -z "$GRADLE_USER_HOME" ]; then
+  GRADLE_USER_HOME="C:/gradle-home"
+fi
+export GRADLE_USER_HOME
+
 #
 # Copyright © 2015-2021 the original authors.
 #

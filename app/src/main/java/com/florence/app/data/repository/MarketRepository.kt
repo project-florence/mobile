@@ -22,7 +22,9 @@ class MarketRepository @Inject constructor(
 
     suspend fun maintenance(): Result<MaintenanceResponse> = runCatching { api.maintenance() }
 
-    suspend fun tickers(limit: Int = 50): Result<List<Ticker>> = runCatching { api.tickers(limit = limit) }
+    suspend fun tickers(limit: Int = 50): Result<List<Ticker>> =
+        runCatching { api.tickers(sort = "alphabetical", offset = 0, limit = limit) }
 
-    suspend fun currency(): Result<Map<String, CurrencyQuote>> = runCatching { api.currency() }
+    suspend fun currency(): Result<Map<String, CurrencyQuote>> =
+        runCatching { api.currency(symbols = null) }
 }
