@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Mini bar chart (Florence logo motif) -->
+    <path
+        android:fillColor="#2563EB"
+        android:pathData="M28,66 L33,66 L33,52 L38,52 L38,66 L43,66 L43,40 L48,40 L48,66 L53,66 L53,58 L58,58 L58,66 L63,66 L63,46 L68,46 L68,66 L73,66 L73,54 L78,54 L78,66 L28,66 Z" />
+</vector>

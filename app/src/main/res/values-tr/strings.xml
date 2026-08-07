@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Florence</string>
+
+    <!-- Navigation -->
+    <string name="nav_market">Pano</string>
+    <string name="nav_search">Ara</string>
+    <string name="nav_portfolio">Portföy</string>
+    <string name="nav_profile">Profil</string>
+
+    <!-- Auth -->
+    <string name="auth_login">Giriş yap</string>
+    <string name="auth_register">Hesap oluştur</string>
+    <string name="auth_username">Kullanıcı adı</string>
+    <string name="auth_email">E-posta</string>
+    <string name="auth_password">Şifre</string>
+    <string name="auth_confirm_password">Şifre (tekrar)</string>
+    <string name="auth_no_account">Hesabın yok mu? Kayıt ol</string>
+    <string name="auth_has_account">Zaten hesabın var mı? Giriş yap</string>
+    <string name="auth_logout">Çıkış yap</string>
+    <string name="auth_logged_in_as">%1$s olarak giriş yapıldı</string>
+    <string name="auth_login_error">Kullanıcı adı veya şifre hatalı</string>
+    <string name="auth_register_error">Kayıt başarısız. Kullanıcı adı veya e-posta zaten kullanılıyor olabilir.</string>
+    <string name="auth_network_error">Bağlantı hatası. İnternet bağlantını kontrol et.</string>
+    <string name="auth_rate_limited">Çok fazla deneme yapıldı. Biraz sonra tekrar dene.</string>
+    <string name="auth_passwords_dont_match">Şifreler eşleşmiyor</string>
+    <string name="auth_password_too_short">Şifre en az 10 karakter olmalı</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Piyasa Panosu</string>
+    <string name="dashboard_currencies">Döviz Kurları</string>
+    <string name="dashboard_stocks">Hisseler</string>
+    <string name="dashboard_version">API %1$s</string>
+    <string name="dashboard_loading">Piyasa verileri yükleniyor…</string>
+    <string name="dashboard_retry">Tekrar dene</string>
+    <string name="dashboard_error">Piyasa verileri yüklenemedi</string>
+    <string name="dashboard_maintenance">Bazı özellikler geçici olarak kapalı: %1$s</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Profil</string>
+    <string name="profile_credits">Krediler</string>
+    <string name="profile_guest">Misafir olarak geziyorsun</string>
+    <string name="profile_sign_in_hint">Portföylere, raporlara ve favorilere erişmek için giriş yap.</string>
+
+    <!-- Placeholders -->
+    <string name="coming_soon">Yakında</string>
+    <string name="coming_soon_desc">Bu ekran bir sonraki kilometre taşında eklenecek.</string>
+
+    <!-- Common -->
+    <string name="common_loading">Yükleniyor…</string>
+    <string name="common_retry">Tekrar dene</string>
+    <string name="common_error">Bir şeyler ters gitti</string>
+</resources>
