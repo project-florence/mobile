@@ -40,16 +40,16 @@ class DashboardViewModel @Inject constructor(
             val version = repo.version()
             val maintenance = repo.maintenance()
             val currency = repo.currency()
-            val tickers = repo.tickers(limit = 50)
+            val companies = repo.companies(limit = 50)
             _uiState.update { st ->
                 st.copy(
                     loading = false,
                     // Yalnızca tümü başarısızsa hata göster; kısmi veri kabul edilir.
-                    error = version.isFailure && currency.isFailure && tickers.isFailure,
+                    error = version.isFailure && currency.isFailure && companies.isFailure,
                     version = version.getOrNull()?.version,
                     disabledFeatures = maintenance.getOrNull()?.disabledFeatures ?: emptyList(),
                     currencies = currency.getOrNull()?.toList() ?: emptyList(),
-                    tickers = tickers.getOrNull() ?: emptyList(),
+                    tickers = companies.getOrNull() ?: emptyList(),
                 )
             }
         }

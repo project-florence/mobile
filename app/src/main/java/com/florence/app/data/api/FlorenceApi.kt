@@ -27,8 +27,17 @@ interface FlorenceApi : AuthEndpoints {
     suspend fun maintenance(): MaintenanceResponse
 
     // ---- Pano ----
+    // NOT: /bist/tickers düz string dizisi döner (["THYAO", ...]).
     @GET("api/v1/bist/tickers")
     suspend fun tickers(
+        @Query("sort") sort: String,
+        @Query("offset") offset: Int,
+        @Query("limit") limit: Int,
+    ): List<String>
+
+    // /bist/companies zengin nesneler döner ({ticker, name, city, ...}).
+    @GET("api/v1/bist/companies")
+    suspend fun companies(
         @Query("sort") sort: String,
         @Query("offset") offset: Int,
         @Query("limit") limit: Int,
