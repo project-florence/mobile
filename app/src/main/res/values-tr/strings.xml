@@ -18,6 +18,20 @@
     <string name="nav_section_market">Piyasa</string>
     <string name="nav_section_account">Hesap</string>
 
+    <!-- Selamlama -->
+    <string name="greeting_morning">Günaydın, %1$s!</string>
+    <string name="greeting_day">İyi günler, %1$s!</string>
+    <string name="greeting_evening">İyi akşamlar, %1$s!</string>
+    <string name="greeting_night">İyi geceler, %1$s!</string>
+    <string name="coming_soon_badge">Yakında</string>
+
+    <!-- Profil -->
+    <string name="profile_announcements">Duyurular</string>
+    <string name="profile_no_announcements">Duyuru yok</string>
+    <string name="profile_no_announcements_hint">Yeni duyurular burada görünecek.</string>
+    <string name="profile_logout">Oturumu Kapat</string>
+    <string name="profile_logging_out">Çıkılıyor…</string>
+
     <!-- Auth -->
     <string name="auth_tagline">Akıllı yatırım asistanın</string>
     <string name="auth_login">Giriş yap</string>

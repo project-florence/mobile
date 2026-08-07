@@ -262,22 +262,6 @@ private fun MainScaffold(viewModel: RootViewModel) {
                     }
                     Spacer(Modifier.size(6.dp))
                     DrawerSectionLabel(stringResource(R.string.nav_section_account))
-                    if (creditsState.isAdmin) {
-                        DrawerNavItem(
-                            item = DrawerItem("admin", R.string.nav_admin, Icons.Filled.Star),
-                            currentRoute = currentRoute,
-                            onNavigate = {
-                                scope.launch { drawerState.close() }
-                                navController.navigate("admin") {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            },
-                        )
-                    }
                     DRAWER_ACCOUNT_ITEMS.forEach { item ->
                         DrawerNavItem(
                             item = item,

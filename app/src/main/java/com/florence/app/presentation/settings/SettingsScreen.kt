@@ -121,7 +121,7 @@ fun SettingsScreen(
                     )
                     Spacer(Modifier.height(10.dp))
                     SettingsRepository.THEMES.forEach { (key, label) ->
-                        val palette = FlorencePalettes.all.firstOrNull { it.name.lowercase() == key }
+                        val palette = FlorencePalettes.all.firstOrNull { it.key == key }
                         ThemeRow(
                             key = key,
                             label = label,
