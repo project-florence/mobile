@@ -46,6 +46,7 @@
     <string name="auth_logged_in_as">%1$s olarak giriş yapıldı</string>
     <string name="auth_login_error">Kullanıcı adı veya şifre hatalı</string>
     <string name="auth_register_error">Kayıt başarısız. Kullanıcı adı veya e-posta zaten kullanılıyor olabilir.</string>
+    <string name="auth_register_taken">Bu kullanıcı adı veya e-posta zaten kayıtlı.</string>
     <string name="auth_network_error">Bağlantı hatası. İnternet bağlantını kontrol et.</string>
     <string name="auth_rate_limited">Çok fazla deneme yapıldı. Biraz sonra tekrar dene.</string>
     <string name="auth_passwords_dont_match">Şifreler eşleşmiyor</string>

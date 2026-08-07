@@ -59,6 +59,7 @@ class AuthViewModel @Inject constructor(
     private fun mapError(t: Throwable): Int = when {
         t is HttpException && t.code() == 401 -> R.string.auth_login_error
         t is HttpException && t.code() == 429 -> R.string.auth_rate_limited
+        t is HttpException && t.code() == 400 -> R.string.auth_register_taken
         t is HttpException -> R.string.auth_register_error
         t is IOException -> R.string.auth_network_error
         else -> R.string.common_error
