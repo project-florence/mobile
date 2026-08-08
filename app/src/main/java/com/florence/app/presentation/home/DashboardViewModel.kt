@@ -60,7 +60,19 @@ class DashboardViewModel @Inject constructor(
                 POPULAR_TICKERS.map { ticker -> async { repo.info(ticker) } }
                     .mapNotNull { it.await().getOrNull() }
             }
-            // Hero kartları için mini grafik verisi (5d / 5m kapanış serisi).
+            favoritesRepo.refresh()
+            // UI'yi bekleme: hero + hisse listesi gelince pano hemen gösterilir.
+            _uiState.update { st ->
+                st.copy(
+                    loading = false,
+                    error = version.isFailure && companies.isFailure,
+                    version = version.getOrNull()?.version,
+                    disabledFeatures = maintenance.getOrNull()?.disabledFeatures ?: emptyList(),
+                    heroes = heroes,
+                    companies = companies.getOrNull() ?: emptyList(),
+                )
+            }
+            // Mini grafik (sparkline) verisi arka planda gelir; kartlar sonra güncellenir.
             val sparklines: Map<String, List<Float>> = coroutineScope {
                 val map = mutableMapOf<String, List<Float>>()
                 POPULAR_TICKERS.forEach { ticker ->
@@ -71,18 +83,7 @@ class DashboardViewModel @Inject constructor(
                 }
                 map
             }
-            favoritesRepo.refresh()
-            _uiState.update { st ->
-                st.copy(
-                    loading = false,
-                    error = version.isFailure && companies.isFailure,
-                    version = version.getOrNull()?.version,
-                    disabledFeatures = maintenance.getOrNull()?.disabledFeatures ?: emptyList(),
-                    heroes = heroes,
-                    companies = companies.getOrNull() ?: emptyList(),
-                    sparklines = sparklines,
-                )
-            }
+            _uiState.update { it.copy(sparklines = sparklines) }
         }
     }
 
