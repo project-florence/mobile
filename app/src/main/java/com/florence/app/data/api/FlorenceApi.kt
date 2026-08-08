@@ -23,6 +23,8 @@ import com.florence.app.data.model.PortfolioTransaction
 import com.florence.app.data.model.AddTransactionRequest
 import com.florence.app.data.model.AddTransactionResponse
 import com.florence.app.data.model.AboutResponse
+import com.florence.app.data.model.ContactResponse
+import com.florence.app.data.model.LegalResponse
 import com.florence.app.data.model.Quote
 import com.florence.app.data.model.ReportDetail
 import com.florence.app.data.model.ReportGenerateResponse
@@ -115,6 +117,16 @@ interface FlorenceApi : AuthEndpoints {
 
     @GET("api/v1/contributors")
     suspend fun contributors(): ContributorsResponse
+
+    // ---- İletişim / Yasal ----
+    @GET("api/v1/contact")
+    suspend fun contact(): ContactResponse
+
+    @GET("api/v1/legal")
+    suspend fun legal(
+        @Query("policy") policy: String,
+        @Query("lang") lang: String,
+    ): LegalResponse
 
     // ---- Kullanıcı / Kredi / Admin ----
     @GET("api/v1/profile")

@@ -10,10 +10,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
@@ -65,12 +68,15 @@ import com.florence.app.data.repository.AuthRepository
 import com.florence.app.presentation.advisor.AdvisorScreen
 import com.florence.app.presentation.admin.AdminScreen
 import com.florence.app.presentation.about.AboutScreen
+import com.florence.app.presentation.contact.ContactScreen
 import com.florence.app.presentation.auth.LoginScreen
 import com.florence.app.presentation.auth.RegisterScreen
 import com.florence.app.presentation.company.CompanyDetailScreen
 import com.florence.app.presentation.economy.EconomyScreen
 import com.florence.app.presentation.home.DashboardScreen
 import com.florence.app.presentation.ipo.IpoScreen
+import com.florence.app.presentation.legal.LegalDetailScreen
+import com.florence.app.presentation.legal.LegalScreen
 import com.florence.app.presentation.notifications.NotificationScreen
 import com.florence.app.presentation.portfolio.PortfolioDetailScreen
 import com.florence.app.presentation.portfolio.PortfolioScreen
@@ -130,6 +136,8 @@ private val DRAWER_ACCOUNT_ITEMS = listOf(
     DrawerItem("settings", R.string.nav_settings, Icons.Filled.Settings),
     DrawerItem("profile", R.string.nav_profile, Icons.Filled.Person),
     DrawerItem("about", R.string.nav_about, Icons.Filled.Info),
+    DrawerItem("contact", R.string.nav_contact, Icons.Filled.Email),
+    DrawerItem("legal", R.string.nav_legal, Icons.Filled.List),
 )
 
 private fun drawerTitleFor(route: String?): Int = when (route) {
@@ -145,6 +153,8 @@ private fun drawerTitleFor(route: String?): Int = when (route) {
     "admin" -> R.string.nav_admin
     "profile" -> R.string.nav_profile
     "about" -> R.string.nav_about
+    "contact" -> R.string.nav_contact
+    "legal" -> R.string.nav_legal
     "notifications" -> R.string.nav_notifications
     else -> R.string.app_name
 }
@@ -199,7 +209,12 @@ private fun MainScaffold(viewModel: RootViewModel) {
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-                Column(modifier = Modifier.fillMaxHeight().width(300.dp)) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(300.dp)
+                        .verticalScroll(rememberScrollState()),
+                ) {
                     Row(
                         modifier = Modifier.padding(start = 20.dp, top = 24.dp, bottom = 16.dp),
                         verticalAlignment = Alignment.CenterVertically,
@@ -427,6 +442,17 @@ private fun MainScaffold(viewModel: RootViewModel) {
                 composable("economy") { EconomyScreen() }
                 composable("settings") { SettingsScreen() }
                 composable("about") { AboutScreen() }
+                composable("contact") { ContactScreen() }
+                composable("legal") { LegalScreen(onOpenPolicy = { policy ->
+                    navController.navigate("legal/$policy")
+                }) }
+                composable(
+                    route = "legal/{policy}",
+                    arguments = listOf(navArgument("policy") { type = NavType.StringType }),
+                ) { backStackEntry ->
+                    val policy = backStackEntry.arguments?.getString("policy") ?: "terms"
+                    LegalDetailScreen(policy = policy)
+                }
                 composable("admin") { AdminScreen() }
                 composable("profile") { ProfileScreen(onLoggedOut = {}) }
                 composable(

@@ -262,6 +262,21 @@ data class ContributorsResponse(
     val contributors: List<Contributor> = emptyList(),
 )
 
+// ---- İletişim / Yasal ----
+@Serializable
+data class ContactResponse(
+    val email: String? = null,
+    val github: String? = null,
+)
+
+@Serializable
+data class LegalResponse(
+    val policy: String? = null,
+    val lang: String? = null,
+    @SerialName("last_updated") val lastUpdated: String? = null,
+    val content: String? = null,
+)
+
 @Serializable
 data class GenerateReportRequest(
     val ticker: String,

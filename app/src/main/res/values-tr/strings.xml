@@ -15,6 +15,12 @@
     <string name="nav_logout">Oturumu Kapat</string>
     <string name="nav_settings">Ayarlar</string>
     <string name="nav_about">Hakkımızda</string>
+    <string name="nav_contact">İletişim</string>
+    <string name="nav_legal">Yasal</string>
+    <string name="legal_terms">Kullanım koşulları</string>
+    <string name="legal_privacy">Gizlilik politikası</string>
+    <string name="legal_cookies">Çerez Politikası</string>
+    <string name="legal_disclaimer">Yasal uyarı</string>
     <string name="nav_notifications">Bildirimler</string>
     <string name="nav_admin">Admin Paneli</string>
     <string name="nav_section_market">Piyasa</string>
