@@ -30,11 +30,11 @@ Florence Mobile is the mobile counterpart of the [Florence web interface](https:
 
 ## 📸 Screenshots
 
-| Login | Dashboard | News |
-|-------|-----------|------|
-| ![Login](screenshots/01_login.png) | ![Dashboard](screenshots/05_pano.png) | ![News](screenshots/106_haberler_canli.png) |
-
-More captures live in [`screenshots/`](screenshots/).
+| | | |
+|-|-|-|
+| ![Screenshot 1](screenshots/screenshot-01.png) | ![Screenshot 2](screenshots/screenshot-02.png) | ![Screenshot 3](screenshots/screenshot-03.png) |
+| ![Screenshot 4](screenshots/screenshot-04.png) | ![Screenshot 5](screenshots/screenshot-05.png) | ![Screenshot 6](screenshots/screenshot-06.png) |
+| ![Screenshot 7](screenshots/screenshot-07.png) | ![Screenshot 8](screenshots/screenshot-08.png) | ![Screenshot 9](screenshots/screenshot-09.png) |
 
 ## 🛠 Tech Stack
 
