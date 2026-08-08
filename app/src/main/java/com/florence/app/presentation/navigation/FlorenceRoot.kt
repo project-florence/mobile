@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
@@ -69,6 +70,7 @@ import com.florence.app.presentation.company.CompanyDetailScreen
 import com.florence.app.presentation.economy.EconomyScreen
 import com.florence.app.presentation.home.DashboardScreen
 import com.florence.app.presentation.ipo.IpoScreen
+import com.florence.app.presentation.notifications.NotificationScreen
 import com.florence.app.presentation.portfolio.PortfolioDetailScreen
 import com.florence.app.presentation.portfolio.PortfolioScreen
 import com.florence.app.presentation.profile.ProfileScreen
@@ -140,6 +142,7 @@ private fun drawerTitleFor(route: String?): Int = when (route) {
     "settings" -> R.string.nav_settings
     "admin" -> R.string.nav_admin
     "profile" -> R.string.nav_profile
+    "notifications" -> R.string.nav_notifications
     else -> R.string.app_name
 }
 
@@ -184,7 +187,8 @@ private fun MainScaffold(viewModel: RootViewModel) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
     val isDetail = currentRoute?.startsWith("company/") == true ||
-        currentRoute?.startsWith("portfolio/") == true
+        currentRoute?.startsWith("portfolio/") == true ||
+        currentRoute == "notifications"
     val creditsViewModel: CreditsViewModel = hiltViewModel()
     val creditsState by creditsViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -320,25 +324,37 @@ private fun MainScaffold(viewModel: RootViewModel) {
                         if (!isDetail) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .padding(end = 12.dp)
-                                    .clip(RoundedCornerShape(20.dp))
-                                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f))
-                                    .padding(horizontal = 10.dp, vertical = 6.dp),
+                                modifier = Modifier.padding(end = 12.dp),
                             ) {
-                                Icon(
-                                    imageVector = Icons.Filled.Star,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.size(14.dp),
-                                )
-                                Spacer(Modifier.size(4.dp))
-                                Text(
-                                    text = creditsState.credits?.let { "%.1f".format(it) } ?: "—",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.primary,
-                                )
+                                // Bildirim zili (şimdilik boş panel)
+                                IconButton(onClick = { navController.navigate("notifications") }) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Notifications,
+                                        contentDescription = "Bildirimler",
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
+                                }
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(20.dp))
+                                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f))
+                                        .padding(horizontal = 10.dp, vertical = 6.dp),
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Star,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.size(14.dp),
+                                    )
+                                    Spacer(Modifier.size(4.dp))
+                                    Text(
+                                        text = creditsState.credits?.let { "%.1f".format(it) } ?: "—",
+                                        style = MaterialTheme.typography.labelMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.primary,
+                                    )
+                                }
                             }
                         }
                     },
@@ -359,6 +375,9 @@ private fun MainScaffold(viewModel: RootViewModel) {
                             navController.navigate("company/$ticker")
                         },
                     )
+                }
+                composable("notifications") {
+                    NotificationScreen()
                 }
                 composable("search") {
                     SearchScreen(

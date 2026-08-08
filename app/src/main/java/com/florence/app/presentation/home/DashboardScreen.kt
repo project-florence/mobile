@@ -24,7 +24,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -50,7 +54,10 @@ import com.florence.app.presentation.components.StatCard
 import com.florence.app.presentation.components.clickableNoRipple
 import com.florence.app.presentation.components.formatCompact
 import com.florence.app.presentation.components.formatPrice
+import com.florence.app.presentation.profile.greetingResFor
+import kotlinx.coroutines.delay
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
@@ -59,11 +66,27 @@ import java.util.Locale
 fun DashboardScreen(
     onOpenCompany: (String) -> Unit,
     viewModel: DashboardViewModel = hiltViewModel(),
+    creditsViewModel: com.florence.app.presentation.settings.CreditsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val creditsState by creditsViewModel.uiState.collectAsStateWithLifecycle()
+
+    // Zaman ayarlı selamlama + canlı saat (30 sn'de bir güncellenir).
+    var now by remember { mutableStateOf(LocalTime.now()) }
+    LaunchedEffect(Unit) {
+        while (true) {
+            now = LocalTime.now()
+            delay(30_000)
+        }
+    }
+    val username = creditsState.profile?.username ?: "Yatırımcı"
+    val greeting = stringResource(greetingResFor(now.hour), username)
+    val clock = now.format(DateTimeFormatter.ofPattern("HH:mm"))
 
     Column(modifier = Modifier.fillMaxSize()) {
         DashboardHeader(
+            greeting = greeting,
+            clock = clock,
             version = uiState.version,
             onRefresh = viewModel::refresh,
         )
@@ -139,7 +162,12 @@ fun DashboardScreen(
 }
 
 @Composable
-private fun DashboardHeader(version: String?, onRefresh: () -> Unit) {
+private fun DashboardHeader(
+    greeting: String?,
+    clock: String?,
+    version: String?,
+    onRefresh: () -> Unit,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -149,12 +177,21 @@ private fun DashboardHeader(version: String?, onRefresh: () -> Unit) {
         LogoMark(size = 34.dp)
         Spacer(Modifier.width(10.dp))
         Column(modifier = Modifier.weight(1f)) {
+            greeting?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            }
             Text(
                 text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.titleLarge,
             )
             Text(
-                text = LocalDate.now().format(DateTimeFormatter.ofPattern("EEE, d MMM", Locale.getDefault())),
+                text = LocalDate.now().format(DateTimeFormatter.ofPattern("EEE, d MMM", Locale.getDefault())) +
+                    (clock?.let { " · $it" } ?: ""),
                 style = MaterialTheme.typography.labelSmall,
                 color = TextSecondary,
             )

@@ -14,6 +14,7 @@
     <string name="nav_economy">Döviz &amp; Metaller</string>
     <string name="nav_logout">Oturumu Kapat</string>
     <string name="nav_settings">Ayarlar</string>
+    <string name="nav_notifications">Bildirimler</string>
     <string name="nav_admin">Admin Paneli</string>
     <string name="nav_section_market">Piyasa</string>
     <string name="nav_section_account">Hesap</string>
