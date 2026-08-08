@@ -199,7 +199,7 @@ private fun DashboardHeader(
             greeting?.let {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.headlineMedium,
+                    style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Black,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
