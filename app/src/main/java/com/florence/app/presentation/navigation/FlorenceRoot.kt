@@ -66,7 +66,6 @@ import androidx.navigation.navArgument
 import com.florence.app.R
 import com.florence.app.data.repository.AuthRepository
 import com.florence.app.presentation.advisor.AdvisorScreen
-import com.florence.app.presentation.admin.AdminScreen
 import com.florence.app.presentation.about.AboutScreen
 import com.florence.app.presentation.contact.ContactScreen
 import com.florence.app.presentation.auth.LoginScreen
@@ -150,7 +149,6 @@ private fun drawerTitleFor(route: String?): Int = when (route) {
     "ipos" -> R.string.nav_ipos
     "economy" -> R.string.nav_economy
     "settings" -> R.string.nav_settings
-    "admin" -> R.string.nav_admin
     "profile" -> R.string.nav_profile
     "about" -> R.string.nav_about
     "contact" -> R.string.nav_contact
@@ -453,7 +451,6 @@ private fun MainScaffold(viewModel: RootViewModel) {
                     val policy = backStackEntry.arguments?.getString("policy") ?: "terms"
                     LegalDetailScreen(policy = policy)
                 }
-                composable("admin") { AdminScreen() }
                 composable("profile") { ProfileScreen(onLoggedOut = {}) }
                 composable(
                     route = "company/{ticker}",
