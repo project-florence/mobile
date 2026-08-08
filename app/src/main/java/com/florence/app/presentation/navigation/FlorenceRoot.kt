@@ -199,6 +199,8 @@ private fun MainScaffold(viewModel: RootViewModel) {
     val currentRoute = backStackEntry?.destination?.route
     val isDetail = currentRoute?.startsWith("company/") == true ||
         currentRoute?.startsWith("portfolio/") == true ||
+        currentRoute?.startsWith("report/") == true ||
+        currentRoute?.startsWith("legal/") == true ||
         currentRoute == "notifications"
     val creditsViewModel: CreditsViewModel = hiltViewModel()
     val creditsState by creditsViewModel.uiState.collectAsStateWithLifecycle()
@@ -273,12 +275,11 @@ private fun MainScaffold(viewModel: RootViewModel) {
                             currentRoute = currentRoute,
                             onNavigate = {
                                 scope.launch { drawerState.close() }
+                                // Temiz navigasyon: hedef ekran her zaman taze açılır,
+                                // alt route kalıntıları (örn. legal detay) geri yüklenmez.
                                 navController.navigate(item.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
+                                    popUpTo(navController.graph.findStartDestination().id)
                                     launchSingleTop = true
-                                    restoreState = true
                                 }
                             },
                         )
@@ -291,12 +292,11 @@ private fun MainScaffold(viewModel: RootViewModel) {
                             currentRoute = currentRoute,
                             onNavigate = {
                                 scope.launch { drawerState.close() }
+                                // Temiz navigasyon: hedef ekran her zaman taze açılır,
+                                // alt route kalıntıları (örn. legal detay) geri yüklenmez.
                                 navController.navigate(item.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
+                                    popUpTo(navController.graph.findStartDestination().id)
                                     launchSingleTop = true
-                                    restoreState = true
                                 }
                             },
                         )
