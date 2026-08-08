@@ -20,7 +20,10 @@ class EconomyViewModel @Inject constructor(
     data class EconomyUiState(
         val loading: Boolean = true,
         val currency: Map<String, CurrencyQuote> = emptyMap(),
-        val currencyEmpty: Boolean = false,
+        val gold: Map<String, CurrencyQuote> = emptyMap(),
+        val silver: CurrencyQuote? = null,
+        val platinum: CurrencyQuote? = null,
+        val palladium: CurrencyQuote? = null,
     )
 
     private val _uiState = MutableStateFlow(EconomyUiState())
@@ -28,12 +31,19 @@ class EconomyViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val result = market.currency()
+            val currency = market.currency()
+            val gold = market.goldPrices()
+            val silver = market.silverPrice()
+            val platinum = market.gramPlatinumPrice()
+            val palladium = market.gramPalladiumPrice()
             _uiState.update {
                 it.copy(
                     loading = false,
-                    currency = result.getOrNull() ?: emptyMap(),
-                    currencyEmpty = result.getOrNull()?.isEmpty() != false,
+                    currency = currency.getOrNull() ?: emptyMap(),
+                    gold = gold.getOrNull() ?: emptyMap(),
+                    silver = silver.getOrNull()?.values?.firstOrNull(),
+                    platinum = platinum.getOrNull()?.values?.firstOrNull(),
+                    palladium = palladium.getOrNull()?.values?.firstOrNull(),
                 )
             }
         }

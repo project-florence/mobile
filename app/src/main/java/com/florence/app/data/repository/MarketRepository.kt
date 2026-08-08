@@ -38,4 +38,16 @@ class MarketRepository @Inject constructor(
 
     suspend fun currency(): Result<Map<String, CurrencyQuote>> =
         runCatching { api.currency(symbols = null) }
+
+    suspend fun goldPrices(): Result<Map<String, CurrencyQuote>> =
+        runCatching { api.goldPrices() }
+
+    suspend fun silverPrice(): Result<Map<String, CurrencyQuote>> =
+        runCatching { api.silverPrice() }
+
+    suspend fun gramPlatinumPrice(): Result<Map<String, CurrencyQuote>> =
+        runCatching { api.gramPlatinumPrice() }
+
+    suspend fun gramPalladiumPrice(): Result<Map<String, CurrencyQuote>> =
+        runCatching { api.gramPalladiumPrice() }
 }

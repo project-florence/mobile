@@ -78,14 +78,10 @@ data class Quote(
 // GET /api/v1/economy/currency  → { "USD": {...}, "EUR": {...} }
 @Serializable
 data class CurrencyQuote(
-    val code: String? = null,
-    val name: String? = null,
-    val buying: Double? = null,
-    val selling: Double? = null,
-    val rate: Double? = null,
-    val change: Double? = null,
-    @SerialName("change_pct") val changePct: Double? = null,
-    val time: String? = null,
+    @SerialName("Buying") val buying: String? = null,
+    @SerialName("Selling") val selling: String? = null,
+    @SerialName("Change") val change: String? = null,
+    @SerialName("Type") val type: String? = null,
 )
 
 // ---- Analitik ----

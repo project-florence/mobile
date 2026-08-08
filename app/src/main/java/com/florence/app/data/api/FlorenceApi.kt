@@ -104,6 +104,19 @@ interface FlorenceApi : AuthEndpoints {
     @GET("api/v1/economy/currency")
     suspend fun currency(@Query("symbols") symbols: String?): Map<String, CurrencyQuote>
 
+    // ---- Metaller (altın türleri, gümüş, platin, paladyum) ----
+    @GET("api/v1/economy/gold-prices")
+    suspend fun goldPrices(): Map<String, CurrencyQuote>
+
+    @GET("api/v1/economy/silver-price")
+    suspend fun silverPrice(): Map<String, CurrencyQuote>
+
+    @GET("api/v1/economy/gram-platinum-price")
+    suspend fun gramPlatinumPrice(): Map<String, CurrencyQuote>
+
+    @GET("api/v1/economy/gram-palladium-price")
+    suspend fun gramPalladiumPrice(): Map<String, CurrencyQuote>
+
     // ---- Analitik (web'deki usePageTracking eşleniği) ----
     @GET("api/v1/announcements")
     suspend fun announcements(): AnnouncementsResponse

@@ -25,7 +25,26 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.florence.app.core.theme.TextSecondary
 import com.florence.app.presentation.components.EmptyState
 import com.florence.app.presentation.components.FlorenceCard
-import com.florence.app.presentation.components.formatPrice
+
+/** Altın türü anahtarı → ekranda gösterilecek güzel ad. */
+private val GOLD_DISPLAY = mapOf(
+    "gram-altin" to "Gram Altın",
+    "ceyrek-altin" to "Çeyrek Altın",
+    "ons" to "Ons",
+    "gram-has-altin" to "Gram Has Altın",
+    "yarim-altin" to "Yarım Altın",
+    "tam-altin" to "Tam Altın",
+    "cumhuriyet-altini" to "Cumhuriyet Altını",
+    "ata-altin" to "Ata Altın",
+    "14-ayar-altin" to "14 Ayar Altın",
+    "18-ayar-altin" to "18 Ayar Altın",
+    "22-ayar-bilezik" to "22 Ayar Bilezik",
+    "ikibucuk-altin" to "İkibuçuk Altın",
+    "besli-altin" to "Beşli Altın",
+    "gremse-altin" to "Gremse Altın",
+    "resat-altin" to "Reşat Altın",
+    "hamit-altin" to "Hamit Altın",
+)
 
 @Composable
 fun EconomyScreen(
@@ -69,6 +88,34 @@ fun EconomyScreen(
                     val (symbol, quote) = uiState.currency.entries.elementAt(index)
                     CurrencyRow(symbol, quote)
                 }
+
+                // ---- Metaller bölümü ----
+                item {
+                    Spacer(Modifier.size(8.dp))
+                    Text(
+                        text = "Metaller",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Text(
+                        text = "Altın, gümüş, platin ve paladyum fiyatları",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                items(uiState.gold.size) { index ->
+                    val (key, quote) = uiState.gold.entries.elementAt(index)
+                    CurrencyRow(GOLD_DISPLAY[key] ?: key, quote)
+                }
+                uiState.silver?.let { silver ->
+                    item { CurrencyRow("Gümüş (gram)", silver) }
+                }
+                uiState.platinum?.let { platinum ->
+                    item { CurrencyRow("Platin (ons)", platinum) }
+                }
+                uiState.palladium?.let { palladium ->
+                    item { CurrencyRow("Paladyum (ons)", palladium) }
+                }
             }
         }
     }
@@ -88,22 +135,23 @@ private fun CurrencyRow(symbol: String, quote: com.florence.app.data.model.Curre
                     fontWeight = FontWeight.Bold,
                 )
                 Text(
-                    text = quote.name ?: "",
+                    text = quote.buying?.let { "Alış $it" } ?: "",
                     style = MaterialTheme.typography.bodySmall,
                     color = TextSecondary,
                 )
             }
             Column(horizontalAlignment = Alignment.End) {
                 Text(
-                    text = formatPrice(quote.rate ?: 0.0),
+                    text = quote.selling ?: "—",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
                 )
-                quote.changePct?.let {
+                quote.change?.let { change ->
+                    val up = change.startsWith("%+")
                     Text(
-                        text = if (it >= 0) "+%.2f%%".format(it) else "%.2f%%".format(it),
+                        text = change,
                         style = MaterialTheme.typography.labelMedium,
-                        color = if (it >= 0) com.florence.app.core.theme.UpColor else com.florence.app.core.theme.DownColor,
+                        color = if (up) com.florence.app.core.theme.UpColor else com.florence.app.core.theme.DownColor,
                     )
                 }
             }
