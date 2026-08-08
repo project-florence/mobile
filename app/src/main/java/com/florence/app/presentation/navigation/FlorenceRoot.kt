@@ -13,6 +13,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.activity.compose.BackHandler
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Create
@@ -174,14 +179,21 @@ fun FlorenceRoot(viewModel: RootViewModel = hiltViewModel()) {
         startDestination = if (session) Routes.MAIN else Routes.LOGIN,
     ) {
         composable(Routes.LOGIN) {
-            LoginScreen(
-                onNavigateToRegister = { navController.navigate(Routes.REGISTER) },
-            )
-        }
-        composable(Routes.REGISTER) {
-            RegisterScreen(
-                onNavigateToLogin = { navController.popBackStack() },
-            )
+            // Kayıt ekranı ayrı bir route değil: koşullu gösterim. `remember`
+            // (saveable değil) olduğu için uygulama öldürülüp açıldığında her
+            // zaman LOGIN ekranı gelir — register restore edilip kullanıcının
+            // "giriş yapacağım" derken kayıt formuna düşmesi engellenir.
+            var showRegister by remember { mutableStateOf(false) }
+            if (showRegister) {
+                BackHandler { showRegister = false }
+                RegisterScreen(
+                    onNavigateToLogin = { showRegister = false },
+                )
+            } else {
+                LoginScreen(
+                    onNavigateToRegister = { showRegister = true },
+                )
+            }
         }
         composable(Routes.MAIN) {
             MainScaffold(viewModel = viewModel)
