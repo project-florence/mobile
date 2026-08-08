@@ -1,6 +1,6 @@
-# Florence Mobil Uygulama (Android) — İmplementasyon Planı
+# Florence Mobil Uygulama (Android) — Geliştirme Yol Haritası
 
-> **For Hermes:** Use subagent-driven-development skill to implement this plan task-by-task.
+> Bu belge, uygulamanın geliştirme sürecini faz faz takip etmek için hazırlanmıştır.
 
 **Goal:** Florence'ın mevcut web uygulaması (project-florence/web) ve API sunucusuyla (project-florence/backend) birebir uyumlu, native bir Android mobil uygulaması geliştirmek.
 
@@ -90,7 +90,7 @@ Yeni repo: `project-florence/mobile` (org konvansiyonu). Kök:
 
 ```
 mobile/
-├── AGENTS.md                  # backend/web'deki gibi (agent çalışma kuralları)
+├── AGENTS.md                  # (geliştirme kuralları için docs/development.md)
 ├── LICENSE                    # AGPL-3.0
 ├── README.md                  # TR + EN
 ├── .github/workflows/         # CI: lint + unit test + assemble
