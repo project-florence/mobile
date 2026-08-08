@@ -64,6 +64,7 @@ import com.florence.app.R
 import com.florence.app.data.repository.AuthRepository
 import com.florence.app.presentation.advisor.AdvisorScreen
 import com.florence.app.presentation.admin.AdminScreen
+import com.florence.app.presentation.about.AboutScreen
 import com.florence.app.presentation.auth.LoginScreen
 import com.florence.app.presentation.auth.RegisterScreen
 import com.florence.app.presentation.company.CompanyDetailScreen
@@ -128,6 +129,7 @@ private val DRAWER_MARKET_ITEMS = listOf(
 private val DRAWER_ACCOUNT_ITEMS = listOf(
     DrawerItem("settings", R.string.nav_settings, Icons.Filled.Settings),
     DrawerItem("profile", R.string.nav_profile, Icons.Filled.Person),
+    DrawerItem("about", R.string.nav_about, Icons.Filled.Info),
 )
 
 private fun drawerTitleFor(route: String?): Int = when (route) {
@@ -142,6 +144,7 @@ private fun drawerTitleFor(route: String?): Int = when (route) {
     "settings" -> R.string.nav_settings
     "admin" -> R.string.nav_admin
     "profile" -> R.string.nav_profile
+    "about" -> R.string.nav_about
     "notifications" -> R.string.nav_notifications
     else -> R.string.app_name
 }
@@ -423,6 +426,7 @@ private fun MainScaffold(viewModel: RootViewModel) {
                 composable("ipos") { IpoScreen() }
                 composable("economy") { EconomyScreen() }
                 composable("settings") { SettingsScreen() }
+                composable("about") { AboutScreen() }
                 composable("admin") { AdminScreen() }
                 composable("profile") { ProfileScreen(onLoggedOut = {}) }
                 composable(

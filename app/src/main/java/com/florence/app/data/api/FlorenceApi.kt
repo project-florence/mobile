@@ -22,10 +22,12 @@ import com.florence.app.data.model.PortfolioSnapshot
 import com.florence.app.data.model.PortfolioTransaction
 import com.florence.app.data.model.AddTransactionRequest
 import com.florence.app.data.model.AddTransactionResponse
+import com.florence.app.data.model.AboutResponse
 import com.florence.app.data.model.Quote
 import com.florence.app.data.model.ReportDetail
 import com.florence.app.data.model.ReportGenerateResponse
 import com.florence.app.data.model.ReportHistoryItem
+import com.florence.app.data.model.ContributorsResponse
 import com.florence.app.data.model.ReportsInfoResponse
 import com.florence.app.data.model.Ticker
 import com.florence.app.data.model.UserProfile
@@ -106,6 +108,13 @@ interface FlorenceApi : AuthEndpoints {
     // ---- Analitik (web'deki usePageTracking eşleniği) ----
     @GET("api/v1/announcements")
     suspend fun announcements(): AnnouncementsResponse
+
+    // ---- Hakkımızda / Katkıda Bulunanlar ----
+    @GET("api/v1/about")
+    suspend fun about(@Query("lang") lang: String): AboutResponse
+
+    @GET("api/v1/contributors")
+    suspend fun contributors(): ContributorsResponse
 
     // ---- Kullanıcı / Kredi / Admin ----
     @GET("api/v1/profile")

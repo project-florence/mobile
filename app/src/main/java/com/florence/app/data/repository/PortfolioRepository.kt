@@ -2,6 +2,8 @@ package com.florence.app.data.repository
 
 import com.florence.app.data.api.FlorenceApi
 import com.florence.app.data.model.AddTransactionRequest
+import com.florence.app.data.model.AboutResponse
+import com.florence.app.data.model.Contributor
 import com.florence.app.data.model.CreatePortfolioRequest
 import com.florence.app.data.model.IpoItem
 import com.florence.app.data.model.Portfolio
@@ -65,4 +67,10 @@ class MiscRepository @Inject constructor(private val api: FlorenceApi) {
 
     suspend fun reportsInfo(): Result<ReportsInfoResponse> =
         runCatching { api.reportsInfo() }
+
+    suspend fun about(lang: String): Result<AboutResponse> =
+        runCatching { api.about(lang) }
+
+    suspend fun contributors(): Result<List<Contributor>> =
+        runCatching { api.contributors().contributors }
 }

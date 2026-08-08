@@ -243,6 +243,25 @@ data class ReportsInfoResponse(
     @SerialName("simulation") val simulation: ReportTypeInfo? = null,
 )
 
+// ---- Hakkımızda / Katkıda Bulunanlar ----
+@Serializable
+data class AboutResponse(
+    val lang: String? = null,
+    val content: String? = null,
+)
+
+@Serializable
+data class Contributor(
+    val nickname: String? = null,
+    @SerialName("picture_url") val pictureUrl: String? = null,
+    @SerialName("github_url") val githubUrl: String? = null,
+)
+
+@Serializable
+data class ContributorsResponse(
+    val contributors: List<Contributor> = emptyList(),
+)
+
 @Serializable
 data class GenerateReportRequest(
     val ticker: String,
