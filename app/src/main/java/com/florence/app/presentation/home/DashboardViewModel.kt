@@ -24,6 +24,8 @@ data class DashboardUiState(
     val heroes: List<CompanyInfo> = emptyList(),
     val companies: List<Ticker> = emptyList(),
     val favorites: Set<String> = emptySet(),
+    /** Hero ticker → 5d/5m kapanış serisi (sparkline için). */
+    val sparklines: Map<String, List<Float>> = emptyMap(),
 )
 
 /** Panoda öne çıkan hisseler (web'deki popüler widget karşılığı). */
@@ -33,6 +35,7 @@ val POPULAR_TICKERS = listOf("THYAO", "ASELS", "GARAN", "AKBNK", "EREGL", "TUPRS
 class DashboardViewModel @Inject constructor(
     private val repo: MarketRepository,
     private val favoritesRepo: FavoritesRepository,
+    private val companyRepo: com.florence.app.data.repository.CompanyRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DashboardUiState())
@@ -57,6 +60,17 @@ class DashboardViewModel @Inject constructor(
                 POPULAR_TICKERS.map { ticker -> async { repo.info(ticker) } }
                     .mapNotNull { it.await().getOrNull() }
             }
+            // Hero kartları için mini grafik verisi (5d / 5m kapanış serisi).
+            val sparklines: Map<String, List<Float>> = coroutineScope {
+                val map = mutableMapOf<String, List<Float>>()
+                POPULAR_TICKERS.forEach { ticker ->
+                    map[ticker] = async {
+                        val history = companyRepo.history(ticker, period = "5d", interval = "5m")
+                        history.getOrNull()?.mapNotNull { c -> c.close?.toFloat() } ?: emptyList<Float>()
+                    }.await()
+                }
+                map
+            }
             favoritesRepo.refresh()
             _uiState.update { st ->
                 st.copy(
@@ -66,6 +80,7 @@ class DashboardViewModel @Inject constructor(
                     disabledFeatures = maintenance.getOrNull()?.disabledFeatures ?: emptyList(),
                     heroes = heroes,
                     companies = companies.getOrNull() ?: emptyList(),
+                    sparklines = sparklines,
                 )
             }
         }

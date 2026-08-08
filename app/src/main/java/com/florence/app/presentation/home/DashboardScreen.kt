@@ -1,5 +1,6 @@
 package com.florence.app.presentation.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Star
@@ -31,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -51,9 +54,12 @@ import com.florence.app.presentation.components.LogoMark
 import com.florence.app.presentation.components.SectionHeader
 import com.florence.app.presentation.components.SkeletonBox
 import com.florence.app.presentation.components.StatCard
+import com.florence.app.presentation.components.Sparkline
+import com.florence.app.presentation.components.TickerAvatar
 import com.florence.app.presentation.components.clickableNoRipple
 import com.florence.app.presentation.components.formatCompact
 import com.florence.app.presentation.components.formatPrice
+import com.florence.app.presentation.components.sparklineColor
 import com.florence.app.presentation.profile.greetingResFor
 import kotlinx.coroutines.delay
 import java.time.LocalDate
@@ -124,6 +130,11 @@ fun DashboardScreen(
                         }
                     }
 
+                    // Piyasa durumu kartı (açık/kapalı + öne çıkanlardan yükselen/düşen)
+                    item {
+                        MarketStatusCard(heroes = uiState.heroes)
+                    }
+
                     item {
                         SectionHeader(title = stringResource(R.string.dashboard_highlights))
                         Spacer(Modifier.height(10.dp))
@@ -132,7 +143,11 @@ fun DashboardScreen(
                         } else {
                             LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                                 items(uiState.heroes, key = { it.symbol ?: it.hashCode() }) { info ->
-                                    HeroCard(info) { ticker -> onOpenCompany(ticker) }
+                                    HeroCard(
+                                        info = info,
+                                        sparkline = uiState.sparklines[info.symbol],
+                                        onClick = { ticker -> onOpenCompany(ticker) },
+                                    )
                                 }
                             }
                         }
@@ -210,25 +225,132 @@ private fun DashboardHeader(
     }
 }
 
-/** Öne çıkan hisse kartı: fiyat + değişim. */
+/** Öne çıkan hisse kartı: avatar + fiyat + değişim + mini grafik. */
 @Composable
-private fun HeroCard(info: CompanyInfo, onClick: (String) -> Unit) {
+private fun HeroCard(
+    info: CompanyInfo,
+    sparkline: List<Float>?,
+    onClick: (String) -> Unit,
+) {
     val market = info.market
     val ticker = (info.symbol ?: "").removeSuffix(".IS")
     val price = market?.currentPrice
     val changePct = computeChangePct(market)
-    StatCard(
-        label = ticker,
-        value = if (price != null) formatPrice(price) else "—",
-        sub = if (changePct != null) String.format(Locale.US, "%+.2f%%", changePct) else null,
-        subColor = when {
-            changePct == null -> TextSecondary
-            changePct >= 0 -> UpColor
-            else -> DownColor
-        },
-        accent = MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier.clickableNoRipple { onClick(ticker) },
-    )
+    val changeColor = when {
+        changePct == null -> TextSecondary
+        changePct >= 0 -> UpColor
+        else -> DownColor
+    }
+    FlorenceCard(
+        onClick = { onClick(ticker) },
+        modifier = Modifier.width(172.dp),
+    ) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                TickerAvatar(ticker = ticker, size = 34.dp)
+                Spacer(Modifier.width(8.dp))
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = ticker,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Text(
+                        text = changePct?.let { String.format(Locale.US, "%+.2f%%", it) } ?: "—",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = changeColor,
+                    )
+                }
+            }
+            Spacer(Modifier.height(10.dp))
+            Text(
+                text = if (price != null) formatPrice(price) else "—",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.ExtraBold,
+            )
+            sparkline?.takeIf { it.size >= 2 }?.let { series ->
+                Spacer(Modifier.height(8.dp))
+                Sparkline(
+                    values = series,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(34.dp),
+                    lineColor = sparklineColor(series, UpColor, DownColor),
+                )
+            }
+        }
+    }
+}
+
+/** Piyasa durumu: açık/kapalı + öne çıkan hisselerin yükselen/düşen sayısı. */
+@Composable
+private fun MarketStatusCard(heroes: List<CompanyInfo>) {
+    val now = LocalTime.now()
+    val day = LocalDate.now().dayOfWeek
+    val isWeekday = day != java.time.DayOfWeek.SATURDAY && day != java.time.DayOfWeek.SUNDAY
+    val isOpen = isWeekday && now >= LocalTime.of(9, 30) && now <= LocalTime.of(18, 0)
+    val ups = heroes.count { (computeChangePct(it.market) ?: 0.0) >= 0 }
+    val downs = heroes.size - ups
+
+    FlorenceCard(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.padding(14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(CircleShape)
+                    .background(
+                        if (isOpen) UpColor.copy(alpha = 0.15f) else DownColor.copy(alpha = 0.15f)
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = if (isOpen) "▲" else "▼",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = if (isOpen) UpColor else DownColor,
+                )
+            }
+            Spacer(Modifier.width(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = if (isOpen) "Piyasa Açık" else "Piyasa Kapalı",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = if (isOpen) UpColor else MaterialTheme.colorScheme.onSurface,
+                )
+                Text(
+                    text = "Hafta içi 09:30–18:00 · ${now.format(DateTimeFormatter.ofPattern("HH:mm"))}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = TextSecondary,
+                )
+            }
+            Column(horizontalAlignment = Alignment.End) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "$ups ▲",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = UpColor,
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = "$downs ▼",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = DownColor,
+                    )
+                }
+                Text(
+                    text = "öne çıkanlar",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = TextSecondary,
+                )
+            }
+        }
+    }
 }
 
 /** Şirket satırı: hisse + isim + favori yıldızı. */
