@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Star
@@ -93,7 +94,6 @@ fun DashboardScreen(
         DashboardHeader(
             greeting = greeting,
             clock = clock,
-            version = uiState.version,
             onRefresh = viewModel::refresh,
         )
 
@@ -180,7 +180,6 @@ fun DashboardScreen(
 private fun DashboardHeader(
     greeting: String?,
     clock: String?,
-    version: String?,
     onRefresh: () -> Unit,
 ) {
     Row(
@@ -189,7 +188,14 @@ private fun DashboardHeader(
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Column(modifier = Modifier.weight(1f)) {
+        // Selamlama kutucuğu — ana sayfanın tek kimliği.
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .clip(RoundedCornerShape(18.dp))
+                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.08f))
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+        ) {
             greeting?.let {
                 Text(
                     text = it,
@@ -208,14 +214,7 @@ private fun DashboardHeader(
                 color = TextSecondary,
             )
         }
-        version?.let {
-            Text(
-                text = stringResource(R.string.dashboard_version, it),
-                style = MaterialTheme.typography.labelSmall,
-                color = TextSecondary,
-                modifier = Modifier.padding(end = 4.dp),
-            )
-        }
+        Spacer(Modifier.width(8.dp))
         IconButton(onClick = onRefresh) {
             Icon(Icons.Filled.Refresh, contentDescription = stringResource(R.string.common_retry))
         }
