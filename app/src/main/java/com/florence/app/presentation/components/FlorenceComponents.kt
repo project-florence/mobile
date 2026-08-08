@@ -7,6 +7,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -30,9 +31,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import com.florence.app.R
+import com.florence.app.core.theme.TextSecondary
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -67,30 +72,17 @@ fun FlorenceCard(
     Box(modifier = modifier.then(clickable)) { content() }
 }
 
-/** Marka logosu: gradyan zemin üzerinde mum grafik motif. */
+/** Marka logosu: uygulama görseli (adaptive icon ile aynı kaynak). */
 @Composable
 fun LogoMark(size: Dp = 40.dp) {
-    Canvas(modifier = Modifier.size(size)) {
-        val r = size.toPx() * 0.28f
-        drawRoundRect(
-            brush = BrandGradient,
-            cornerRadius = androidx.compose.ui.geometry.CornerRadius(r, r),
-        )
-        val w = size.toPx()
-        val barW = w * 0.09f
-        val gap = w * 0.10f
-        val bars = listOf(0.38f, 0.55f, 0.30f, 0.68f, 0.48f)
-        val baseY = w * 0.78f
-        bars.forEachIndexed { i, h ->
-            val x = w * 0.18f + i * (barW + gap)
-            drawRoundRect(
-                color = Color.White,
-                topLeft = androidx.compose.ui.geometry.Offset(x, baseY - w * h),
-                size = androidx.compose.ui.geometry.Size(barW, w * h),
-                cornerRadius = androidx.compose.ui.geometry.CornerRadius(barW * 0.35f, barW * 0.35f),
-            )
-        }
-    }
+    Image(
+        painter = painterResource(R.drawable.ic_logo_fg),
+        contentDescription = null,
+        modifier = Modifier
+            .size(size)
+            .clip(RoundedCornerShape(size * 0.22f)),
+        contentScale = ContentScale.Crop,
+    )
 }
 
 /** Fiyat + yüzde değişim; renk otomatik (yeşil/kırmızı). */
