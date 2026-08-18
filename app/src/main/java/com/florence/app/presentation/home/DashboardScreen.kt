@@ -132,7 +132,10 @@ fun DashboardScreen(
 
                     // Piyasa durumu kartı (açık/kapalı + öne çıkanlardan yükselen/düşen)
                     item {
-                        MarketStatusCard(heroes = uiState.heroes)
+                        MarketStatusCard(
+                            marketStatus = uiState.marketStatus,
+                            heroes = uiState.heroes,
+                        )
                     }
 
                     item {
@@ -280,13 +283,38 @@ private fun HeroCard(
 
 /** Piyasa durumu: açık/kapalı + öne çıkan hisselerin yükselen/düşen sayısı. */
 @Composable
-private fun MarketStatusCard(heroes: List<CompanyInfo>) {
-    val now = LocalTime.now()
-    val day = LocalDate.now().dayOfWeek
-    val isWeekday = day != java.time.DayOfWeek.SATURDAY && day != java.time.DayOfWeek.SUNDAY
-    val isOpen = isWeekday && now >= LocalTime.of(9, 30) && now <= LocalTime.of(18, 0)
+private fun MarketStatusCard(
+    marketStatus: com.florence.app.data.model.MarketStatusResponse?,
+    heroes: List<CompanyInfo>,
+) {
+    // Gerçek backend verisi yoksa nötr/kullanılamaz durum göster.
+    val status = marketStatus
+    val isOpen = status?.open == true
     val ups = heroes.count { (computeChangePct(it.market) ?: 0.0) >= 0 }
     val downs = heroes.size - ups
+    val clock = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
+
+    val title = when {
+        status == null -> stringResource(R.string.market_status_unavailable)
+        isOpen -> stringResource(R.string.market_open)
+        else -> stringResource(R.string.market_closed)
+    }
+
+    // Alt satır: tatil / açılış saati / güncelleme.
+    val subtitle = buildString {
+        if (status?.isHoliday == true && !status.holidayName.isNullOrBlank()) {
+            append(stringResource(R.string.market_holiday, status.holidayName))
+        } else if (!isOpen && !status?.nextOpenAt.isNullOrBlank()) {
+            append(stringResource(R.string.market_reopens_at, formatTime(status?.nextOpenAt)))
+        } else if (isOpen) {
+            append(stringResource(R.string.market_open))
+        }
+        status?.asOf?.let { asOf ->
+            if (isNotBlank()) append(" · ")
+            append(stringResource(R.string.market_asof, formatTime(asOf)))
+        }
+        if (isBlank()) append(stringResource(R.string.market_schedule_hint, clock))
+    }
 
     FlorenceCard(modifier = Modifier.fillMaxWidth()) {
         Row(
@@ -298,27 +326,43 @@ private fun MarketStatusCard(heroes: List<CompanyInfo>) {
                     .size(44.dp)
                     .clip(CircleShape)
                     .background(
-                        if (isOpen) UpColor.copy(alpha = 0.15f) else DownColor.copy(alpha = 0.15f)
+                        when {
+                            status == null -> MaterialTheme.colorScheme.surfaceVariant
+                            isOpen -> UpColor.copy(alpha = 0.15f)
+                            else -> DownColor.copy(alpha = 0.15f)
+                        }
                     ),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    text = if (isOpen) "▲" else "▼",
+                    text = when {
+                        status == null -> "—"
+                        isOpen -> "▲"
+                        else -> "▼"
+                    },
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = if (isOpen) UpColor else DownColor,
+                    color = when {
+                        status == null -> TextSecondary
+                        isOpen -> UpColor
+                        else -> DownColor
+                    },
                 )
             }
             Spacer(Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = if (isOpen) "Piyasa Açık" else "Piyasa Kapalı",
+                    text = title,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = if (isOpen) UpColor else MaterialTheme.colorScheme.onSurface,
+                    color = when {
+                        status == null -> TextSecondary
+                        isOpen -> UpColor
+                        else -> MaterialTheme.colorScheme.onSurface
+                    },
                 )
                 Text(
-                    text = "Hafta içi 09:30–18:00 · ${now.format(DateTimeFormatter.ofPattern("HH:mm"))}",
+                    text = subtitle,
                     style = MaterialTheme.typography.labelSmall,
                     color = TextSecondary,
                 )
@@ -340,11 +384,30 @@ private fun MarketStatusCard(heroes: List<CompanyInfo>) {
                     )
                 }
                 Text(
-                    text = "öne çıkanlar",
+                    text = stringResource(R.string.market_highlights),
                     style = MaterialTheme.typography.labelSmall,
                     color = TextSecondary,
                 )
             }
+        }
+    }
+}
+
+/** YYYY-MM-DDTHH:mm:ss… → HH:mm (parse edemezse ham değeri dön). */
+private fun formatTime(value: String?): String {
+    if (value.isNullOrBlank()) return ""
+    return try {
+        java.time.OffsetDateTime.parse(value).format(DateTimeFormatter.ofPattern("HH:mm"))
+    } catch (e: Exception) {
+        // "2026-08-19T15:00:00Z" gibi UTC biçimlerini ve kısa offset'leri dene.
+        try {
+            if (value.contains("T")) {
+                value.substringAfter("T").take(5)
+            } else {
+                value.take(5)
+            }
+        } catch (e2: Exception) {
+            value
         }
     }
 }

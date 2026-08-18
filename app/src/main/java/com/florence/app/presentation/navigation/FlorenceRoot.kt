@@ -24,6 +24,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
@@ -73,6 +74,8 @@ import com.florence.app.R
 import com.florence.app.data.repository.AuthRepository
 import com.florence.app.presentation.advisor.AdvisorScreen
 import com.florence.app.presentation.about.AboutScreen
+import com.florence.app.presentation.avatar.AvatarPickerScreen
+import com.florence.app.presentation.bots.BotsScreen
 import com.florence.app.presentation.contact.ContactScreen
 import com.florence.app.presentation.auth.AuthViewModel
 import com.florence.app.presentation.auth.LoginScreen
@@ -148,6 +151,7 @@ private val DRAWER_MARKET_ITEMS = listOf(
 
 private val DRAWER_ACCOUNT_ITEMS = listOf(
     DrawerItem("settings", R.string.nav_settings, Icons.Filled.Settings),
+    DrawerItem("bots", R.string.nav_bots, Icons.Filled.Face),
     DrawerItem("profile", R.string.nav_profile, Icons.Filled.Person),
     DrawerItem("about", R.string.nav_about, Icons.Filled.Info),
     DrawerItem("contact", R.string.nav_contact, Icons.Filled.Email),
@@ -164,7 +168,9 @@ private fun drawerTitleFor(route: String?): Int = when (route) {
     "ipos" -> R.string.nav_ipos
     "economy" -> R.string.nav_economy
     "settings" -> R.string.nav_settings
+    "bots" -> R.string.nav_bots
     "profile" -> R.string.nav_profile
+    "avatar" -> R.string.avatar_title
     "about" -> R.string.nav_about
     "contact" -> R.string.nav_contact
     "legal" -> R.string.nav_legal
@@ -255,7 +261,8 @@ private fun MainScaffold(viewModel: RootViewModel) {
         currentRoute?.startsWith("portfolio/") == true ||
         currentRoute?.startsWith("report/") == true ||
         currentRoute?.startsWith("legal/") == true ||
-        currentRoute == "notifications"
+        currentRoute == "notifications" ||
+        currentRoute == "avatar"
     val creditsViewModel: CreditsViewModel = hiltViewModel()
     val creditsState by creditsViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -505,7 +512,23 @@ private fun MainScaffold(viewModel: RootViewModel) {
                     val policy = backStackEntry.arguments?.getString("policy") ?: "terms"
                     LegalDetailScreen(policy = policy)
                 }
-                composable("profile") { ProfileScreen(onLoggedOut = {}) }
+                composable("profile") {
+                    ProfileScreen(
+                        onLoggedOut = {},
+                        onOpenAvatar = { navController.navigate("avatar") },
+                        onOpenBots = { navController.navigate("bots") },
+                    )
+                }
+                composable("bots") { BotsScreen() }
+                composable("avatar") {
+                    AvatarPickerScreen(
+                        onSaved = {
+                            // Seçim sonrası profil avatar'ını tazele ve geri dön.
+                            creditsViewModel.refresh()
+                            navController.popBackStack()
+                        },
+                    )
+                }
                 composable(
                     route = "company/{ticker}",
                     arguments = listOf(navArgument("ticker") { type = NavType.StringType }),

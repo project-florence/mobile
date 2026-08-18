@@ -121,6 +121,56 @@
     <string name="common_back">Back</string>
     <string name="common_open">Open</string>
 
+    <!-- Market status (K) -->
+    <string name="market_open">Market Open</string>
+    <string name="market_closed">Market Closed</string>
+    <string name="market_opens_at">Opens at %1$s</string>
+    <string name="market_reopens_at">Reopens at %1$s</string>
+    <string name="market_holiday">Holiday: %1$s</string>
+    <string name="market_timezone">Timezone: %1$s</string>
+    <string name="market_asof">as of %1$s</string>
+    <string name="market_schedule_hint">Trading hours · last update %1$s</string>
+    <string name="market_status_unavailable">Market status unavailable</string>
+    <string name="market_highlights">highlights</string>
+
+    <!-- Avatar (J) -->
+    <string name="avatar_title">Choose Avatar</string>
+    <string name="avatar_change">Change avatar</string>
+    <string name="avatar_picker_hint">Tap an avatar to apply it</string>
+    <string name="avatar_saving">Applying…</string>
+    <string name="avatar_saved">Avatar updated</string>
+    <string name="avatar_error">Could not update avatar</string>
+
+    <!-- Bots (I) -->
+    <string name="nav_bots">My Bots</string>
+    <string name="bots_title">My Bots</string>
+    <string name="bots_empty">No bots yet</string>
+    <string name="bots_empty_hint">Create a bot to get programmatic API access. Your account allows up to 5 bots.</string>
+    <string name="bots_create">Create bot</string>
+    <string name="bots_username">Bot username</string>
+    <string name="bots_username_hint">e.g. my-bot-1</string>
+    <string name="bots_password">Password (optional)</string>
+    <string name="bots_password_hint">Leave empty to auto-generate a strong password</string>
+    <string name="bots_creating">Creating…</string>
+    <string name="bots_username_required">Enter a bot username</string>
+    <string name="bots_delete">Delete</string>
+    <string name="bots_delete_title">Delete bot?</string>
+    <string name="bots_delete_body">This bot will no longer be able to access the API.</string>
+    <string name="bots_cancel">Cancel</string>
+    <string name="bots_limit">%1$d of %2$d bots</string>
+    <string name="bots_password_title">Bot created — save this password</string>
+    <string name="bots_password_body">This password is shown only once. Copy it now — it cannot be retrieved later.</string>
+    <string name="bots_copy">Copy</string>
+    <string name="bots_copied">Copied</string>
+    <string name="bots_created">Bot created</string>
+    <string name="bots_created_at">Created %1$s</string>
+    <string name="bots_last_login">Last login %1$s</string>
+    <string name="bots_error_limit">Bot limit reached (max 5). Delete a bot to create more.</string>
+    <string name="bots_error_username_taken">This bot username is already taken.</string>
+    <string name="bots_error_not_allowed">Bots are not allowed for your account.</string>
+    <string name="bots_error_generic">Could not create bot.</string>
+    <string name="bots_error_load">Could not load bots.</string>
+
     <!-- Common -->
     <string name="common_loading">Loading…</string>
     <string name="common_retry">Retry</string>

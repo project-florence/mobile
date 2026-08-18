@@ -121,6 +121,56 @@
     <string name="common_back">Geri</string>
     <string name="common_open">Aç</string>
 
+    <!-- Piyasa durumu (K) -->
+    <string name="market_open">Piyasa Açık</string>
+    <string name="market_closed">Piyasa Kapalı</string>
+    <string name="market_opens_at">Açılış %1$s</string>
+    <string name="market_reopens_at">Yeniden açılış %1$s</string>
+    <string name="market_holiday">Tatil: %1$s</string>
+    <string name="market_timezone">Saat dilimi: %1$s</string>
+    <string name="market_asof">güncelleme: %1$s</string>
+    <string name="market_schedule_hint">İşlem saatleri · son güncelleme %1$s</string>
+    <string name="market_status_unavailable">Piyasa durumu alınamadı</string>
+    <string name="market_highlights">öne çıkanlar</string>
+
+    <!-- Avatar (J) -->
+    <string name="avatar_title">Avatar Seç</string>
+    <string name="avatar_change">Avatarı değiştir</string>
+    <string name="avatar_picker_hint">Uygulamak için bir avatara dokun</string>
+    <string name="avatar_saving">Uygulanıyor…</string>
+    <string name="avatar_saved">Avatar güncellendi</string>
+    <string name="avatar_error">Avatar güncellenemedi</string>
+
+    <!-- Botlar (I) -->
+    <string name="nav_bots">Bot Hesaplarım</string>
+    <string name="bots_title">Bot Hesaplarım</string>
+    <string name="bots_empty">Henüz bot yok</string>
+    <string name="bots_empty_hint">Programatik API erişimi için bir bot oluştur. Hesabında en fazla 5 bot olabilir.</string>
+    <string name="bots_create">Bot oluştur</string>
+    <string name="bots_username">Bot kullanıcı adı</string>
+    <string name="bots_username_hint">örn. bot-1</string>
+    <string name="bots_password">Şifre (isteğe bağlı)</string>
+    <string name="bots_password_hint">Otomatik güçlü şifre üretmek için boş bırak</string>
+    <string name="bots_creating">Oluşturuluyor…</string>
+    <string name="bots_username_required">Bir bot kullanıcı adı gir</string>
+    <string name="bots_delete">Sil</string>
+    <string name="bots_delete_title">Bot silinsin mi?</string>
+    <string name="bots_delete_body">Bu bot artık API\'ye erişemeyecek.</string>
+    <string name="bots_cancel">Vazgeç</string>
+    <string name="bots_limit">%1$d / %2$d bot</string>
+    <string name="bots_password_title">Bot oluşturuldu — bu şifreyi sakla</string>
+    <string name="bots_password_body">Bu şifre yalnızca bir kez gösterilir. Hemen kopyala — daha sonra tekrar alınamaz.</string>
+    <string name="bots_copy">Kopyala</string>
+    <string name="bots_copied">Kopyalandı</string>
+    <string name="bots_created">Bot oluşturuldu</string>
+    <string name="bots_created_at">Oluşturulma %1$s</string>
+    <string name="bots_last_login">Son giriş %1$s</string>
+    <string name="bots_error_limit">Bot limitine ulaşıldı (en fazla 5). Yeni bot için birini sil.</string>
+    <string name="bots_error_username_taken">Bu bot kullanıcı adı zaten kullanımda.</string>
+    <string name="bots_error_not_allowed">Hesabın için botlara izin verilmiyor.</string>
+    <string name="bots_error_generic">Bot oluşturulamadı.</string>
+    <string name="bots_error_load">Botlar yüklenemedi.</string>
+
     <!-- Common -->
     <string name="common_loading">Yükleniyor…</string>
     <string name="common_retry">Tekrar dene</string>

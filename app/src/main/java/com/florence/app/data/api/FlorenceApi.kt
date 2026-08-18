@@ -11,6 +11,7 @@ import com.florence.app.data.model.CurrencyQuote
 import com.florence.app.data.model.FavoritesResponse
 import com.florence.app.data.model.IpoItem
 import com.florence.app.data.model.MaintenanceResponse
+import com.florence.app.data.model.MarketStatusResponse
 import com.florence.app.data.model.NewsItem
 import com.florence.app.data.model.Portfolio
 import com.florence.app.data.model.PortfolioSnapshot
@@ -18,7 +19,12 @@ import com.florence.app.data.model.PortfolioTransaction
 import com.florence.app.data.model.AddTransactionRequest
 import com.florence.app.data.model.AddTransactionResponse
 import com.florence.app.data.model.AboutResponse
+import com.florence.app.data.model.AvatarItem
+import com.florence.app.data.model.BotsResponse
 import com.florence.app.data.model.ContactResponse
+import com.florence.app.data.model.CreateBotRequest
+import com.florence.app.data.model.CreateBotResponse
+import com.florence.app.data.model.DeleteBotResponse
 import com.florence.app.data.model.LegalResponse
 import com.florence.app.data.model.ReportDetail
 import com.florence.app.data.model.ReportGenerateResponse
@@ -26,12 +32,15 @@ import com.florence.app.data.model.ReportHistoryItem
 import com.florence.app.data.model.ContributorsResponse
 import com.florence.app.data.model.ReportsInfoResponse
 import com.florence.app.data.model.Ticker
+import com.florence.app.data.model.UpdateAvatarRequest
+import com.florence.app.data.model.UpdateAvatarResponse
 import com.florence.app.data.model.UserProfile
 import com.florence.app.data.model.VersionResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -48,6 +57,10 @@ interface FlorenceApi : AuthEndpoints {
 
     @GET("api/v1/maintenance")
     suspend fun maintenance(): MaintenanceResponse
+
+    // ---- Piyasa durumu (public, 60sn Redis cache) ----
+    @GET("api/v1/market/status")
+    suspend fun marketStatus(): MarketStatusResponse
 
     // ---- Pano ----
     // NOT: /bist/tickers düz string dizisi döner (["THYAO", ...]).
@@ -133,8 +146,25 @@ interface FlorenceApi : AuthEndpoints {
     @GET("api/v1/profile")
     suspend fun profile(): UserProfile
 
+    // Avatarlar (public): göreceli url döner → app tarafında API origin ile birleştirilir.
+    @GET("api/v1/meta/avatars")
+    suspend fun avatars(): List<AvatarItem>
+
+    @PUT("api/v1/profile/avatar")
+    suspend fun updateAvatar(@Body body: UpdateAvatarRequest): UpdateAvatarResponse
+
     @GET("api/v1/credits")
     suspend fun credits(): CreditsResponse
+
+    // ---- Bot hesapları (auth, normal kullanıcı) ----
+    @POST("api/v1/bots")
+    suspend fun createBot(@Body body: CreateBotRequest): CreateBotResponse
+
+    @GET("api/v1/bots")
+    suspend fun bots(): BotsResponse
+
+    @DELETE("api/v1/bots/{botId}")
+    suspend fun deleteBot(@Path("botId") botId: String): DeleteBotResponse
 
     // ---- Sanal Portföy ----
     @GET("api/v1/portfolios")

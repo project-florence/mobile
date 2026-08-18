@@ -299,6 +299,8 @@ data class UserProfile(
     val email: String? = null,
     @SerialName("user_type") val userType: String? = null,
     @SerialName("created_at") val createdAt: String? = null,
+    @SerialName("email_verified") val emailVerified: Boolean? = null,
+    @SerialName("avatar_id") val avatarId: String? = null,
     val credits: Double? = null,
 )
 
@@ -356,3 +358,72 @@ data class NewsItem(
 // GET /api/v1/favorites → {"favorites": ["THYAO", ...]}
 @Serializable
 data class FavoritesResponse(val favorites: List<String> = emptyList())
+
+// ---- Piyasa durumu ----
+// GET /api/v1/market/status (public, 60sn Redis cache)
+// Yanıt alanları backend'de snake_case döner: next_open_at, is_holiday ...
+@Serializable
+data class MarketStatusResponse(
+    val open: Boolean = false,
+    @SerialName("next_open_at") val nextOpenAt: String? = null, // piyasa AÇIKKEN null
+    val timezone: String? = null,
+    @SerialName("is_holiday") val isHoliday: Boolean = false,
+    @SerialName("holiday_name") val holidayName: String? = null,
+    @SerialName("as_of") val asOf: String? = null,
+)
+
+// ---- Avatar ----
+// GET /api/v1/meta/avatars → [{ id, url (göreceli) }, ... 12 kayıt]
+@Serializable
+data class AvatarItem(
+    val id: String? = null,
+    val url: String? = null, // GÖRECELİ — app tarafında API origin ile birleştirilir
+)
+
+// PUT /api/v1/profile/avatar body → { avatar_id: "avatar-3" }
+@Serializable
+data class UpdateAvatarRequest(
+    @SerialName("avatar_id") val avatarId: String,
+)
+
+@Serializable
+data class UpdateAvatarResponse(
+    val message: String? = null,
+    @SerialName("avatar_id") val avatarId: String? = null,
+)
+
+// ---- Bot hesapları ----
+// POST /api/v1/bots body → { username, password (ops., min 10) }
+@Serializable
+data class CreateBotRequest(
+    val username: String,
+    val password: String? = null,
+)
+
+// Şifre YALNIZCA bu yanıtta döner (tek seferlik).
+@Serializable
+data class CreateBotResponse(
+    val id: Long? = null,
+    val username: String? = null,
+    val email: String? = null,
+    val password: String? = null,
+)
+
+@Serializable
+data class BotItem(
+    val id: Long? = null,
+    val username: String? = null,
+    @SerialName("created_at") val createdAt: String? = null,
+    @SerialName("last_login") val lastLogin: String? = null,
+)
+
+// GET /api/v1/bots → { bots: [...] }
+@Serializable
+data class BotsResponse(
+    val bots: List<BotItem> = emptyList(),
+)
+
+@Serializable
+data class DeleteBotResponse(
+    val message: String? = null,
+)

@@ -3,6 +3,7 @@ package com.florence.app.presentation.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.florence.app.data.model.CompanyInfo
+import com.florence.app.data.model.MarketStatusResponse
 import com.florence.app.data.model.Ticker
 import com.florence.app.data.repository.FavoritesRepository
 import com.florence.app.data.repository.MarketRepository
@@ -26,6 +27,8 @@ data class DashboardUiState(
     val favorites: Set<String> = emptySet(),
     /** Hero ticker → 5d/5m kapanış serisi (sparkline için). */
     val sparklines: Map<String, List<Float>> = emptyMap(),
+    /** Piyasa açık/kapalı durumu (GET /market/status). */
+    val marketStatus: MarketStatusResponse? = null,
 )
 
 /** Panoda öne çıkan hisseler (web'deki popüler widget karşılığı). */
@@ -55,6 +58,7 @@ class DashboardViewModel @Inject constructor(
         viewModelScope.launch {
             val version = repo.version()
             val maintenance = repo.maintenance()
+            val marketStatus = repo.marketStatus()
             val companies = repo.companies(limit = 50)
             val heroes = coroutineScope {
                 POPULAR_TICKERS.map { ticker -> async { repo.info(ticker) } }
@@ -70,6 +74,7 @@ class DashboardViewModel @Inject constructor(
                     disabledFeatures = maintenance.getOrNull()?.disabledFeatures ?: emptyList(),
                     heroes = heroes,
                     companies = companies.getOrNull() ?: emptyList(),
+                    marketStatus = marketStatus.getOrNull(),
                 )
             }
             // Mini grafik (sparkline) verisi arka planda gelir; kartlar sonra güncellenir.

@@ -5,6 +5,7 @@ import com.florence.app.data.model.CompanyInfo
 import com.florence.app.data.model.CompanySearchResult
 import com.florence.app.data.model.CurrencyQuote
 import com.florence.app.data.model.MaintenanceResponse
+import com.florence.app.data.model.MarketStatusResponse
 import com.florence.app.data.model.Ticker
 import com.florence.app.data.model.VersionResponse
 import javax.inject.Inject
@@ -23,6 +24,9 @@ class MarketRepository @Inject constructor(
     suspend fun version(): Result<VersionResponse> = runCatching { api.version() }
 
     suspend fun maintenance(): Result<MaintenanceResponse> = runCatching { api.maintenance() }
+
+    suspend fun marketStatus(): Result<MarketStatusResponse> =
+        runCatching { api.marketStatus() }
 
     suspend fun tickers(limit: Int = 50): Result<List<String>> =
         runCatching { api.tickers(sort = "alphabetical", offset = 0, limit = limit) }

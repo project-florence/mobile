@@ -14,7 +14,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Star
@@ -47,8 +50,10 @@ import com.florence.app.core.theme.DownColor
 import com.florence.app.core.theme.FlorencePalettes
 import com.florence.app.core.theme.TextSecondary
 import com.florence.app.core.theme.UpColor
+import com.florence.app.presentation.components.AvatarArt
 import com.florence.app.presentation.components.EmptyState
 import com.florence.app.presentation.components.FlorenceCard
+import com.florence.app.presentation.components.clickableNoRipple
 import com.florence.app.presentation.settings.CreditsViewModel
 import kotlinx.coroutines.delay
 import java.time.LocalTime
@@ -65,6 +70,8 @@ fun greetingResFor(hour: Int): Int = when (hour) {
 @Composable
 fun ProfileScreen(
     onLoggedOut: () -> Unit,
+    onOpenAvatar: () -> Unit = {},
+    onOpenBots: () -> Unit = {},
     viewModel: ProfileViewModel = hiltViewModel(),
     creditsViewModel: CreditsViewModel = hiltViewModel(),
 ) {
@@ -92,7 +99,7 @@ fun ProfileScreen(
         ),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
-        // ---- Selamlama başlığı ----
+        // ---- Selamlama başlığı (avatar + kimlik) ----
         item {
             ProfileHeader(
                 username = username,
@@ -100,7 +107,38 @@ fun ProfileScreen(
                 isAdmin = creditsState.isAdmin,
                 greeting = greeting,
                 clock = clock,
+                avatarId = profile?.avatarId,
+                onAvatarClick = onOpenAvatar,
             )
+        }
+
+        // ---- Bots girişi ----
+        item {
+            FlorenceCard(onClick = onOpenBots, modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Face,
+                        contentDescription = null,
+                        tint = FlorencePalettes.Florence.primary,
+                        modifier = Modifier.size(22.dp),
+                    )
+                    Spacer(Modifier.size(14.dp))
+                    Text(
+                        text = stringResource(R.string.nav_bots),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.weight(1f),
+                    )
+                    Icon(
+                        imageVector = Icons.Filled.KeyboardArrowRight,
+                        contentDescription = null,
+                        tint = TextSecondary,
+                    )
+                }
+            }
         }
 
         // ---- Coin kartı ----
@@ -250,6 +288,8 @@ private fun ProfileHeader(
     isAdmin: Boolean,
     greeting: String,
     clock: String,
+    avatarId: String?,
+    onAvatarClick: () -> Unit,
 ) {
     val primary = FlorencePalettes.Florence.primary
     val secondary = FlorencePalettes.Florence.secondary
@@ -265,22 +305,29 @@ private fun ProfileHeader(
             .padding(20.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            // Büyük avatar
+            // Büyük avatar (kullanıcı avatar_id'si) — tıklayınca seçim ekranına gider.
             Box(
                 modifier = Modifier
                     .size(64.dp)
                     .clip(CircleShape)
-                    .background(
-                        Brush.linearGradient(listOf(primary, secondary))
-                    ),
-                contentAlignment = Alignment.Center,
+                    .clickableNoRipple(onAvatarClick),
             ) {
-                Text(
-                    text = username.take(2).uppercase(),
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = androidx.compose.ui.graphics.Color.White,
-                )
+                AvatarArt(avatarId = avatarId, size = 64.dp)
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .size(22.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Edit,
+                        contentDescription = stringResource(R.string.avatar_change),
+                        tint = androidx.compose.ui.graphics.Color.White,
+                        modifier = Modifier.size(13.dp),
+                    )
+                }
             }
             Spacer(Modifier.size(16.dp))
             Column {
