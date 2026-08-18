@@ -21,8 +21,12 @@ interface TokenStore {
     var accessToken: String?
     val refreshToken: String?
     val session: StateFlow<Boolean>
+    /** true → auth UI VerifyEmailScreen'e yönlenmeli (refresh 403 'error_email_not_verified'). */
+    val verificationRequired: StateFlow<Boolean>
     suspend fun setTokens(access: String, refresh: String)
     suspend fun clear()
+    fun markVerificationRequired()
+    fun clearVerificationRequired()
 }
 
 @Singleton
@@ -52,10 +56,22 @@ class EncryptedTokenStore @Inject constructor(
     private val _session = MutableStateFlow(prefs.contains(KEY_REFRESH))
     override val session: StateFlow<Boolean> = _session.asStateFlow()
 
+    private val _verificationRequired = MutableStateFlow(false)
+    override val verificationRequired: StateFlow<Boolean> = _verificationRequired.asStateFlow()
+
+    override fun markVerificationRequired() {
+        _verificationRequired.value = true
+    }
+
+    override fun clearVerificationRequired() {
+        _verificationRequired.value = false
+    }
+
     override suspend fun setTokens(access: String, refresh: String) {
         accessToken = access
         prefs.edit().putString(KEY_REFRESH, refresh).apply()
         _session.value = true
+        _verificationRequired.value = false
     }
 
     override suspend fun clear() {

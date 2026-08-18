@@ -44,6 +44,7 @@
     <string name="auth_login">Sign in</string>
     <string name="auth_register">Create account</string>
     <string name="auth_username">Username</string>
+    <string name="auth_username_or_email">Username or email</string>
     <string name="auth_email">Email</string>
     <string name="auth_password">Password</string>
     <string name="auth_confirm_password">Confirm password</string>
@@ -54,10 +55,26 @@
     <string name="auth_login_error">Invalid username or password</string>
     <string name="auth_register_error">Registration failed. The username or email may already be in use.</string>
     <string name="auth_register_taken">This username or email is already registered.</string>
+    <string name="auth_email_taken">This email is already registered.</string>
+    <string name="auth_username_taken">This username is already taken.</string>
     <string name="auth_network_error">Network error. Check your connection.</string>
     <string name="auth_rate_limited">Too many attempts. Try again in a moment.</string>
     <string name="auth_passwords_dont_match">Passwords do not match</string>
     <string name="auth_password_too_short">Password must be at least 10 characters</string>
+
+    <!-- Email verification -->
+    <string name="verify_title">Verify your email</string>
+    <string name="verify_instructions">A verification email is on its way. Open it and tap the link to activate your account.</string>
+    <string name="verify_sent">Verification email sent.</string>
+    <string name="verify_resend">Resend email</string>
+    <string name="verify_continue">I\'ve already verified — continue</string>
+    <string name="verify_back_to_login">Back to sign in</string>
+    <string name="verify_rate_limited">Too many requests. Please try again later.</string>
+    <string name="verify_cooldown">Try again in %1$d s</string>
+    <string name="verify_user_not_found">User not found.</string>
+    <string name="verify_already_verified">Email already verified. You can sign in.</string>
+    <string name="verify_success">Email verified successfully!</string>
+    <string name="verify_failed">Verification failed. The link may be invalid or expired.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Market Overview</string>
@@ -77,10 +94,6 @@
     <string name="profile_credits">Credits</string>
     <string name="profile_guest">You are browsing as a guest</string>
     <string name="profile_sign_in_hint">Sign in to access portfolios, reports and favorites.</string>
-
-    <!-- Placeholders -->
-    <string name="coming_soon">Coming soon</string>
-    <string name="coming_soon_desc">This screen will be implemented in the next milestone.</string>
 
     <!-- Search -->
     <string name="search_hint">Search stocks…</string>

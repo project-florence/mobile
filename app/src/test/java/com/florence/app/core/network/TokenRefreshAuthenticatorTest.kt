@@ -175,10 +175,20 @@ class TokenRefreshAuthenticatorTest {
         override var refreshToken: String? = null
         private val _session = MutableStateFlow(false)
         override val session: StateFlow<Boolean> = _session.asStateFlow()
+        private val _verificationRequired = MutableStateFlow(false)
+        override val verificationRequired: StateFlow<Boolean> = _verificationRequired.asStateFlow()
 
         fun setTokensBlocking(access: String, refresh: String) {
             accessToken = access
             refreshToken = refresh
+        }
+
+        override fun markVerificationRequired() {
+            _verificationRequired.value = true
+        }
+
+        override fun clearVerificationRequired() {
+            _verificationRequired.value = false
         }
 
         override suspend fun setTokens(access: String, refresh: String) {

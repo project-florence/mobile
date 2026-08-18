@@ -44,6 +44,7 @@
     <string name="auth_login">Giriş yap</string>
     <string name="auth_register">Hesap oluştur</string>
     <string name="auth_username">Kullanıcı adı</string>
+    <string name="auth_username_or_email">Kullanıcı adı veya e-posta</string>
     <string name="auth_email">E-posta</string>
     <string name="auth_password">Şifre</string>
     <string name="auth_confirm_password">Şifre (tekrar)</string>
@@ -54,10 +55,26 @@
     <string name="auth_login_error">Kullanıcı adı veya şifre hatalı</string>
     <string name="auth_register_error">Kayıt başarısız. Kullanıcı adı veya e-posta zaten kullanılıyor olabilir.</string>
     <string name="auth_register_taken">Bu kullanıcı adı veya e-posta zaten kayıtlı.</string>
+    <string name="auth_email_taken">Bu e-posta zaten kayıtlı.</string>
+    <string name="auth_username_taken">Bu kullanıcı adı zaten kullanımda.</string>
     <string name="auth_network_error">Bağlantı hatası. İnternet bağlantını kontrol et.</string>
     <string name="auth_rate_limited">Çok fazla deneme yapıldı. Biraz sonra tekrar dene.</string>
     <string name="auth_passwords_dont_match">Şifreler eşleşmiyor</string>
     <string name="auth_password_too_short">Şifre en az 10 karakter olmalı</string>
+
+    <!-- E-posta doğrulama -->
+    <string name="verify_title">E-postanı doğrula</string>
+    <string name="verify_instructions">Doğrulama e-postası yolda. E-postanı aç ve hesabını etkinleştirmek için linke tıkla.</string>
+    <string name="verify_sent">Doğrulama e-postası gönderildi.</string>
+    <string name="verify_resend">E-postayı yeniden gönder</string>
+    <string name="verify_continue">Doğruladım — devam et</string>
+    <string name="verify_back_to_login">Giriş ekranına dön</string>
+    <string name="verify_rate_limited">Çok fazla istek gönderildi. Lütfen daha sonra tekrar dene.</string>
+    <string name="verify_cooldown">%1$d sn sonra tekrar dene</string>
+    <string name="verify_user_not_found">Kullanıcı bulunamadı.</string>
+    <string name="verify_already_verified">E-posta zaten doğrulanmış. Giriş yapabilirsin.</string>
+    <string name="verify_success">E-posta başarıyla doğrulandı!</string>
+    <string name="verify_failed">Doğrulama başarısız. Link geçersiz veya süresi dolmuş olabilir.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Piyasa Panosu</string>
@@ -77,10 +94,6 @@
     <string name="profile_credits">Krediler</string>
     <string name="profile_guest">Misafir olarak geziyorsun</string>
     <string name="profile_sign_in_hint">Portföylere, raporlara ve favorilere erişmek için giriş yap.</string>
-
-    <!-- Placeholders -->
-    <string name="coming_soon">Yakında</string>
-    <string name="coming_soon_desc">Bu ekran bir sonraki kilometre taşında eklenecek.</string>
 
     <!-- Search -->
     <string name="search_hint">Hisse ara…</string>

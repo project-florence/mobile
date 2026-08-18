@@ -4,10 +4,15 @@ import com.florence.app.data.model.AuthTokens
 import com.florence.app.data.model.RefreshRequest
 import com.florence.app.data.model.RegisterRequest
 import com.florence.app.data.model.RegisterResponse
+import com.florence.app.data.model.ResendVerificationRequest
+import com.florence.app.data.model.VerificationSentResponse
+import com.florence.app.data.model.VerifyEmailResponse
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface AuthEndpoints {
     @POST("api/v1/auth/login")
@@ -19,6 +24,13 @@ interface AuthEndpoints {
 
     @POST("api/v1/auth/register")
     suspend fun register(@Body body: RegisterRequest): RegisterResponse
+
+    @POST("api/v1/auth/resend-verification")
+    suspend fun resendVerification(@Body body: ResendVerificationRequest): VerificationSentResponse
+
+    // Public endpoint — no auth token required.
+    @GET("api/v1/auth/verify-email")
+    suspend fun verifyEmail(@Query("token") token: String): VerifyEmailResponse
 
     @POST("api/v1/auth/refresh")
     suspend fun refresh(@Body body: RefreshRequest): AuthTokens

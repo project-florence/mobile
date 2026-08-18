@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.activity.compose.BackHandler
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Create
@@ -73,8 +74,10 @@ import com.florence.app.data.repository.AuthRepository
 import com.florence.app.presentation.advisor.AdvisorScreen
 import com.florence.app.presentation.about.AboutScreen
 import com.florence.app.presentation.contact.ContactScreen
+import com.florence.app.presentation.auth.AuthViewModel
 import com.florence.app.presentation.auth.LoginScreen
 import com.florence.app.presentation.auth.RegisterScreen
+import com.florence.app.presentation.auth.VerifyEmailScreen
 import com.florence.app.presentation.company.CompanyDetailScreen
 import com.florence.app.presentation.economy.EconomyScreen
 import com.florence.app.presentation.home.DashboardScreen
@@ -109,6 +112,13 @@ class RootViewModel @Inject constructor(
     private val repo: AuthRepository,
 ) : ViewModel() {
     val session: StateFlow<Boolean> = repo.session
+
+    /** true → auth akışı VerifyEmailScreen'e gitmeli (refresh 403 unverified email). */
+    val verificationRequired: StateFlow<Boolean> = repo.verificationRequired
+
+    fun clearVerificationRequired() {
+        repo.clearVerificationRequired()
+    }
 
     fun logout() {
         viewModelScope.launch { repo.logout() }
@@ -179,19 +189,51 @@ fun FlorenceRoot(viewModel: RootViewModel = hiltViewModel()) {
         startDestination = if (session) Routes.MAIN else Routes.LOGIN,
     ) {
         composable(Routes.LOGIN) {
-            // Kayıt ekranı ayrı bir route değil: koşullu gösterim. `remember`
-            // (saveable değil) olduğu için uygulama öldürülüp açıldığında her
-            // zaman LOGIN ekranı gelir — register restore edilip kullanıcının
-            // "giriş yapacağım" derken kayıt formuna düşmesi engellenir.
+            // Kayıt ve doğrulama ekranları ayrı bir route değil: koşullu gösterim.
+            // `remember` (saveable değil) olduğu için uygulama öldürülüp açıldığında
+            // her zaman LOGIN ekranı gelir.
             var showRegister by remember { mutableStateOf(false) }
-            if (showRegister) {
-                BackHandler { showRegister = false }
-                RegisterScreen(
-                    onNavigateToLogin = { showRegister = false },
+            var showVerify by remember { mutableStateOf(false) }
+            val authVm: AuthViewModel = hiltViewModel()
+            val uiState by authVm.uiState.collectAsStateWithLifecycle()
+            val verificationRequired by viewModel.verificationRequired.collectAsStateWithLifecycle()
+
+            // login 403 / kayıt başarısı → verifyPending (VM üzerinden).
+            LaunchedEffect(uiState.verifyPending) {
+                if (uiState.verifyPending) showVerify = true
+            }
+            // refresh 403 unverified email → oturum kapandı, verify göster.
+            LaunchedEffect(verificationRequired) {
+                if (verificationRequired) showVerify = true
+            }
+
+            when {
+                showVerify -> VerifyEmailScreen(
+                    viewModel = authVm,
+                    onBackToLogin = {
+                        authVm.dismissVerify()
+                        viewModel.clearVerificationRequired()
+                        showVerify = false
+                        showRegister = false
+                    },
+                    onLoggedOut = {
+                        authVm.dismissVerify()
+                        authVm.logout()
+                        viewModel.clearVerificationRequired()
+                        showVerify = false
+                        showRegister = false
+                    },
                 )
-            } else {
-                LoginScreen(
+                showRegister -> {
+                    BackHandler { showRegister = false }
+                    RegisterScreen(
+                        onNavigateToLogin = { showRegister = false },
+                        viewModel = authVm,
+                    )
+                }
+                else -> LoginScreen(
                     onNavigateToRegister = { showRegister = true },
+                    viewModel = authVm,
                 )
             }
         }

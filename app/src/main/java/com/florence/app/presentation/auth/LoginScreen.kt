@@ -92,7 +92,7 @@ fun LoginScreen(
                 AuthField(
                     value = username,
                     onValueChange = { username = it },
-                    label = stringResource(R.string.auth_username),
+                    label = stringResource(R.string.auth_username_or_email),
                     icon = { Icon(Icons.Filled.Person, null, tint = TextSecondary) },
                     imeAction = ImeAction.Next,
                 )

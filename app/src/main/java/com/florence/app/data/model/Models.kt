@@ -8,7 +8,9 @@ import kotlinx.serialization.Serializable
 // login: OAuth2PasswordRequestForm (form-encoded username/password)
 //        → { access_token, refresh_token, token_type }
 // refresh: { refresh_token } → { access_token, refresh_token }
-// register: { username, email, password(min 10) } → { message, user_id }
+// register: { username, email, password(min 10) } → { message, user_id, verification_sent }
+// resend-verification: { username_or_email } → { verification_sent }
+// verify-email (public GET): ?token=… → { message }
 
 @Serializable
 data class AuthTokens(
@@ -28,6 +30,23 @@ data class RegisterRequest(
 data class RegisterResponse(
     val message: String = "",
     @SerialName("user_id") val userId: Long? = null,
+    @SerialName("verification_sent") val verificationSent: Boolean? = null,
+)
+
+@Serializable
+data class ResendVerificationRequest(
+    @SerialName("username_or_email") val usernameOrEmail: String,
+)
+
+@Serializable
+data class VerificationSentResponse(
+    @SerialName("verification_sent") val verificationSent: Boolean = false,
+)
+
+@Serializable
+data class VerifyEmailResponse(
+    val message: String? = null,
+    val detail: String? = null,
 )
 
 @Serializable
@@ -59,20 +78,6 @@ data class CompanySearchResult(
     @SerialName("company_name") val companyName: String? = null,
     val sector: String? = null,
     @SerialName("sub_sector") val subSector: String? = null,
-)
-
-// GET /api/v1/price/current?ticker=X  (src/services/quote.py:_build_quote)
-@Serializable
-data class Quote(
-    val ticker: String? = null,
-    val price: Double? = null,
-    @SerialName("previous_close") val previousClose: Double? = null,
-    @SerialName("absolute_change") val absoluteChange: Double? = null,
-    @SerialName("change_pct") val changePct: Double? = null,
-    @SerialName("as_of") val asOf: String? = null,
-    @SerialName("market_status") val marketStatus: String? = null,
-    @SerialName("is_stale") val isStale: Boolean? = null,
-    @SerialName("change_window") val changeWindow: String? = null,
 )
 
 // GET /api/v1/economy/currency  → { "USD": {...}, "EUR": {...} }
@@ -162,7 +167,7 @@ data class CreatePortfolioRequest(
 @Serializable
 data class AddTransactionRequest(
     val ticker: String,
-    val type: String = "BUY",
+    val type: String,
     val quantity: Double,
 )
 
@@ -271,19 +276,6 @@ data class LegalResponse(
     val lang: String? = null,
     @SerialName("last_updated") val lastUpdated: String? = null,
     val content: String? = null,
-)
-
-@Serializable
-data class GenerateReportRequest(
-    val ticker: String,
-    @SerialName("report_type") val reportType: String = "quick_report",
-)
-
-@Serializable
-data class GenerateReportResponse(
-    @SerialName("report_id") val reportId: String? = null,
-    val status: String? = null,
-    val message: String? = null,
 )
 
 // ---- Duyurular ----

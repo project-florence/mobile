@@ -9,8 +9,6 @@ import com.florence.app.data.model.CreatePortfolioRequest
 import com.florence.app.data.model.CreditsResponse
 import com.florence.app.data.model.CurrencyQuote
 import com.florence.app.data.model.FavoritesResponse
-import com.florence.app.data.model.GenerateReportRequest
-import com.florence.app.data.model.GenerateReportResponse
 import com.florence.app.data.model.IpoItem
 import com.florence.app.data.model.MaintenanceResponse
 import com.florence.app.data.model.NewsItem
@@ -22,7 +20,6 @@ import com.florence.app.data.model.AddTransactionResponse
 import com.florence.app.data.model.AboutResponse
 import com.florence.app.data.model.ContactResponse
 import com.florence.app.data.model.LegalResponse
-import com.florence.app.data.model.Quote
 import com.florence.app.data.model.ReportDetail
 import com.florence.app.data.model.ReportGenerateResponse
 import com.florence.app.data.model.ReportHistoryItem
@@ -40,8 +37,8 @@ import retrofit2.http.Query
 
 /**
  * Florence API yüzeyi. Tüm uçlar /api/v1 altındadır (src/api/router.py).
- * v0 kapsamı: auth + sistem + pano (tickers/currency/version/maintenance).
- * Diğer uçlar (portföy, rapor, simülasyon, IPO, haber…) sonraki kilometre taşlarında eklenir.
+ * Kapsam: auth, sistem, pano, ekonomi (döviz/metaller), favoriler,
+ * haberler, sanal portföy, IPO, raporlar, analitik ve profil/kredi uçları.
  */
 interface FlorenceApi : AuthEndpoints {
 
@@ -71,12 +68,6 @@ interface FlorenceApi : AuthEndpoints {
 
     @GET("api/v1/companies/search")
     suspend fun searchCompanies(@Query("query") query: String): List<CompanySearchResult>
-
-    @GET("api/v1/price/current")
-    suspend fun priceCurrent(
-        @Query("ticker") ticker: String,
-        @Query("interval") interval: String,
-    ): Quote
 
     @GET("api/v1/companies/info/{ticker}")
     suspend fun companyInfo(@Path("ticker") ticker: String): CompanyInfo
@@ -183,9 +174,6 @@ interface FlorenceApi : AuthEndpoints {
 
     @GET("api/v1/reports/info")
     suspend fun reportsInfo(): ReportsInfoResponse
-
-    @POST("api/v1/reports/generate")
-    suspend fun generateReport(@Body body: GenerateReportRequest): GenerateReportResponse
 
     @POST("api/v1/analytics/event")
     suspend fun trackEvent(@Body event: AnalyticsEvent): Unit

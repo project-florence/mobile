@@ -73,6 +73,14 @@ class TokenRefreshAuthenticator @Inject constructor(
             tokenStore.setTokens(res.access_token, res.refresh_token)
             true
         } catch (e: Exception) {
+            // 403 detail 'error_email_not_verified': şifre doğru ama e-posta
+            // doğrulanmamış — oturumu kapat ve VerifyEmailScreen'e yönlendir.
+            if (e is retrofit2.HttpException &&
+                e.code() == 403 &&
+                e.response()?.errorBody()?.string()?.contains("error_email_not_verified") == true
+            ) {
+                tokenStore.markVerificationRequired()
+            }
             tokenStore.clear()
             false
         }
