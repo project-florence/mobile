@@ -171,6 +171,59 @@
     <string name="bots_error_generic">Bot oluşturulamadı.</string>
     <string name="bots_error_load">Botlar yüklenemedi.</string>
 
+    <!-- Notifications -->
+    <string name="notifications_empty">Bildirim yok</string>
+    <string name="notifications_empty_hint">Yeni duyurular burada görünecek.</string>
+    <string name="notifications_unread">Yeni</string>
+    <string name="notifications_error">Bildirimler yüklenemedi</string>
+    <string name="notifications_error_hint">Bildirim servisi şu an yanıt vermiyor. Kısa süre sonra tekrar dene.</string>
+    <string name="notifications_announcement">Duyuru</string>
+
+    <!-- Macroeconomy -->
+    <string name="macro_title">Makroekonomi</string>
+    <string name="macro_subtitle">ABD ekonomisi ve küresel piyasa göstergeleri</string>
+    <string name="macro_fed_funds">Fed Faizi</string>
+    <string name="macro_us_unrate">ABD İşsizlik</string>
+    <string name="macro_vix">VIX (Volatilite)</string>
+    <string name="macro_sp500">S&amp;P 500</string>
+    <string name="macro_nasdaq">Nasdaq</string>
+    <string name="macro_bitcoin">Bitcoin (USD)</string>
+    <string name="macro_brent">Brent Petrol</string>
+    <string name="macro_wti">WTI Petrol</string>
+    <string name="macro_dxy">Dolar Endeksi (DXY)</string>
+    <string name="macro_10y">ABD 10 Yıl Tahvil</string>
+    <string name="macro_gdp">ABD GSYİH</string>
+    <string name="macro_real_gdp">ABD Reel GSYİH</string>
+    <string name="macro_cpi">ABD TÜFE</string>
+    <string name="macro_error">Makro veri alınamadı</string>
+    <string name="macro_error_hint">Veri sağlayıcısı şu an yanıt vermiyor. Kısa süre sonra tekrar dene.</string>
+
+    <!-- Hesap yönetimi (C4) -->
+    <string name="account_management">Hesap Yönetimi</string>
+    <string name="account_change_password">Şifre Değiştir</string>
+    <string name="account_change_email">E-posta Değiştir</string>
+    <string name="account_change_username">Kullanıcı Adı Değiştir</string>
+    <string name="account_current_password">Mevcut Şifre</string>
+    <string name="account_new_password">Yeni Şifre</string>
+    <string name="account_new_email">Yeni E-posta</string>
+    <string name="account_new_username">Yeni Kullanıcı Adı</string>
+    <string name="account_delete">Hesabı Sil</string>
+    <string name="account_delete_title">Hesap silinsin mi?</string>
+    <string name="account_delete_body">Bu, hesabını ve tüm verilerini kalıcı olarak silecek. Bu işlem geri alınamaz.</string>
+    <string name="account_cancel">Vazgeç</string>
+    <string name="account_save">Kaydet</string>
+    <string name="account_success_password">Şifre güncellendi</string>
+    <string name="account_success_email">E-posta güncellendi</string>
+    <string name="account_success_username">Kullanıcı adı güncellendi</string>
+    <string name="account_current_password_incorrect">Mevcut şifre hatalı</string>
+
+    <!-- Veri dışa aktarımı (C5) -->
+    <string name="account_export">Verilerimi Dışa Aktar</string>
+    <string name="account_export_title">Verileriniz</string>
+    <string name="account_export_empty">Dışa aktarılacak veri yok.</string>
+    <string name="account_export_failed">Veriler dışa aktarılamadı</string>
+    <string name="account_close">Kapat</string>
+
     <!-- Common -->
     <string name="common_loading">Yükleniyor…</string>
     <string name="common_retry">Tekrar dene</string>

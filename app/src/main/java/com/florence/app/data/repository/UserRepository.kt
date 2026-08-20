@@ -9,6 +9,7 @@ import com.florence.app.data.model.DeleteBotResponse
 import com.florence.app.data.model.UpdateAvatarRequest
 import com.florence.app.data.model.UpdateAvatarResponse
 import com.florence.app.data.model.UserProfile
+import kotlinx.serialization.json.JsonObject
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -39,4 +40,10 @@ class UserRepository @Inject constructor(
 
     suspend fun deleteBot(botId: String): Result<DeleteBotResponse> =
         runCatching { api.deleteBot(botId) }
+
+    // ---- Veri dışa aktarımı (auth) ----
+    // Karmaşık JSON (profile, favorites, reports, portfolios, transactions).
+    // Tam model parse etmek zahmetli → ham JsonObject olarak döner.
+    suspend fun userExport(): Result<JsonObject> =
+        runCatching { api.userExport() }
 }

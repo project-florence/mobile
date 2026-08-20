@@ -3,6 +3,7 @@ package com.florence.app.presentation.economy
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.florence.app.data.model.CurrencyQuote
+import com.florence.app.data.model.MacroeconomyResponse
 import com.florence.app.data.repository.MarketRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +25,9 @@ class EconomyViewModel @Inject constructor(
         val silver: CurrencyQuote? = null,
         val platinum: CurrencyQuote? = null,
         val palladium: CurrencyQuote? = null,
+        val macroLoading: Boolean = true,
+        val macroError: Boolean = false,
+        val macro: MacroeconomyResponse? = null,
     )
 
     private val _uiState = MutableStateFlow(EconomyUiState())
@@ -44,6 +48,21 @@ class EconomyViewModel @Inject constructor(
                     silver = silver.getOrNull()?.values?.firstOrNull(),
                     platinum = platinum.getOrNull()?.values?.firstOrNull(),
                     palladium = palladium.getOrNull()?.values?.firstOrNull(),
+                )
+            }
+        }
+        loadMacro()
+    }
+
+    fun loadMacro() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(macroLoading = true, macroError = false) }
+            val result = market.macroeconomy()
+            _uiState.update {
+                it.copy(
+                    macroLoading = false,
+                    macroError = result.isFailure,
+                    macro = result.getOrNull(),
                 )
             }
         }

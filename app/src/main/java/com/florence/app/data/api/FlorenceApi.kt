@@ -26,6 +26,7 @@ import com.florence.app.data.model.CreateBotRequest
 import com.florence.app.data.model.CreateBotResponse
 import com.florence.app.data.model.DeleteBotResponse
 import com.florence.app.data.model.LegalResponse
+import com.florence.app.data.model.MacroeconomyResponse
 import com.florence.app.data.model.ReportDetail
 import com.florence.app.data.model.ReportGenerateResponse
 import com.florence.app.data.model.ReportHistoryItem
@@ -43,6 +44,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
+import kotlinx.serialization.json.JsonObject
 
 /**
  * Florence API yüzeyi. Tüm uçlar /api/v1 altındadır (src/api/router.py).
@@ -120,6 +122,15 @@ interface FlorenceApi : AuthEndpoints {
 
     @GET("api/v1/economy/gram-palladium-price")
     suspend fun gramPalladiumPrice(): Map<String, CurrencyQuote>
+
+    // ---- Makroekonomi (500 dönebilir: FRED verisi yoksa) ----
+    @GET("api/v1/macroeconomy")
+    suspend fun macroeconomy(): MacroeconomyResponse
+
+    // ---- Kullanıcı veri dışa aktarımı (auth) ----
+    // Karmaşık JSON; tam model parse etmek zahmetli olduğundan JsonObject olarak döner.
+    @GET("api/v1/user/export")
+    suspend fun userExport(): JsonObject
 
     // ---- Analitik (web'deki usePageTracking eşleniği) ----
     @GET("api/v1/announcements")

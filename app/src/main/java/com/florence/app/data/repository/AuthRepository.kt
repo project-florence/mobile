@@ -2,6 +2,9 @@ package com.florence.app.data.repository
 
 import com.florence.app.core.storage.TokenStore
 import com.florence.app.data.api.FlorenceApi
+import com.florence.app.data.model.ChangeEmailRequest
+import com.florence.app.data.model.ChangePasswordRequest
+import com.florence.app.data.model.ChangeUsernameRequest
 import com.florence.app.data.model.RegisterRequest
 import com.florence.app.data.model.RegisterResponse
 import com.florence.app.data.model.ResendVerificationRequest
@@ -61,4 +64,21 @@ class AuthRepository @Inject constructor(
     }
 
     fun isLoggedIn(): Boolean = tokenStore.refreshToken != null
+
+    // ---- Hesap yönetimi (PUT /api/v1/auth/*, DELETE /api/v1/auth/delete) ----
+    suspend fun changePassword(currentPassword: String, newPassword: String): Result<Unit> = runCatching {
+        api.changePassword(ChangePasswordRequest(currentPassword, newPassword))
+    }
+
+    suspend fun changeEmail(newEmail: String, currentPassword: String): Result<Unit> = runCatching {
+        api.changeEmail(ChangeEmailRequest(newEmail, currentPassword))
+    }
+
+    suspend fun changeUsername(newUsername: String, currentPassword: String): Result<Unit> = runCatching {
+        api.changeUsername(ChangeUsernameRequest(newUsername, currentPassword))
+    }
+
+    suspend fun deleteAccount(): Result<Unit> = runCatching {
+        api.deleteAccount()
+    }
 }

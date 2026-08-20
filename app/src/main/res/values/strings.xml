@@ -171,6 +171,59 @@
     <string name="bots_error_generic">Could not create bot.</string>
     <string name="bots_error_load">Could not load bots.</string>
 
+    <!-- Notifications -->
+    <string name="notifications_empty">No notifications</string>
+    <string name="notifications_empty_hint">New announcements will appear here.</string>
+    <string name="notifications_unread">New</string>
+    <string name="notifications_error">Couldn\'t load notifications</string>
+    <string name="notifications_error_hint">The notification service is not responding. Try again shortly.</string>
+    <string name="notifications_announcement">Announcement</string>
+
+    <!-- Macroeconomy -->
+    <string name="macro_title">Macroeconomics</string>
+    <string name="macro_subtitle">US economy &amp; global market indicators</string>
+    <string name="macro_fed_funds">Fed Funds Rate</string>
+    <string name="macro_us_unrate">US Unemployment</string>
+    <string name="macro_vix">VIX (Volatility)</string>
+    <string name="macro_sp500">S&amp;P 500</string>
+    <string name="macro_nasdaq">Nasdaq</string>
+    <string name="macro_bitcoin">Bitcoin (USD)</string>
+    <string name="macro_brent">Brent Crude</string>
+    <string name="macro_wti">WTI Crude</string>
+    <string name="macro_dxy">Dollar Index (DXY)</string>
+    <string name="macro_10y">US 10-Yr Treasury</string>
+    <string name="macro_gdp">US GDP</string>
+    <string name="macro_real_gdp">US Real GDP</string>
+    <string name="macro_cpi">US CPI</string>
+    <string name="macro_error">Macro data unavailable</string>
+    <string name="macro_error_hint">The data provider is not responding. Try again shortly.</string>
+
+    <!-- Account management (C4) -->
+    <string name="account_management">Account Management</string>
+    <string name="account_change_password">Change Password</string>
+    <string name="account_change_email">Change Email</string>
+    <string name="account_change_username">Change Username</string>
+    <string name="account_current_password">Current Password</string>
+    <string name="account_new_password">New Password</string>
+    <string name="account_new_email">New Email</string>
+    <string name="account_new_username">New Username</string>
+    <string name="account_delete">Delete Account</string>
+    <string name="account_delete_title">Delete account?</string>
+    <string name="account_delete_body">This will permanently delete your account and all your data. This action cannot be undone.</string>
+    <string name="account_cancel">Cancel</string>
+    <string name="account_save">Save</string>
+    <string name="account_success_password">Password updated</string>
+    <string name="account_success_email">Email updated</string>
+    <string name="account_success_username">Username updated</string>
+    <string name="account_current_password_incorrect">Current password is incorrect</string>
+
+    <!-- Data export (C5) -->
+    <string name="account_export">Export My Data</string>
+    <string name="account_export_title">Your Data</string>
+    <string name="account_export_empty">No data to export.</string>
+    <string name="account_export_failed">Could not export data</string>
+    <string name="account_close">Close</string>
+
     <!-- Common -->
     <string name="common_loading">Loading…</string>
     <string name="common_retry">Retry</string>

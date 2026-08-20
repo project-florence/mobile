@@ -109,10 +109,7 @@ fun ReportDetailScreen(
                                 color = FlorencePalettes.Florence.primary,
                             )
                             Spacer(Modifier.size(6.dp))
-                            Text(
-                                text = body,
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
+                            MarkdownText(markdown = body)
                         }
                     }
                 } ?: run {

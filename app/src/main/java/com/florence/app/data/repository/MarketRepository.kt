@@ -5,6 +5,7 @@ import com.florence.app.data.model.CompanyInfo
 import com.florence.app.data.model.CompanySearchResult
 import com.florence.app.data.model.CurrencyQuote
 import com.florence.app.data.model.MaintenanceResponse
+import com.florence.app.data.model.MacroeconomyResponse
 import com.florence.app.data.model.MarketStatusResponse
 import com.florence.app.data.model.Ticker
 import com.florence.app.data.model.VersionResponse
@@ -54,4 +55,7 @@ class MarketRepository @Inject constructor(
 
     suspend fun gramPalladiumPrice(): Result<Map<String, CurrencyQuote>> =
         runCatching { api.gramPalladiumPrice() }
+
+    suspend fun macroeconomy(): Result<MacroeconomyResponse> =
+        runCatching { api.macroeconomy() }
 }

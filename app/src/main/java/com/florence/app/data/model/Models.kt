@@ -279,17 +279,73 @@ data class LegalResponse(
 )
 
 // ---- Duyurular ----
+// Backend (src/api/announcements.py): GET /api/v1/announcements → son 7 gün
+// {"announcements": [{"id", "title", "content", "sent_by", "created_at",
+//                     "updated_at", "is_unread"}, ...]} (auth)
 @Serializable
 data class AnnouncementItem(
     val id: Long? = null,
     val title: String? = null,
-    val body: String? = null,
-    val created_at: String? = null,
+    val content: String? = null,
+    @SerialName("sent_by") val sentBy: String? = null,
+    @SerialName("created_at") val createdAt: String? = null,
+    @SerialName("updated_at") val updatedAt: String? = null,
+    @SerialName("is_unread") val isUnread: Boolean = false,
 )
 
 @Serializable
 data class AnnouncementsResponse(
     val announcements: List<AnnouncementItem> = emptyList(),
+)
+
+// ---- Makroekonomi ----
+// Backend (src/api/macroeconomy.py): GET /api/v1/macroeconomy → tüm alanlar
+// float, snake_case. 500 dönebilir (FRED verisi yoksa). Değerler eksik
+// olabileceğinden hepsi Double? (nullable).
+@Serializable
+data class MacroeconomyResponse(
+    @SerialName("usa_gdp") val usaGdp: Double? = null,
+    @SerialName("usa_real_gdp") val usaRealGdp: Double? = null,
+    @SerialName("fed_funds") val fedFunds: Double? = null,
+    @SerialName("fed_funds_rate") val fedFundsRate: Double? = null,
+    @SerialName("usa_unrate") val usaUnrate: Double? = null,
+    @SerialName("brent_crude_oil_price") val brentCrudeOilPrice: Double? = null,
+    @SerialName("wti_crude_oil_price") val wtiCrudeOilPrice: Double? = null,
+    @SerialName("usa_consumer_cpi") val usaConsumerCpi: Double? = null,
+    @SerialName("usa_10y_treasury") val usa10yTreasury: Double? = null,
+    @SerialName("dxy") val dxy: Double? = null,
+    @SerialName("vix") val vix: Double? = null,
+    @SerialName("sp500") val sp500: Double? = null,
+    @SerialName("nasdaq") val nasdaq: Double? = null,
+    @SerialName("bitcoin") val bitcoin: Double? = null,
+)
+
+// ---- Hesap yönetimi (auth) ----
+// PUT /api/v1/auth/change-password  →  {current_password, new_password (min 10)}
+@Serializable
+data class ChangePasswordRequest(
+    @SerialName("current_password") val currentPassword: String,
+    @SerialName("new_password") val newPassword: String,
+)
+
+// PUT /api/v1/auth/change-email  →  {new_email, current_password}
+@Serializable
+data class ChangeEmailRequest(
+    @SerialName("new_email") val newEmail: String,
+    @SerialName("current_password") val currentPassword: String,
+)
+
+// PUT /api/v1/auth/change-username  →  {new_username, current_password}
+@Serializable
+data class ChangeUsernameRequest(
+    @SerialName("new_username") val newUsername: String,
+    @SerialName("current_password") val currentPassword: String,
+)
+
+// PUT/DELETE auth uçları → 200 {"message": ...}
+@Serializable
+data class ChangeResponse(
+    val message: String? = null,
 )
 
 // ---- Kullanıcı / Kredi (coin) ----

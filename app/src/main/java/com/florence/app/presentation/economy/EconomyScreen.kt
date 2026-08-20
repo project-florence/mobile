@@ -18,13 +18,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.florence.app.R
 import com.florence.app.core.theme.TextSecondary
+import com.florence.app.data.model.MacroeconomyResponse
 import com.florence.app.presentation.components.EmptyState
 import com.florence.app.presentation.components.FlorenceCard
+import java.util.Locale
 
 /** Altın türü anahtarı → ekranda gösterilecek güzel ad. */
 private val GOLD_DISPLAY = mapOf(
@@ -116,7 +120,84 @@ fun EconomyScreen(
                 uiState.palladium?.let { palladium ->
                     item { CurrencyRow("Paladyum (ons)", palladium) }
                 }
+
+                // ---- Makroekonomi bölümü ----
+                item {
+                    Spacer(Modifier.size(8.dp))
+                    Text(
+                        text = stringResource(R.string.macro_title),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Text(
+                        text = stringResource(R.string.macro_subtitle),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                if (uiState.macroLoading) {
+                    item {
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                        }
+                    }
+                } else {
+                    val m = uiState.macro
+                    if (uiState.macroError || m == null) {
+                        item {
+                            EmptyState(
+                                title = stringResource(R.string.macro_error),
+                                subtitle = stringResource(R.string.macro_error_hint),
+                            )
+                        }
+                    } else {
+                        item { MacroMetricRow(stringResource(R.string.macro_fed_funds), m.fedFundsRate ?: m.fedFunds, "%") }
+                        item { MacroMetricRow(stringResource(R.string.macro_us_unrate), m.usaUnrate, "%") }
+                        item { MacroMetricRow(stringResource(R.string.macro_vix), m.vix, "") }
+                        item { MacroMetricRow(stringResource(R.string.macro_sp500), m.sp500, "") }
+                        item { MacroMetricRow(stringResource(R.string.macro_nasdaq), m.nasdaq, "") }
+                        item { MacroMetricRow(stringResource(R.string.macro_bitcoin), m.bitcoin, "") }
+                        item { MacroMetricRow(stringResource(R.string.macro_brent), m.brentCrudeOilPrice, "") }
+                        item { MacroMetricRow(stringResource(R.string.macro_wti), m.wtiCrudeOilPrice, "") }
+                        item { MacroMetricRow(stringResource(R.string.macro_dxy), m.dxy, "") }
+                        item { MacroMetricRow(stringResource(R.string.macro_10y), m.usa10yTreasury, "%") }
+                        item { MacroMetricRow(stringResource(R.string.macro_gdp), m.usaGdp, "") }
+                        item { MacroMetricRow(stringResource(R.string.macro_real_gdp), m.usaRealGdp, "") }
+                        item { MacroMetricRow(stringResource(R.string.macro_cpi), m.usaConsumerCpi, "") }
+                    }
+                }
             }
+        }
+    }
+}
+
+/** Makroekonomi metriği: solda etiket, sağda değer (null ise "--"). */
+@Composable
+private fun MacroMetricRow(label: String, value: Double?, suffix: String) {
+    FlorenceCard(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.weight(1f),
+            )
+            Text(
+                text = if (value != null) {
+                    val formatted = String.format(Locale.US, "%.2f", value)
+                    if (suffix.isNotEmpty()) "$formatted$suffix" else formatted
+                } else {
+                    "--"
+                },
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = if (value != null) MaterialTheme.colorScheme.onSurface else TextSecondary,
+            )
         }
     }
 }
