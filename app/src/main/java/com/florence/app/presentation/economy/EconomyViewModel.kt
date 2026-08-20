@@ -20,6 +20,8 @@ class EconomyViewModel @Inject constructor(
 
     data class EconomyUiState(
         val loading: Boolean = true,
+        /** Ağ hatasıyla cache'ten çalışılıyor (eski veri + "önbellek" etiketi). */
+        val isStale: Boolean = false,
         val currency: Map<String, CurrencyQuote> = emptyMap(),
         val gold: Map<String, CurrencyQuote> = emptyMap(),
         val silver: CurrencyQuote? = null,
@@ -34,6 +36,12 @@ class EconomyViewModel @Inject constructor(
     val uiState: StateFlow<EconomyUiState> = _uiState.asStateFlow()
 
     init {
+        viewModelScope.launch {
+            // #D1 — stale bayrağını repo'nun offline fallback sinyalinden türet.
+            market.staleKeys.collect { keys ->
+                _uiState.update { it.copy(isStale = MarketRepository.isEconomyStale(keys)) }
+            }
+        }
         viewModelScope.launch {
             val currency = market.currency()
             val gold = market.goldPrices()

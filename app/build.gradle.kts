@@ -34,7 +34,10 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // NOTE: release APKs are intentionally built UNsigned. Signing is done
+            // out-of-band by the developer with apksigner (keystore is NOT checked
+            // into the repo); see docs/release-signing.md.
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -83,4 +86,5 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.mockwebserver)
+    testImplementation(libs.kotlinx.coroutines.test)
 }

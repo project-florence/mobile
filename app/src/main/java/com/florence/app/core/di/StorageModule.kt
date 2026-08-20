@@ -1,5 +1,7 @@
 package com.florence.app.core.di
 
+import com.florence.app.core.cache.OfflineCache
+import com.florence.app.core.cache.SharedPreferencesOfflineCache
 import com.florence.app.core.storage.EncryptedTokenStore
 import com.florence.app.core.storage.TokenStore
 import dagger.Binds
@@ -15,4 +17,8 @@ abstract class StorageModule {
     @Binds
     @Singleton
     abstract fun bindTokenStore(impl: EncryptedTokenStore): TokenStore
+
+    @Binds
+    @Singleton
+    abstract fun bindOfflineCache(impl: SharedPreferencesOfflineCache): OfflineCache
 }

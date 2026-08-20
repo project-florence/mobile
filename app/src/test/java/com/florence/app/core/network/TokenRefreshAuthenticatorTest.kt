@@ -160,6 +160,91 @@ class TokenRefreshAuthenticatorTest {
         assertEquals(1, refreshCount)
     }
 
+    @Test
+    fun `rate limited refresh 429 clears tokens and does not retry`() {
+        store.setTokensBlocking("old-access", "old-refresh")
+        store.clearVerificationRequired()
+
+        // Orijinal istek → 401, refresh → 429 (rate-limited: 5 istek/dk).
+        // doRefresh() HttpException'ı yakalar, tokenStore.clear() yapar ve false
+        // döner → authenticate null döner → istek yeniden denenmez.
+        server.enqueue(MockResponse().setResponseCode(401).setBody("""{"detail":"Token expired"}"""))
+        server.enqueue(
+            MockResponse().setResponseCode(429)
+                .setBody("""{"detail":"Too many requests"}"""),
+        )
+
+        val response = client.newCall(
+            Request.Builder().url(server.url("api/v1/version")).build(),
+        ).execute()
+
+        assertEquals(401, response.code) // retry yok → orijinal 401 yanıtı döner
+        // Tokenlar temizlenir (markVerificationRequired DEĞİL — sadece clear).
+        assertNull(store.accessToken)
+        assertNull(store.refreshToken)
+        assertTrue("rate-limit sonrası verificationRequired kurulmamalı", !store.verificationRequired.value)
+
+        val requests = server.takeRequests(2)
+        assertEquals(2, requests.size) // orijinal + refresh; retry yok
+        assertEquals("/api/v1/auth/refresh", requests[1].path)
+    }
+
+    @Test
+    fun `consecutive fast 401s share a single refresh and keep tokens consistent`() {
+        store.setTokensBlocking("old-access", "old-refresh")
+
+        // 401'leri 300ms geciktir ki 6 istek de eşzamanlı authenticate'e girsin.
+        // Refresh yalnızca bir kez; retry'lar aynı yeni token'ı taşır.
+        server.dispatcher = object : Dispatcher() {
+            override fun dispatch(request: RecordedRequest): MockResponse {
+                val path = request.path
+                return when {
+                    path == "/api/v1/auth/refresh" ->
+                        MockResponse().setResponseCode(200)
+                            .setBody("""{"access_token":"new-access","refresh_token":"new-refresh"}""")
+
+                    path?.startsWith("/api/v1/bist/tickers") == true ->
+                        if (request.getHeader("Authorization") != null) {
+                            MockResponse().setResponseCode(200).setBody("ok")
+                        } else {
+                            Thread.sleep(300)
+                            MockResponse().setResponseCode(401).setBody("{}")
+                        }
+
+                    else -> MockResponse().setResponseCode(200).setBody("ok")
+                }
+            }
+        }
+
+        val results = java.util.concurrent.ConcurrentLinkedQueue<Int>()
+        val threads = (0 until 6).map {
+            Thread {
+                val response = client.newCall(
+                    Request.Builder().url(server.url("api/v1/bist/tickers")).build(),
+                ).execute()
+                results += response.code
+                response.body?.close()
+            }
+        }
+        threads.forEach { it.start() }
+        threads.forEach { it.join() }
+
+        assertEquals("tüm yanıtlar 200 olmalı", 6, results.count { it == 200 })
+        assertEquals("new-access", store.accessToken)
+
+        val total = server.takeRequests(13) // 6 orijinal + 1 refresh + 6 retry
+        val refreshCount = total.count { it.path == "/api/v1/auth/refresh" }
+        assertEquals("tam olarak 1 refresh olmalı", 1, refreshCount)
+
+        // Tutarlılık: her retry aynı yeni access token'ı taşımalı.
+        val retries = total.filter {
+            it.path?.startsWith("/api/v1/bist/tickers") == true &&
+                it.getHeader("Authorization") != null
+        }
+        assertEquals(6, retries.size)
+        assertTrue("tüm retry'lar aynı token'ı taşımalı", retries.all { it.getHeader("Authorization") == "Bearer new-access" })
+    }
+
     private fun MockWebServer.takeRequests(count: Int): List<RecordedRequest> {
         val result = mutableListOf<RecordedRequest>()
         val deadline = System.currentTimeMillis() + 5000

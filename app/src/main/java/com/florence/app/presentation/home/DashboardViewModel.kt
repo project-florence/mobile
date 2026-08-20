@@ -20,6 +20,8 @@ import javax.inject.Inject
 data class DashboardUiState(
     val loading: Boolean = true,
     val error: Boolean = false,
+    /** Ağ hatasıyla cache'ten çalışılıyor (eski veri + "önbellek" etiketi). */
+    val isStale: Boolean = false,
     val version: String? = null,
     val disabledFeatures: List<String> = emptyList(),
     val heroes: List<CompanyInfo> = emptyList(),
@@ -48,6 +50,12 @@ class DashboardViewModel @Inject constructor(
         viewModelScope.launch {
             favoritesRepo.favorites.collect { favs ->
                 _uiState.update { it.copy(favorites = favs) }
+            }
+        }
+        viewModelScope.launch {
+            // #D1 — stale bayrağını repo'nun offline fallback sinyalinden türet.
+            repo.staleKeys.collect { keys ->
+                _uiState.update { it.copy(isStale = MarketRepository.isDashboardStale(keys)) }
             }
         }
         refresh()

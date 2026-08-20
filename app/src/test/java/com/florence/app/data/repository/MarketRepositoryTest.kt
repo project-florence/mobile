@@ -1,5 +1,6 @@
 package com.florence.app.data.repository
 
+import com.florence.app.core.cache.InMemoryOfflineCache
 import com.florence.app.data.api.FlorenceApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
@@ -32,7 +33,8 @@ class MarketRepositoryTest {
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
             .create(FlorenceApi::class.java)
-        repo = MarketRepository(api)
+        // #D1 — repository artık cache-first; in-memory test double ile beslenir.
+        repo = MarketRepository(api, InMemoryOfflineCache(), json)
     }
 
     @After
