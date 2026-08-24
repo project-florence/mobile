@@ -38,6 +38,13 @@ import com.florence.app.data.model.UpdateAvatarRequest
 import com.florence.app.data.model.UpdateAvatarResponse
 import com.florence.app.data.model.UserProfile
 import com.florence.app.data.model.VersionResponse
+import com.florence.app.data.model.SimulationDailyCostResponse
+import com.florence.app.data.model.EstimateCostResponse
+import com.florence.app.data.model.SimulationHistoryItem
+import com.florence.app.data.model.SimulationDetailResponse
+import com.florence.app.data.model.SimulationResponse
+import com.florence.app.data.model.FitRequest
+import com.florence.app.data.model.FitResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -224,8 +231,40 @@ interface FlorenceApi : AuthEndpoints {
     ): ReportGenerateResponse
 
     @GET("api/v1/reports/info")
-    suspend fun reportsInfo(): ReportsInfoResponse
+        suspend fun reportsInfo(): ReportsInfoResponse
 
-    @POST("api/v1/analytics/event")
+        // ---- Simülasyon (G1) ----
+        // Monte Carlo simülasyonu; simulate maliyetlidir (kredi harcar).
+        @GET("api/v1/simulations/per-day-cost")
+        suspend fun simulationDailyCost(): SimulationDailyCostResponse
+
+        @GET("api/v1/simulations/estimate-cost/{ticker}")
+        suspend fun estimateSimulationCost(
+            @Path("ticker") ticker: String,
+            @Query("days") days: Int,
+        ): EstimateCostResponse
+
+        @GET("api/v1/simulations/history")
+        suspend fun simulationHistory(
+            @Query("limit") limit: Int = 20,
+            @Query("offset") offset: Int = 0,
+        ): List<SimulationHistoryItem>
+
+        @GET("api/v1/simulations/history/{simId}")
+        suspend fun simulationDetail(@Path("simId") simId: Int): SimulationDetailResponse
+
+        @GET("api/v1/simulations/{ticker}")
+        suspend fun simulate(
+            @Path("ticker") ticker: String,
+            @Query("days") days: Int,
+            @Query("bounds") bounds: String = "0.05",
+            @Query("target") target: String? = null,
+        ): SimulationResponse
+
+        // ---- AI Danışman / risk bazlı öneri (G2) ----
+        @POST("api/v1/stocks/fit")
+        suspend fun fitStocks(@Body body: FitRequest): FitResponse
+
+        @POST("api/v1/analytics/event")
     suspend fun trackEvent(@Body event: AnalyticsEvent): Unit
 }

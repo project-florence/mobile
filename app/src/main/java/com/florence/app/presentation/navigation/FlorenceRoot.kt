@@ -96,6 +96,7 @@ import com.florence.app.presentation.reports.ReportDetailScreen
 import com.florence.app.presentation.reports.ReportsScreen
 import com.florence.app.presentation.search.SearchScreen
 import com.florence.app.presentation.settings.CreditsViewModel
+import com.florence.app.presentation.simulation.SimulationScreen
 import com.florence.app.presentation.settings.SettingsScreen
 import com.florence.app.presentation.watchlist.WatchlistScreen
 import com.florence.app.presentation.components.LogoMark
@@ -145,7 +146,8 @@ private val DRAWER_MARKET_ITEMS = listOf(
     DrawerItem("watchlist", R.string.nav_watchlist, Icons.Filled.Star),
     DrawerItem("portfolio", R.string.nav_portfolio, Icons.Filled.List),
     DrawerItem("reports", R.string.nav_reports, Icons.Filled.Create),
-    DrawerItem("advisor", R.string.nav_advisor, Icons.Filled.Send),
+        DrawerItem("simulation", R.string.simulation_title, Icons.Filled.PlayArrow),
+        DrawerItem("advisor", R.string.nav_advisor, Icons.Filled.Send),
     DrawerItem("ipos", R.string.nav_ipos, Icons.Filled.PlayArrow),
     DrawerItem("economy", R.string.nav_economy, Icons.Filled.Info),
 )
@@ -165,7 +167,8 @@ private fun drawerTitleFor(route: String?): Int = when (route) {
     "watchlist" -> R.string.nav_watchlist
     "portfolio" -> R.string.nav_portfolio
     "reports" -> R.string.nav_reports
-    "advisor" -> R.string.nav_advisor
+        "simulation" -> R.string.simulation_title
+        "advisor" -> R.string.nav_advisor
     "ipos" -> R.string.nav_ipos
     "economy" -> R.string.nav_economy
     "settings" -> R.string.nav_settings
@@ -499,6 +502,7 @@ private fun MainScaffold(viewModel: RootViewModel) {
                     ReportDetailScreen(onBack = { navController.popBackStack() })
                 }
                 composable("advisor") { AdvisorScreen() }
+                composable("simulation") { SimulationScreen() }
                                 composable("economy") { EconomyScreen() }
                 composable("ipos") {
                     IpoScreen(onOpenIpo = { slug -> navController.navigate("ipo/$slug") })

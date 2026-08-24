@@ -249,11 +249,72 @@
     <string name="account_close">Close</string>
 
     <!-- Common -->
-        <string name="common_loading">Loading…</string>
-        <string name="common_retry">Retry</string>
-        <string name="common_error">Something went wrong</string>
-        <string name="common_rate_limited">Too many requests. Please wait a moment and try again.</string>
-        <string name="common_server_busy">The system is busy. Please try again shortly.</string>
-        <string name="common_insufficient_credit">Insufficient credits to complete this action.</string>
-        <string name="common_network_error">Network error. Check your connection.</string>
-    </resources>
+            <string name="common_loading">Loading…</string>
+            <string name="common_retry">Retry</string>
+            <string name="common_error">Something went wrong</string>
+            <string name="common_rate_limited">Too many requests. Please wait a moment and try again.</string>
+            <string name="common_server_busy">The system is busy. Please try again shortly.</string>
+            <string name="common_insufficient_credit">Insufficient credits to complete this action.</string>
+            <string name="common_network_error">Network error. Check your connection.</string>
+
+        <!-- Simulation (G1) -->
+        <string name="simulation_title">Simulation</string>
+        <string name="simulation_subtitle">Monte Carlo price simulation</string>
+        <string name="simulation_tab_run">New Simulation</string>
+        <string name="simulation_tab_history">History</string>
+        <string name="simulation_run_card_title">Run a new simulation</string>
+        <string name="simulation_ticker_label">Ticker</string>
+        <string name="simulation_ticker_hint">Stock code (e.g. THYAO)</string>
+        <string name="simulation_days_label">Days</string>
+        <string name="simulation_days_hint">1 – 370</string>
+        <string name="simulation_bounds_label">Bounds (confidence)</string>
+        <string name="simulation_target_label">Target price (optional)</string>
+        <string name="simulation_estimate">Estimated cost: %1$s credits</string>
+        <string name="simulation_credit_warning">Simulation spends credits. You need a sufficient balance.</string>
+        <string name="simulation_run">Run Simulation</string>
+        <string name="simulation_running">Simulating…</string>
+        <string name="simulation_result_title">Simulation Result</string>
+        <string name="simulation_prob_above">Above target</string>
+        <string name="simulation_prob_below">Below target</string>
+        <string name="simulation_conf_range">%1$s%% range</string>
+        <string name="simulation_direction">Direction: %1$s</string>
+        <string name="simulation_target_value">Target price: %1$s</string>
+        <string name="simulation_cost_spent">Credits spent: %1$s</string>
+        <string name="simulation_credits_left">Remaining credits: %1$s</string>
+        <string name="simulation_result_saved">Result saved to history.</string>
+        <string name="simulation_empty_history">No simulations yet</string>
+        <string name="simulation_empty_history_hint">Run your first simulation to see results here.</string>
+        <string name="simulation_history_line">%1$s · %2$d days</string>
+        <string name="simulation_history_meta">%1$s · target %2$s</string>
+        <string name="simulation_detail_title">Simulation Detail</string>
+        <string name="simulation_detail_meta">%1$s · %2$d days · target %3$s</string>
+        <string name="simulation_detail_probs">Above target: %1$s · Below target: %2$s</string>
+        <string name="simulation_detail_confidence">Confidence interval: %1$s – %2$s</string>
+
+        <!-- AI Advisor (G2) -->
+        <string name="advisor_subtitle">Risk-based stock suggestions &amp; quick analysis</string>
+        <string name="advisor_profile_title">Your investor profile</string>
+        <string name="advisor_risk_label">Risk appetite</string>
+        <string name="advisor_risk_conservative">Conservative</string>
+        <string name="advisor_risk_balanced">Balanced</string>
+        <string name="advisor_risk_aggressive">Aggressive</string>
+        <string name="advisor_horizon_label">Horizon</string>
+        <string name="advisor_horizon_short">Short</string>
+        <string name="advisor_horizon_medium">Medium</string>
+        <string name="advisor_horizon_long">Long</string>
+        <string name="advisor_profit_label">Profitability preference</string>
+        <string name="advisor_profit_low">Low</string>
+        <string name="advisor_profit_medium">Medium</string>
+        <string name="advisor_profit_high">High</string>
+        <string name="advisor_fitting">Finding matches…</string>
+        <string name="advisor_get_recommendations">Get Recommendations</string>
+        <string name="advisor_recommendations_title">Suggested stocks</string>
+        <string name="advisor_score">Score: %1$s</string>
+        <string name="advisor_card_title">Generate a quick report</string>
+        <string name="advisor_ticker_label">Stock code (e.g. THYAO)</string>
+        <string name="advisor_cost">Cost: %1$s credits · %2$s sec</string>
+        <string name="advisor_analyze">Analyze</string>
+        <string name="advisor_analyzing">Analyzing…</string>
+        <string name="advisor_credit_note">Quick reports spend credits.</string>
+        <string name="advisor_intro">Pick your risk appetite and preferences to get stock suggestions, then choose one to generate a quick analysis report.</string>
+        </resources>

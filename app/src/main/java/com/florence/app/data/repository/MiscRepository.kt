@@ -12,6 +12,8 @@ import com.florence.app.data.model.ReportDetail
 import com.florence.app.data.model.ReportGenerateResponse
 import com.florence.app.data.model.ReportHistoryItem
 import com.florence.app.data.model.ReportsInfoResponse
+import com.florence.app.data.model.FitRequest
+import com.florence.app.data.model.FitResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -44,6 +46,10 @@ class MiscRepository @Inject constructor(private val api: FlorenceApi) {
 
     suspend fun reportsInfo(): Result<ReportsInfoResponse> =
         runCatching { api.reportsInfo() }
+
+    /** Risk bazlı hisse önerisi (AI Danışman / advisor feature). */
+    suspend fun fitStocks(body: FitRequest): Result<FitResponse> =
+        runCatching { api.fitStocks(body) }
 
     suspend fun about(lang: String): Result<AboutResponse> =
         runCatching { api.about(lang) }

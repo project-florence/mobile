@@ -511,3 +511,101 @@ data class BotsResponse(
 data class DeleteBotResponse(
     val message: String? = null,
 )
+
+// ---- Simülasyon (G1) ----
+// Backend (src/api/simulations.py + src/services/simulation_history.py):
+// GET /simulations/per-day-cost  → { per_day_cost, round }
+// GET /simulations/estimate-cost/{ticker}?days=  → { cost }
+// GET /simulations/history?limit=&offset=  → [SimulationHistoryItem]
+// GET /simulations/history/{sim_id}  → SimulationDetailResponse (result = JSONB)
+// GET /simulations/{ticker}?days=&bounds=&target=  → SimulationResponse (Monte Carlo)
+// Simülasyon maliyetlidir (kredi harcar); 402 "insufficient credit" dönebilir.
+@Serializable
+data class SimulationDailyCostResponse(
+    @SerialName("per_day_cost") val perDayCost: Double? = null,
+    val round: Int? = null,
+)
+
+@Serializable
+data class EstimateCostResponse(
+    val cost: Double? = null,
+)
+
+@Serializable
+data class SimulationHistoryItem(
+    val id: Int? = null,
+    val ticker: String? = null,
+    val days: Int? = null,
+    val bounds: String? = null,
+    val target: String? = null,
+    val cost: Double? = null,
+    @SerialName("created_at") val createdAt: String? = null,
+)
+
+// Monte Carlo güven aralığı (bounds -> percent = 1 - 2*bounds).
+@Serializable
+data class SimulationConfidence(
+    val min: Double? = null,
+    val max: Double? = null,
+    val percent: Double? = null,
+    val days: Int? = null,
+    val bounds: String? = null,
+)
+
+// Simülasyon çalıştırma yanıtı (sonuç + meta bilgi; kredi harcar).
+@Serializable
+data class SimulationResponse(
+    @SerialName("prob_above") val probAbove: Double? = null,
+    @SerialName("prob_below") val probBelow: Double? = null,
+    val confidence: SimulationConfidence? = null,
+    val direction: String? = null,
+    @SerialName("simulation_id") val simulationId: Int? = null,
+    val ticker: String? = null,
+    val days: Int? = null,
+    val target: String? = null,
+    val bounds: String? = null,
+    @SerialName("credits_spend") val creditsSpend: Double? = null,
+    @SerialName("remaining_credits") val remainingCredits: Double? = null,
+)
+
+// Geçmiş detayı: result alanı kaydedilmiş JSONB (SimulationResponse içeriğiyle aynı şema).
+@Serializable
+data class SimulationDetailResponse(
+    val id: Int? = null,
+    val ticker: String? = null,
+    val days: Int? = null,
+    val bounds: String? = null,
+    val target: String? = null,
+    val result: SimulationResponse? = null,
+    val cost: Double? = null,
+    @SerialName("created_at") val createdAt: String? = null,
+)
+
+// ---- AI Danışman / risk bazlı hisse önerisi (G2) ----
+// Backend (src/api/fit.py): POST /api/v1/stocks/fit — advisor feature'ı tarafından
+// kapsama alınan risk/horizon/karlılık vektör eşleştirme ucu.
+// FitRequest { horizon, profitability, risk_tolerance, limit } → FitResponse.
+// risk_tolerance: low | medium | high
+// horizon:        short | medium | long
+// profitability:  low | medium | high
+@Serializable
+data class FitRequest(
+    val horizon: String,
+    val profitability: String,
+    @SerialName("risk_tolerance") val riskTolerance: String,
+    val limit: Int = 5,
+)
+
+@Serializable
+data class FitResultItem(
+    val ticker: String? = null,
+    val vector: List<Double> = emptyList(),
+    val score: Double? = null,
+    val distance: Double? = null,
+)
+
+@Serializable
+data class FitResponse(
+    val query: Map<String, Double> = emptyMap(),
+    val results: List<FitResultItem> = emptyList(),
+)

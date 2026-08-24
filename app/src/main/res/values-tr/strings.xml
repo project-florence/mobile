@@ -249,11 +249,72 @@
     <string name="account_close">Kapat</string>
 
     <!-- Common -->
-        <string name="common_loading">Yükleniyor…</string>
-        <string name="common_retry">Tekrar dene</string>
-        <string name="common_error">Bir şeyler ters gitti</string>
-        <string name="common_rate_limited">Çok fazla istek gönderildi. Biraz bekleyip tekrar dene.</string>
-        <string name="common_server_busy">Sistem yoğun. Lütfen kısa süre sonra tekrar dene.</string>
-        <string name="common_insufficient_credit">Bu işlemi tamamlamak için yeterli kredi yok.</string>
-        <string name="common_network_error">Bağlantı hatası. İnternet bağlantını kontrol et.</string>
-    </resources>
+            <string name="common_loading">Yükleniyor…</string>
+            <string name="common_retry">Tekrar dene</string>
+            <string name="common_error">Bir şeyler ters gitti</string>
+            <string name="common_rate_limited">Çok fazla istek gönderildi. Biraz bekleyip tekrar dene.</string>
+            <string name="common_server_busy">Sistem yoğun. Lütfen kısa süre sonra tekrar dene.</string>
+            <string name="common_insufficient_credit">Bu işlemi tamamlamak için yeterli kredi yok.</string>
+            <string name="common_network_error">Bağlantı hatası. İnternet bağlantını kontrol et.</string>
+
+        <!-- Simulation (G1) -->
+        <string name="simulation_title">Simülasyon</string>
+        <string name="simulation_subtitle">Monte Carlo fiyat simülasyonu</string>
+        <string name="simulation_tab_run">Yeni Simülasyon</string>
+        <string name="simulation_tab_history">Geçmiş</string>
+        <string name="simulation_run_card_title">Yeni bir simülasyon çalıştır</string>
+        <string name="simulation_ticker_label">Hisse kodu</string>
+        <string name="simulation_ticker_hint">Hisse kodu (örn. THYAO)</string>
+        <string name="simulation_days_label">Gün sayısı</string>
+        <string name="simulation_days_hint">1 – 370</string>
+        <string name="simulation_bounds_label">Bant (güven aralığı)</string>
+        <string name="simulation_target_label">Hedef fiyat (opsiyonel)</string>
+        <string name="simulation_estimate">Tahmini maliyet: %1$s kredi</string>
+        <string name="simulation_credit_warning">Simülasyon kredi harcar. Yeterli bakiyen olmalı.</string>
+        <string name="simulation_run">Simülasyonu Çalıştır</string>
+        <string name="simulation_running">Simüle ediliyor…</string>
+        <string name="simulation_result_title">Simülasyon Sonucu</string>
+        <string name="simulation_prob_above">Hedefin üstü</string>
+        <string name="simulation_prob_below">Hedefin altı</string>
+        <string name="simulation_conf_range">%1$s%% aralık</string>
+        <string name="simulation_direction">Yön: %1$s</string>
+        <string name="simulation_target_value">Hedef fiyat: %1$s</string>
+        <string name="simulation_cost_spent">Harcanan kredi: %1$s</string>
+        <string name="simulation_credits_left">Kalan kredi: %1$s</string>
+        <string name="simulation_result_saved">Sonuç geçmişe kaydedildi.</string>
+        <string name="simulation_empty_history">Henüz simülasyon yok</string>
+        <string name="simulation_empty_history_hint">İlk simülasyonunu çalıştırdığında sonuçlar burada görünür.</string>
+        <string name="simulation_history_line">%1$s · %2$d gün</string>
+        <string name="simulation_history_meta">%1$s · hedef %2$s</string>
+        <string name="simulation_detail_title">Simülasyon Detayı</string>
+        <string name="simulation_detail_meta">%1$s · %2$d gün · hedef %3$s</string>
+        <string name="simulation_detail_probs">Hedefin üstü: %1$s · Hedefin altı: %2$s</string>
+        <string name="simulation_detail_confidence">Güven aralığı: %1$s – %2$s</string>
+
+        <!-- AI Advisor (G2) -->
+        <string name="advisor_subtitle">Risk bazlı hisse önerileri ve hızlı analiz</string>
+        <string name="advisor_profile_title">Yatırımcı profilin</string>
+        <string name="advisor_risk_label">Risk iştahı</string>
+        <string name="advisor_risk_conservative">Muhafazakar</string>
+        <string name="advisor_risk_balanced">Dengeli</string>
+        <string name="advisor_risk_aggressive">Agresif</string>
+        <string name="advisor_horizon_label">Ufuk</string>
+        <string name="advisor_horizon_short">Kısa</string>
+        <string name="advisor_horizon_medium">Orta</string>
+        <string name="advisor_horizon_long">Uzun</string>
+        <string name="advisor_profit_label">Karlılık tercihi</string>
+        <string name="advisor_profit_low">Düşük</string>
+        <string name="advisor_profit_medium">Orta</string>
+        <string name="advisor_profit_high">Yüksek</string>
+        <string name="advisor_fitting">Eşleşmeler aranıyor…</string>
+        <string name="advisor_get_recommendations">Önerileri Getir</string>
+        <string name="advisor_recommendations_title">Önerilen hisseler</string>
+        <string name="advisor_score">Skor: %1$s</string>
+        <string name="advisor_card_title">Hızlı rapor üret</string>
+        <string name="advisor_ticker_label">Hisse kodu (örn. THYAO)</string>
+        <string name="advisor_cost">Maliyet: %1$s kredi · %2$s sn</string>
+        <string name="advisor_analyze">Analiz Et</string>
+        <string name="advisor_analyzing">Analiz ediliyor…</string>
+        <string name="advisor_credit_note">Hızlı raporlar kredi harcar.</string>
+        <string name="advisor_intro">Risk iştahını ve tercihlerini seç, hisse önerileri al; ardından biri için hızlı analiz raporu üret.</string>
+        </resources>
