@@ -3,6 +3,7 @@ package com.florence.app.presentation.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.florence.app.R
+import com.florence.app.core.net.ApiErrorMapper
 import com.florence.app.core.storage.TokenStore
 import com.florence.app.data.model.AnnouncementItem
 import com.florence.app.data.model.AvatarItem
@@ -21,11 +22,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 import retrofit2.HttpException
-import java.io.IOException
 import javax.inject.Inject
 
 /** Profil ekranında çalıştırılabilecek hesap işlemleri (hangi dialog'da spinner gösterileceğini seçer). */
@@ -191,23 +188,10 @@ class ProfileViewModel @Inject constructor(
     private fun prettyPrint(json: JsonObject): String =
         prettyJson.encodeToString(JsonElement.serializer(), json)
 
-    private fun mapAccountError(t: Throwable): Int = when {
-        t is HttpException && t.code() == 401 -> R.string.account_current_password_incorrect
-        t is HttpException && t.code() == 429 -> R.string.auth_rate_limited
-        t is HttpException && t.code() == 400 -> when (httpErrorDetail(t)) {
-            "error_email_taken" -> R.string.auth_email_taken
-            "error_username_taken" -> R.string.auth_username_taken
-            else -> R.string.auth_register_taken
-        }
-        t is IOException -> R.string.auth_network_error
-        else -> R.string.common_error
+    private fun mapAccountError(t: Throwable): Int {
+        // Mevcut şifre hatalı (401) — hesap yönetimine özel mesaj.
+        if (t is HttpException && t.code() == 401) return R.string.account_current_password_incorrect
+        // Bilinen durum kodları ve error_* i18n anahtarlarını ortak mapper'a delege et.
+        return ApiErrorMapper.mapApiError(t) ?: R.string.common_error
     }
-
-    /** backend hata gövdesindeki "detail" alanını döndürür (örn. error_email_taken). */
-    private fun httpErrorDetail(t: HttpException): String? =
-        t.response()?.errorBody()?.string()?.let { body ->
-            runCatching {
-                Json.parseToJsonElement(body).jsonObject["detail"]?.jsonPrimitive?.contentOrNull
-            }.getOrNull()
-        }
 }

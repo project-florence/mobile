@@ -5,6 +5,7 @@ import com.florence.app.data.model.AboutResponse
 import com.florence.app.data.model.AnnouncementItem
 import com.florence.app.data.model.ContactResponse
 import com.florence.app.data.model.Contributor
+import com.florence.app.data.model.IpoDetail
 import com.florence.app.data.model.IpoItem
 import com.florence.app.data.model.LegalResponse
 import com.florence.app.data.model.ReportDetail
@@ -19,6 +20,15 @@ class MiscRepository @Inject constructor(private val api: FlorenceApi) {
 
     suspend fun ipos(): Result<List<IpoItem>> =
         runCatching { api.iposActive() }
+
+    suspend fun upcomingIpos(): Result<List<IpoItem>> =
+        runCatching { api.upcomingIpos() }
+
+    suspend fun draftIpos(): Result<List<IpoItem>> =
+        runCatching { api.draftIpos() }
+
+    suspend fun ipoDetail(slug: String): Result<IpoDetail> =
+        runCatching { api.ipoDetail(slug) }
 
     suspend fun announcements(): Result<List<AnnouncementItem>> =
         runCatching { api.announcements().announcements }

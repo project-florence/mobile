@@ -3,6 +3,7 @@ package com.florence.app.presentation.bots
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.florence.app.R
+import com.florence.app.core.net.ApiErrorMapper
 import com.florence.app.data.model.BotItem
 import com.florence.app.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -92,27 +93,17 @@ class BotsViewModel @Inject constructor(
             val result = user.deleteBot(id.toString())
             _uiState.update { it.copy(deletingId = null) }
             if (result.isFailure) {
-                _uiState.update { it.copy(errorRes = R.string.bots_error_generic) }
+                _uiState.update { it.copy(errorRes = errorResFor(result.exceptionOrNull())) }
             }
             load()
         }
     }
 
-    /** Backend hata detayından i18n mesajına eşle. */
-    private fun errorResFor(t: Throwable?): Int? {
-        if (t is HttpException) {
-            val body = try {
-                t.response()?.errorBody()?.string()?.lowercase() ?: ""
-            } catch (e: Exception) {
-                ""
-            }
-            return when {
-                body.contains("bot_limit_reached") -> R.string.bots_error_limit
-                body.contains("username_taken") -> R.string.bots_error_username_taken
-                body.contains("not_allowed") -> R.string.bots_error_not_allowed
-                else -> R.string.bots_error_generic
-            }
-        }
+    /** Backend hata kodunu F7 ortak mapper veya bot'a özel mesajlara eşler. */
+    private fun errorResFor(t: Throwable?): Int {
+        ApiErrorMapper.mapApiError(t)?.let { return it }
+        // Şifre < 10 karakter → 422 (backend doğrulama hatası).
+        if (t is HttpException && t.code() == 422) return R.string.bots_error_password_short
         return R.string.bots_error_generic
     }
 }

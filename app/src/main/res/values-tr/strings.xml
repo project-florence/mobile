@@ -75,6 +75,7 @@
     <string name="verify_already_verified">E-posta zaten doğrulanmış. Giriş yapabilirsin.</string>
     <string name="verify_success">E-posta başarıyla doğrulandı!</string>
     <string name="verify_failed">Doğrulama başarısız. Link geçersiz veya süresi dolmuş olabilir.</string>
+    <string name="error_email_not_verified">Devam etmek için e-postanı doğrula.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Piyasa Panosu</string>
@@ -114,12 +115,34 @@
     <string name="detail_no_news">Haber bulunamadı</string>
     <string name="detail_news_unavailable">Haber servisi şu an kullanılamıyor</string>
     <string name="range_5m">5dk</string>
-    <string name="range_30m">30dk</string>
-    <string name="range_1h">1Saat</string>
-    <string name="range_6mo">6Ay</string>
-    <string name="range_1y">1Yıl</string>
-    <string name="common_back">Geri</string>
-    <string name="common_open">Aç</string>
+        <string name="range_30m">30dk</string>
+        <string name="range_1h">1Saat</string>
+        <string name="range_6mo">6Ay</string>
+        <string name="range_1y">1Yıl</string>
+        <string name="common_back">Geri</string>
+        <string name="common_open">Aç</string>
+
+        <!-- Halka Arzlar (C3) -->
+        <string name="ipo_title">Halka Arzlar</string>
+        <string name="ipo_subtitle">Halka arzlar ve başvuru detayları</string>
+        <string name="ipo_tab_upcoming">Yaklaşan</string>
+        <string name="ipo_tab_active">Aktif</string>
+        <string name="ipo_tab_draft">Taslak</string>
+        <string name="ipo_empty_title">Burada halka arz yok</string>
+        <string name="ipo_empty_subtitle">Şu an gösterilecek kayıt bulunmuyor.</string>
+        <string name="ipo_date">Tarih: %1$s</string>
+        <string name="ipo_apply_link">Başvuru Detayı</string>
+        <string name="ipo_error">Halka arz verileri yüklenemedi.</string>
+        <string name="ipo_detail_title">Halka Arz Detayı</string>
+        <string name="ipo_ticker">Borsa Kodu: %1$s</string>
+        <string name="ipo_info">Bilgiler</string>
+        <string name="ipo_sections">Detaylar</string>
+        <string name="ipo_company">Şirket</string>
+        <string name="ipo_city">Şehir: %1$s</string>
+        <string name="ipo_founded">Kuruluş: %1$s</string>
+        <string name="ipo_description">Açıklama</string>
+        <string name="ipo_updated">Güncelleme: %1$s</string>
+        <string name="ipo_not_found">Halka arz bulunamadı.</string>
 
     <!-- Piyasa durumu (K) -->
     <string name="market_open">Piyasa Açık</string>
@@ -169,7 +192,8 @@
     <string name="bots_error_username_taken">Bu bot kullanıcı adı zaten kullanımda.</string>
     <string name="bots_error_not_allowed">Hesabın için botlara izin verilmiyor.</string>
     <string name="bots_error_generic">Bot oluşturulamadı.</string>
-    <string name="bots_error_load">Botlar yüklenemedi.</string>
+        <string name="bots_error_load">Botlar yüklenemedi.</string>
+        <string name="bots_error_password_short">Şifre en az 10 karakter olmalı.</string>
 
     <!-- Notifications -->
     <string name="notifications_empty">Bildirim yok</string>
@@ -225,7 +249,11 @@
     <string name="account_close">Kapat</string>
 
     <!-- Common -->
-    <string name="common_loading">Yükleniyor…</string>
-    <string name="common_retry">Tekrar dene</string>
-    <string name="common_error">Bir şeyler ters gitti</string>
-</resources>
+        <string name="common_loading">Yükleniyor…</string>
+        <string name="common_retry">Tekrar dene</string>
+        <string name="common_error">Bir şeyler ters gitti</string>
+        <string name="common_rate_limited">Çok fazla istek gönderildi. Biraz bekleyip tekrar dene.</string>
+        <string name="common_server_busy">Sistem yoğun. Lütfen kısa süre sonra tekrar dene.</string>
+        <string name="common_insufficient_credit">Bu işlemi tamamlamak için yeterli kredi yok.</string>
+        <string name="common_network_error">Bağlantı hatası. İnternet bağlantını kontrol et.</string>
+    </resources>

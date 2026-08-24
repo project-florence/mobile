@@ -84,6 +84,7 @@ import com.florence.app.presentation.auth.VerifyEmailScreen
 import com.florence.app.presentation.company.CompanyDetailScreen
 import com.florence.app.presentation.economy.EconomyScreen
 import com.florence.app.presentation.home.DashboardScreen
+import com.florence.app.presentation.ipo.IpoDetailScreen
 import com.florence.app.presentation.ipo.IpoScreen
 import com.florence.app.presentation.legal.LegalDetailScreen
 import com.florence.app.presentation.legal.LegalScreen
@@ -258,11 +259,12 @@ private fun MainScaffold(viewModel: RootViewModel) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
     val isDetail = currentRoute?.startsWith("company/") == true ||
-        currentRoute?.startsWith("portfolio/") == true ||
-        currentRoute?.startsWith("report/") == true ||
-        currentRoute?.startsWith("legal/") == true ||
-        currentRoute == "notifications" ||
-        currentRoute == "avatar"
+            currentRoute?.startsWith("portfolio/") == true ||
+            currentRoute?.startsWith("report/") == true ||
+            currentRoute?.startsWith("legal/") == true ||
+            currentRoute?.startsWith("ipo/") == true ||
+            currentRoute == "notifications" ||
+            currentRoute == "avatar"
     val creditsViewModel: CreditsViewModel = hiltViewModel()
     val creditsState by creditsViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -497,8 +499,16 @@ private fun MainScaffold(viewModel: RootViewModel) {
                     ReportDetailScreen(onBack = { navController.popBackStack() })
                 }
                 composable("advisor") { AdvisorScreen() }
-                composable("ipos") { IpoScreen() }
-                composable("economy") { EconomyScreen() }
+                                composable("economy") { EconomyScreen() }
+                composable("ipos") {
+                    IpoScreen(onOpenIpo = { slug -> navController.navigate("ipo/$slug") })
+                }
+                composable(
+                    route = "ipo/{slug}",
+                    arguments = listOf(navArgument("slug") { type = NavType.StringType }),
+                ) {
+                    IpoDetailScreen()
+                }
                 composable("settings") { SettingsScreen() }
                 composable("about") { AboutScreen() }
                 composable("contact") { ContactScreen() }

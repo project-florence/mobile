@@ -187,6 +187,34 @@ data class IpoItem(
     val status: String? = null,
 )
 
+/**
+ * /ipos/{slug} detayı — backend halkarz source'tan zengin şema döndürür:
+ * {
+ *   slug, ticker, company_name,
+ *   info: {key→value} (ör. "Halka Arz Fiyatı").
+ *   sections: {başlık→paragraf},
+ *   company: {city, founded, description},
+ *   updated_at
+ * }
+ */
+@Serializable
+data class IpoDetail(
+    val slug: String? = null,
+    val ticker: String? = null,
+    @SerialName("company_name") val companyName: String? = null,
+    val info: Map<String, String> = emptyMap(),
+    val sections: Map<String, String> = emptyMap(),
+    val company: IpoCompanyInfo? = null,
+    @SerialName("updated_at") val updatedAt: String? = null,
+)
+
+@Serializable
+data class IpoCompanyInfo(
+    val city: String? = null,
+    val founded: String? = null,
+    val description: String? = null,
+)
+
 // ---- Raporlar ----
 @Serializable
 data class ReportHistoryItem(

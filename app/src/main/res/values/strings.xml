@@ -75,6 +75,7 @@
     <string name="verify_already_verified">Email already verified. You can sign in.</string>
     <string name="verify_success">Email verified successfully!</string>
     <string name="verify_failed">Verification failed. The link may be invalid or expired.</string>
+    <string name="error_email_not_verified">Please verify your email to continue.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Market Overview</string>
@@ -114,12 +115,34 @@
     <string name="detail_no_news">No news found</string>
     <string name="detail_news_unavailable">News service is currently unavailable</string>
     <string name="range_5m">5m</string>
-    <string name="range_30m">30m</string>
-    <string name="range_1h">1H</string>
-    <string name="range_6mo">6M</string>
-    <string name="range_1y">1Y</string>
-    <string name="common_back">Back</string>
-    <string name="common_open">Open</string>
+        <string name="range_30m">30m</string>
+        <string name="range_1h">1H</string>
+        <string name="range_6mo">6M</string>
+        <string name="range_1y">1Y</string>
+        <string name="common_back">Back</string>
+        <string name="common_open">Open</string>
+
+        <!-- IPOs (C3) -->
+        <string name="ipo_title">IPOs</string>
+        <string name="ipo_subtitle">Initial public offerings and application details</string>
+        <string name="ipo_tab_upcoming">Upcoming</string>
+        <string name="ipo_tab_active">Active</string>
+        <string name="ipo_tab_draft">Draft</string>
+        <string name="ipo_empty_title">No IPOs here</string>
+        <string name="ipo_empty_subtitle">There are no entries to show right now.</string>
+        <string name="ipo_date">Date: %1$s</string>
+        <string name="ipo_apply_link">Application Details</string>
+        <string name="ipo_error">Could not load IPO data.</string>
+        <string name="ipo_detail_title">IPO Details</string>
+        <string name="ipo_ticker">Ticker: %1$s</string>
+        <string name="ipo_info">Information</string>
+        <string name="ipo_sections">Details</string>
+        <string name="ipo_company">Company</string>
+        <string name="ipo_city">City: %1$s</string>
+        <string name="ipo_founded">Founded: %1$s</string>
+        <string name="ipo_description">Description</string>
+        <string name="ipo_updated">Updated: %1$s</string>
+        <string name="ipo_not_found">IPO not found.</string>
 
     <!-- Market status (K) -->
     <string name="market_open">Market Open</string>
@@ -169,7 +192,8 @@
     <string name="bots_error_username_taken">This bot username is already taken.</string>
     <string name="bots_error_not_allowed">Bots are not allowed for your account.</string>
     <string name="bots_error_generic">Could not create bot.</string>
-    <string name="bots_error_load">Could not load bots.</string>
+        <string name="bots_error_load">Could not load bots.</string>
+        <string name="bots_error_password_short">Password must be at least 10 characters.</string>
 
     <!-- Notifications -->
     <string name="notifications_empty">No notifications</string>
@@ -225,7 +249,11 @@
     <string name="account_close">Close</string>
 
     <!-- Common -->
-    <string name="common_loading">Loading…</string>
-    <string name="common_retry">Retry</string>
-    <string name="common_error">Something went wrong</string>
-</resources>
+        <string name="common_loading">Loading…</string>
+        <string name="common_retry">Retry</string>
+        <string name="common_error">Something went wrong</string>
+        <string name="common_rate_limited">Too many requests. Please wait a moment and try again.</string>
+        <string name="common_server_busy">The system is busy. Please try again shortly.</string>
+        <string name="common_insufficient_credit">Insufficient credits to complete this action.</string>
+        <string name="common_network_error">Network error. Check your connection.</string>
+    </resources>

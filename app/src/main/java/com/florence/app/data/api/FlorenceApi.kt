@@ -9,6 +9,7 @@ import com.florence.app.data.model.CreatePortfolioRequest
 import com.florence.app.data.model.CreditsResponse
 import com.florence.app.data.model.CurrencyQuote
 import com.florence.app.data.model.FavoritesResponse
+import com.florence.app.data.model.IpoDetail
 import com.florence.app.data.model.IpoItem
 import com.florence.app.data.model.MaintenanceResponse
 import com.florence.app.data.model.MarketStatusResponse
@@ -196,9 +197,18 @@ interface FlorenceApi : AuthEndpoints {
         @Body body: AddTransactionRequest,
     ): AddTransactionResponse
 
-    // ---- IPO ----
-    @GET("api/v1/ipos/active")
-    suspend fun iposActive(): List<IpoItem>
+    // ---- IPO ---- (dört uç da public, auth yok)
+        @GET("api/v1/ipos/upcoming")
+        suspend fun upcomingIpos(): List<IpoItem>
+
+        @GET("api/v1/ipos/active")
+        suspend fun iposActive(): List<IpoItem>
+
+        @GET("api/v1/ipos/draft")
+        suspend fun draftIpos(): List<IpoItem>
+
+        @GET("api/v1/ipos/{slug}")
+        suspend fun ipoDetail(@Path("slug") slug: String): IpoDetail
 
     // ---- Raporlar ----
     @GET("api/v1/reports/history")
