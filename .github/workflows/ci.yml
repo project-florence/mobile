@@ -29,12 +29,6 @@ jobs:
         with:
           cache: gradle
 
-      # gradle.properties on this repo pins org.gradle.java.home to a Windows path.
-      # Comment that line out for the Linux runner (ephemeral checkout, repo untouched).
-      - name: Comment out Windows-only JDK path in gradle.properties
-        run: |
-          sed -i 's|^org\.gradle\.java\.home=.*|#&|' gradle.properties
-
       - name: Run unit tests
         run: ./gradlew :app:testDevDebugUnitTest --console=plain
 
@@ -58,11 +52,6 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           cache: gradle
-
-      # Same Windows JDK path override as in the test job (issue only affects Linux runners).
-      - name: Comment out Windows-only JDK path in gradle.properties
-        run: |
-          sed -i 's|^org\.gradle\.java\.home=.*|#&|' gradle.properties
 
       - name: Run lint (devDebug)
         run: ./gradlew :app:lintDevDebug --console=plain
@@ -93,17 +82,23 @@ jobs:
         with:
           cache: gradle
 
-      - name: Comment out Windows-only JDK path in gradle.properties
+      # Build dev + prod, debug + release. Release APKs are intentionally
+      # UNsigned (buildType release has no signingConfig; the keystore is NOT
+      # checked in and no secrets are used here). The developer signs them
+      # out-of-band with apksigner — see docs/release-signing.md.
+      - name: Assemble all APK variants
         run: |
-          sed -i 's|^org\.gradle\.java\.home=.*|#&|' gradle.properties
+          ./gradlew \
+            :app:assembleProdRelease \
+            :app:assembleProdDebug \
+            :app:assembleDevRelease \
+            :app:assembleDevDebug \
+            --console=plain
 
-      - name: Assemble prod release APK
-        run: ./gradlew :app:assembleProdRelease --console=plain
-
-      # Unsigned APK — uploaded as a build artifact, NOT published as a release.
+      # Upload every produced APK as a single artifact for manual download/signing.
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: florence-prod-release-apk
-          path: app/build/outputs/apk/prod/release/*.apk
+          name: florence-apks
+          path: app/build/outputs/apk/*/*/*.apk
           if-no-files-found: error

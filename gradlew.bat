@@ -16,10 +16,18 @@
 @rem SPDX-License-Identifier: Apache-2.0
 @rem
 
-@rem Machine workaround: GRADLE_USER_HOME must NOT contain an apostrophe.
-@rem Java's @argfile parser treats ' as a quote, which breaks Gradle worker
-@rem classpath files when the path lives under a user name like "GAMER'S".
-if "%GRADLE_USER_HOME%"=="" set GRADLE_USER_HOME=C:\gradle-home
+@rem Portable GRADLE_USER_HOME: if the environment already sets it, respect it
+@rem (covers CI and shared caches — nothing is forced here). Otherwise default to
+@rem the standard %USERPROFILE%\.gradle. Java's @argfile parser treats ' as a
+@rem quote, which breaks Gradle worker classpath files when the path lives under
+@rem an apostrophe-bearing user profile name; in that case fall back to
+@rem a drive-root cache on %SystemDrive% to keep the path apostrophe-free.
+if not defined GRADLE_USER_HOME (
+    set "GRADLE_USER_HOME=%USERPROFILE%\.gradle"
+    echo(%USERPROFILE%| findstr /C:"'" >nul
+    if not errorlevel 1 set "GRADLE_USER_HOME=%SystemDrive%\gradle-home"
+)
+if not defined GRADLE_USER_HOME set "GRADLE_USER_HOME=%SystemDrive%\gradle-home"
 
 @if "%DEBUG%"=="" @echo off
 @rem ##########################################################################

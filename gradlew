@@ -1,11 +1,16 @@
 #!/bin/sh
 
-# Machine workaround: GRADLE_USER_HOME must NOT contain an apostrophe.
-# Java's @argfile parser treats ' as a quote, which breaks Gradle worker
-# classpath files (e.g. "Could not find or load main class GradleWorkerMain")
-# when the path lives under a Windows user name like "GAMER'S".
+# Portable GRADLE_USER_HOME: if the environment already sets it, respect it
+# (covers CI and shared caches — nothing is forced here). Otherwise default to
+# the standard $HOME/.gradle. Java's @argfile parser treats ' as a quote, which
+# breaks Gradle worker classpath files (e.g. "Could not find or load main class
+# GradleWorkerMain") when the path contains an apostrophe; in that case fall back
+# to a temp-based apostrophe-free location.
 if [ -z "$GRADLE_USER_HOME" ]; then
-  GRADLE_USER_HOME="C:/gradle-home"
+  GRADLE_USER_HOME="$HOME/.gradle"
+  case "$GRADLE_USER_HOME" in
+    *"'"*) GRADLE_USER_HOME="${TMPDIR:-/tmp}/gradle-home" ;;
+  esac
 fi
 export GRADLE_USER_HOME
 

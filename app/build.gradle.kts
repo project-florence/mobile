@@ -15,8 +15,13 @@ android {
         applicationId = "com.florence.app"
         minSdk = 26
         targetSdk = 36
+        // Version policy: versionCode/versionName are the single source of truth for
+        // app releases. versionName mirrors the Git release tag (e.g. tag "v0.7.0" →
+        // versionName "0.7.0") so web/desktop and mobile stay aligned; bump both together
+        // at release time. versionCode stays 1 for the first release and increments by 1
+        // for every subsequent release (Android requires strictly increasing ints).
         versionCode = 1
-        versionName = "0.1.0"
+        versionName = "0.7.0"
     }
 
     flavorDimensions += "env"
@@ -81,6 +86,13 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.security.crypto)
     implementation(libs.appcompat)
+    // Coil 3: async image loading + SVG decoding for backend-served avatars.
+    // coil-svg registers SvgDecoder and coil-network-okhttp registers OkHttpNetworkFetcher
+    // (both auto-discovered by Coil's default ImageLoader via ServiceLoader -> R8-consumer
+    // rules keep the registrations for the minified release build).
+    implementation(libs.coil.compose)
+    implementation(libs.coil.svg)
+    implementation(libs.coil.network.okhttp)
 
     debugImplementation(libs.compose.ui.tooling)
 

@@ -5,10 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.florence.app.R
 import com.florence.app.core.storage.TokenStore
 import com.florence.app.data.model.AnnouncementItem
+import com.florence.app.data.model.AvatarItem
 import com.florence.app.data.repository.AuthRepository
 import com.florence.app.data.repository.MiscRepository
 import com.florence.app.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -61,6 +63,8 @@ class ProfileViewModel @Inject constructor(
     data class ProfileUiState(
         val loading: Boolean = true,
         val announcements: List<AnnouncementItem> = emptyList(),
+        /** avatar_id → göreceli `/avatars/…` URL haritası (profil başlığındaki gerçek SVG için). */
+        val avatarUrls: Map<String, String> = emptyMap(),
         val loggedIn: Boolean = true,
         val loggingOut: Boolean = false,
     )
@@ -73,9 +77,23 @@ class ProfileViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val result = misc.announcements()
+            // Duyuruları ve avatar listesini paralel yükle (ikisi de bağımsız GET).
+            val announcementsDeferred = async { misc.announcements() }
+            val avatarsDeferred = async { user.avatars() }
+            val announcements = announcementsDeferred.await().getOrNull() ?: emptyList()
+            val avatarUrls = avatarsDeferred.await()
+                .getOrNull()
+                .orEmpty()
+                .mapNotNull { avatar ->
+                    avatar.id?.let { id -> avatar.url?.let { url -> id to url } }
+                }
+                .toMap()
             _uiState.update {
-                it.copy(loading = false, announcements = result.getOrNull() ?: emptyList())
+                it.copy(
+                    loading = false,
+                    announcements = announcements,
+                    avatarUrls = avatarUrls,
+                )
             }
         }
     }

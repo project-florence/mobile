@@ -69,7 +69,7 @@ import com.florence.app.core.theme.DownColor
 import com.florence.app.core.theme.FlorencePalettes
 import com.florence.app.core.theme.TextSecondary
 import com.florence.app.core.theme.UpColor
-import com.florence.app.presentation.components.AvatarArt
+import com.florence.app.presentation.components.AvatarImage
 import com.florence.app.presentation.components.EmptyState
 import com.florence.app.presentation.components.FlorenceCard
 import com.florence.app.presentation.components.clickableNoRipple
@@ -131,6 +131,8 @@ fun ProfileScreen(
 
     val profile = creditsState.profile
     val username = profile?.username ?: "Yatırımcı"
+    // Kullanıcının avatar_id'si için backend'den yüklenen göreceli /avatars/… URL'si.
+    val avatarUrl = profile?.avatarId?.let { uiState.avatarUrls[it] }
 
     // Canlı saat — her 30 saniyede bir güncellenir.
     var now by remember { mutableStateOf(LocalTime.now()) }
@@ -159,6 +161,7 @@ fun ProfileScreen(
                 greeting = greeting,
                 clock = clock,
                 avatarId = profile?.avatarId,
+                avatarUrl = avatarUrl,
                 onAvatarClick = onOpenAvatar,
             )
         }
@@ -785,6 +788,7 @@ private fun ProfileHeader(
     greeting: String,
     clock: String,
     avatarId: String?,
+    avatarUrl: String?,
     onAvatarClick: () -> Unit,
 ) {
     val primary = FlorencePalettes.Florence.primary
@@ -808,7 +812,11 @@ private fun ProfileHeader(
                     .clip(CircleShape)
                     .clickableNoRipple(onAvatarClick),
             ) {
-                AvatarArt(avatarId = avatarId, size = 64.dp)
+                AvatarImage(
+                    url = avatarUrl,
+                    avatarId = avatarId,
+                    size = 64.dp,
+                )
                 Box(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)

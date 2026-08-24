@@ -30,7 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.florence.app.R
 import com.florence.app.core.theme.TextSecondary
-import com.florence.app.presentation.components.AvatarArt
+import com.florence.app.presentation.components.AvatarImage
 import com.florence.app.presentation.components.EmptyState
 
 @Composable
@@ -111,7 +111,12 @@ fun AvatarPickerScreen(
                                     if (!selected) viewModel.select(id, onSaved)
                                 },
                         ) {
-                            AvatarArt(avatarId = id, size = 76.dp, showLabel = false)
+                            AvatarImage(
+                                url = avatar.url,
+                                avatarId = avatar.id,
+                                size = 76.dp,
+                                showLabel = false,
+                            )
                         }
                     }
                 }
