@@ -45,6 +45,18 @@ import com.florence.app.data.model.SimulationDetailResponse
 import com.florence.app.data.model.SimulationResponse
 import com.florence.app.data.model.FitRequest
 import com.florence.app.data.model.FitResponse
+import com.florence.app.data.model.PortfolioValuation
+import com.florence.app.data.model.PortfolioDiversification
+import com.florence.app.data.model.PortfolioPerformers
+import com.florence.app.data.model.PortfolioHistoryPoint
+import com.florence.app.data.model.PortfolioReturns
+import com.florence.app.data.model.PortfolioRisk
+import com.florence.app.data.model.BenchmarkComparison
+import com.florence.app.data.model.PortfolioPerformance
+import com.florence.app.data.model.TransactionStats
+import com.florence.app.data.model.TickerStats
+import com.florence.app.data.model.CompanySummaryResponse
+import com.florence.app.data.model.UpdatePreferencesRequest
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -199,12 +211,62 @@ interface FlorenceApi : AuthEndpoints {
     suspend fun portfolioTransactions(@Path("id") id: String): List<PortfolioTransaction>
 
     @POST("api/v1/portfolios/{id}/transactions")
-    suspend fun addTransaction(
-        @Path("id") id: String,
-        @Body body: AddTransactionRequest,
-    ): AddTransactionResponse
+        suspend fun addTransaction(
+            @Path("id") id: String,
+            @Body body: AddTransactionRequest,
+        ): AddTransactionResponse
 
-    // ---- IPO ---- (dört uç da public, auth yok)
+        // ---- G3: Portföy analitikleri (auth) ----
+        @GET("api/v1/portfolios/{id}/valuation")
+        suspend fun portfolioValuation(@Path("id") id: String): PortfolioValuation
+
+        @GET("api/v1/portfolios/{id}/diversification")
+        suspend fun portfolioDiversification(@Path("id") id: String): PortfolioDiversification
+
+        @GET("api/v1/portfolios/{id}/performers")
+        suspend fun portfolioPerformers(@Path("id") id: String, @Query("top_n") topN: Int = 5): PortfolioPerformers
+
+        @GET("api/v1/portfolios/{id}/history")
+        suspend fun portfolioHistory(@Path("id") id: String, @Query("period") period: String = "1mo"): List<PortfolioHistoryPoint>
+
+        @GET("api/v1/portfolios/{id}/returns")
+        suspend fun portfolioReturns(@Path("id") id: String, @Query("period") period: String = "1mo"): PortfolioReturns
+
+        @GET("api/v1/portfolios/{id}/risk")
+        suspend fun portfolioRisk(@Path("id") id: String, @Query("period") period: String = "1y"): PortfolioRisk
+
+        @GET("api/v1/portfolios/{id}/benchmark")
+        suspend fun portfolioBenchmark(@Path("id") id: String, @Query("ticker") ticker: String = "XU100"): BenchmarkComparison
+
+        @GET("api/v1/portfolios/{id}/performance")
+        suspend fun portfolioPerformance(@Path("id") id: String): PortfolioPerformance
+
+        @GET("api/v1/portfolios/{id}/stats")
+        suspend fun portfolioStats(@Path("id") id: String): TransactionStats
+
+        // ---- C9: Ek veri uçları (public) ----
+        @GET("api/v1/stats/top")
+        suspend fun statsTop(@Query("limit") limit: Int = 50): List<TickerStats>
+
+        @GET("api/v1/stats/{ticker}")
+        suspend fun tickerStats(@Path("ticker") ticker: String): TickerStats
+
+        @GET("api/v1/companies/summary")
+        suspend fun companiesSummary(
+            @Query("limit") limit: Int = 50,
+            @Query("offset") offset: Int = 0,
+            @Query("sort") sort: String = "popular",
+        ): CompanySummaryResponse
+
+        // ---- C10: Kullanıcı tercihleri (auth) ----
+        // GET /user/preferences ham JSONB nesnesi döner; PUT req { prefs: {...} } → güncel nesne.
+        @GET("api/v1/user/preferences")
+        suspend fun userPreferences(): JsonObject
+
+        @PUT("api/v1/user/preferences")
+        suspend fun updateUserPreferences(@Body body: UpdatePreferencesRequest): JsonObject
+
+        // ---- IPO ---- (dört uç da public, auth yok)
         @GET("api/v1/ipos/upcoming")
         suspend fun upcomingIpos(): List<IpoItem>
 

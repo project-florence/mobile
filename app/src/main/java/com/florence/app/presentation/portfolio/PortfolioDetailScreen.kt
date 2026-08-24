@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -33,10 +34,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.florence.app.R
 import com.florence.app.core.theme.DownColor
 import com.florence.app.core.theme.UpColor
 import com.florence.app.data.model.PortfolioAsset
@@ -50,6 +53,7 @@ import com.florence.app.presentation.components.formatPrice
 @Composable
 fun PortfolioDetailScreen(
     onBack: () -> Unit,
+    onOpenAnalytics: () -> Unit,
     viewModel: PortfolioDetailViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -83,6 +87,18 @@ fun PortfolioDetailScreen(
                     IconButton(onClick = viewModel::refresh) {
                         Icon(Icons.Filled.Refresh, contentDescription = "Yenile")
                     }
+                }
+            }
+
+            // Analitikler girişi → portfolio/{id}/analytics ekranı
+            item {
+                Button(
+                    onClick = onOpenAnalytics,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Icon(Icons.Filled.Info, contentDescription = null)
+                    Spacer(Modifier.size(8.dp))
+                    Text(stringResource(R.string.portfolio_open_analytics))
                 }
             }
 

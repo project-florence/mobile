@@ -8,6 +8,7 @@ import com.florence.app.data.model.CreateBotResponse
 import com.florence.app.data.model.DeleteBotResponse
 import com.florence.app.data.model.UpdateAvatarRequest
 import com.florence.app.data.model.UpdateAvatarResponse
+import com.florence.app.data.model.UpdatePreferencesRequest
 import com.florence.app.data.model.UserProfile
 import kotlinx.serialization.json.JsonObject
 import javax.inject.Inject
@@ -46,4 +47,12 @@ class UserRepository @Inject constructor(
     // Tam model parse etmek zahmetli → ham JsonObject olarak döner.
     suspend fun userExport(): Result<JsonObject> =
         runCatching { api.userExport() }
+
+    // ---- C10: Kullanıcı tercihleri (theme/lang) backend senkronu (auth) ----
+    // GET → ham prefs nesnesi {theme, lang, ...}; PUT → { prefs: {...} }.
+    suspend fun userPreferences(): Result<JsonObject> =
+        runCatching { api.userPreferences() }
+
+    suspend fun updateUserPreferences(prefs: JsonObject): Result<JsonObject> =
+        runCatching { api.updateUserPreferences(UpdatePreferencesRequest(prefs)) }
 }

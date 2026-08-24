@@ -7,6 +7,7 @@ import com.florence.app.R
 import com.florence.app.data.model.Candle
 import com.florence.app.data.model.CompanyInfo
 import com.florence.app.data.model.NewsItem
+import com.florence.app.data.model.TickerStats
 import com.florence.app.data.repository.CompanyRepository
 import com.florence.app.data.repository.FavoritesRepository
 import com.florence.app.data.repository.MarketRepository
@@ -42,6 +43,7 @@ data class CompanyDetailUiState(
     // Varsayılan: 1Ay/30dk — cron 5m+30m mumları doldurur; 1d aralığı isteğe bağlı gelir.
     val range: RangeOption = CHART_RANGES[1],
     val isFavorite: Boolean = false,
+    val tickerStats: TickerStats? = null,
 )
 
 @HiltViewModel
@@ -65,6 +67,7 @@ class CompanyDetailViewModel @Inject constructor(
         }
         loadInfo()
         loadNews()
+        loadStats()
         loadHistory(CHART_RANGES[1])
     }
 
@@ -84,6 +87,13 @@ class CompanyDetailViewModel @Inject constructor(
             _uiState.update {
                 it.copy(news = news.getOrNull() ?: emptyList(), newsError = news.isFailure)
             }
+        }
+    }
+
+    fun loadStats() {
+        viewModelScope.launch {
+            val stats = companyRepo.stats(ticker)
+            _uiState.update { it.copy(tickerStats = stats.getOrNull()) }
         }
     }
 

@@ -609,3 +609,163 @@ data class FitResponse(
     val query: Map<String, Double> = emptyMap(),
     val results: List<FitResultItem> = emptyList(),
 )
+
+// ---- G3: Portföy analitikleri ----
+// Backend (src/api/virtual_portfolio.py + src/services/portfolio.py). Hepsi auth,
+// GET /api/v1/portfolios/{portfolio_id}/{valuation|diversification|performers|history|returns|risk|benchmark|performance|stats}.
+
+// /valuation → { total_value, cash_balance, holdings_value, total_pnl, pnl_percentage, assets[] }
+// (PortfolioValuation üstte tanımlı; aynı şema.)
+
+// /diversification
+@Serializable
+data class DiversificationAsset(
+    val ticker: String? = null,
+    val amount: Double? = null,
+    val value: Double? = null,
+    val type: String? = null,
+    @SerialName("allocation_pct") val allocationPct: Double? = null,
+)
+
+@Serializable
+data class PortfolioDiversification(
+    @SerialName("total_value") val totalValue: Double? = null,
+    @SerialName("cash_balance") val cashBalance: Double? = null,
+    @SerialName("cash_allocation_pct") val cashAllocationPct: Double? = null,
+    val assets: List<DiversificationAsset> = emptyList(),
+    @SerialName("allocation_by_type") val allocationByType: Map<String, Double> = emptyMap(),
+)
+
+// /performers?top_n → { best[], worst[] }
+@Serializable
+data class PortfolioPerformer(
+    val ticker: String? = null,
+    val amount: Double? = null,
+    val pnl: Double? = null,
+    @SerialName("pnl_percentage") val pnlPercentage: Double? = null,
+)
+
+@Serializable
+data class PortfolioPerformers(
+    val best: List<PortfolioPerformer> = emptyList(),
+    val worst: List<PortfolioPerformer> = emptyList(),
+)
+
+// /history?period → [ {ts, total_value, cash_balance, holdings_value} ]
+@Serializable
+data class PortfolioHistoryPoint(
+    val ts: String? = null,
+    @SerialName("total_value") val totalValue: Double? = null,
+    @SerialName("cash_balance") val cashBalance: Double? = null,
+    @SerialName("holdings_value") val holdingsValue: Double? = null,
+)
+
+// /returns?period
+@Serializable
+data class PortfolioReturns(
+    val period: String? = null,
+    @SerialName("start_value") val startValue: Double? = null,
+    @SerialName("end_value") val endValue: Double? = null,
+    @SerialName("absolute_return") val absoluteReturn: Double? = null,
+    @SerialName("total_return_percentage") val totalReturnPercentage: Double? = null,
+    @SerialName("cagr_percentage") val cagrPercentage: Double? = null,
+)
+
+// /risk?period
+@Serializable
+data class PortfolioRisk(
+    val volatility: Double? = null,
+    @SerialName("max_drawdown") val maxDrawdown: Double? = null,
+    @SerialName("sharpe_ratio") val sharpeRatio: Double? = null,
+)
+
+// /benchmark?ticker
+@Serializable
+data class BenchmarkComparison(
+    @SerialName("portfolio_return_pct") val portfolioReturnPct: Double? = null,
+    @SerialName("benchmark_ticker") val benchmarkTicker: String? = null,
+    @SerialName("benchmark_return_pct") val benchmarkReturnPct: Double? = null,
+    @SerialName("difference_pct") val differencePct: Double? = null,
+    val outperformed: Boolean? = null,
+)
+
+// /performance → { overall:{}, assets[] }
+@Serializable
+data class PerformanceOverall(
+    @SerialName("efficiency_score") val efficiencyScore: Double? = null,
+    @SerialName("actual_pnl") val actualPnl: Double? = null,
+    @SerialName("optimal_pnl") val optimalPnl: Double? = null,
+)
+
+@Serializable
+data class PortfolioPerformance(
+    val overall: PerformanceOverall? = null,
+    val assets: List<AssetPerformance> = emptyList(),
+)
+
+@Serializable
+data class AssetPerformance(
+    val ticker: String? = null,
+    @SerialName("efficiency_score") val efficiencyScore: Double? = null,
+    @SerialName("actual_pnl") val actualPnl: Double? = null,
+    @SerialName("optimal_pnl") val optimalPnl: Double? = null,
+)
+
+// /stats → { total_transactions, total_buys, total_sells, ... }
+@Serializable
+data class TransactionStats(
+    @SerialName("total_transactions") val totalTransactions: Long? = null,
+    @SerialName("total_buys") val totalBuys: Long? = null,
+    @SerialName("total_sells") val totalSells: Long? = null,
+    @SerialName("total_buy_volume") val totalBuyVolume: Double? = null,
+    @SerialName("total_sell_volume") val totalSellVolume: Double? = null,
+    @SerialName("avg_transaction_size") val avgTransactionSize: Double? = null,
+    @SerialName("unique_tickers") val uniqueTickers: Long? = null,
+)
+
+// ---- C9: Ek veri uçları ----
+// stats/top (public) → [{ ticker, name, info_count, report_count, news_count, history_count, simulation_count, favorite_count, total }]
+// stats/{ticker} (public) → { ticker, info_count, ... }
+@Serializable
+data class TickerStats(
+    val ticker: String? = null,
+    val name: String? = null,
+    @SerialName("info_count") val infoCount: Long? = null,
+    @SerialName("report_count") val reportCount: Long? = null,
+    @SerialName("news_count") val newsCount: Long? = null,
+    @SerialName("history_count") val historyCount: Long? = null,
+    @SerialName("simulation_count") val simulationCount: Long? = null,
+    @SerialName("favorite_count") val favoriteCount: Long? = null,
+    val total: Long? = null,
+)
+
+// /companies/summary → { data:[{ticker,name,sector,last_price,change_pct,...}], total }
+@Serializable
+data class CompanySummary(
+    val ticker: String? = null,
+    val name: String? = null,
+    val sector: String? = null,
+    @SerialName("last_price") val lastPrice: Double? = null,
+    @SerialName("change_pct") val changePct: Double? = null,
+    @SerialName("previous_close") val previousClose: Double? = null,
+    @SerialName("absolute_change") val absoluteChange: Double? = null,
+    val volume: Double? = null,
+    @SerialName("market_cap") val marketCap: Double? = null,
+    @SerialName("day_high") val dayHigh: Double? = null,
+    @SerialName("day_low") val dayLow: Double? = null,
+)
+
+@Serializable
+data class CompanySummaryResponse(
+    val data: List<CompanySummary> = emptyList(),
+    val total: Long? = null,
+)
+
+// ---- C10: Kullanıcı tercihleri (backend senkron) ----
+// GET  /user/preferences → { prefs JSONB }  (ham nesne döner)
+// PUT  /user/preferences → req { prefs: {...} } → senkron + güncel nesne döner.
+// Tercihler serbest JSONB olduğundan (lang/theme/…), typed yerine JsonObject kullanılır.
+@Serializable
+data class UpdatePreferencesRequest(
+    val prefs: kotlinx.serialization.json.JsonObject,
+)

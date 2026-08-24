@@ -5,6 +5,7 @@ import com.florence.app.data.api.FlorenceApi
 import com.florence.app.data.model.Candle
 import com.florence.app.data.model.CompanyInfo
 import com.florence.app.data.model.NewsItem
+import com.florence.app.data.model.TickerStats
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -59,4 +60,6 @@ class CompanyRepository @Inject constructor(
         runCatching { api.priceHistory(ticker, period, interval) }
 
     suspend fun news(ticker: String): Result<List<NewsItem>> = runCatching { api.news(ticker) }
+
+    suspend fun stats(ticker: String): Result<TickerStats> = runCatching { api.tickerStats(ticker) }
 }

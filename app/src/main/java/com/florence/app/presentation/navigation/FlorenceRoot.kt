@@ -89,6 +89,7 @@ import com.florence.app.presentation.ipo.IpoScreen
 import com.florence.app.presentation.legal.LegalDetailScreen
 import com.florence.app.presentation.legal.LegalScreen
 import com.florence.app.presentation.notifications.NotificationScreen
+import com.florence.app.presentation.portfolio.PortfolioAnalyticsScreen
 import com.florence.app.presentation.portfolio.PortfolioDetailScreen
 import com.florence.app.presentation.portfolio.PortfolioScreen
 import com.florence.app.presentation.profile.ProfileScreen
@@ -166,6 +167,7 @@ private fun drawerTitleFor(route: String?): Int = when (route) {
     "search" -> R.string.nav_search
     "watchlist" -> R.string.nav_watchlist
     "portfolio" -> R.string.nav_portfolio
+    "portfolio/{portfolioId}/analytics" -> R.string.analytics_title
     "reports" -> R.string.nav_reports
         "simulation" -> R.string.simulation_title
         "advisor" -> R.string.nav_advisor
@@ -483,11 +485,21 @@ private fun MainScaffold(viewModel: RootViewModel) {
                     )
                 }
                 composable(
-                    route = "portfolio/{portfolioId}",
-                    arguments = listOf(navArgument("portfolioId") { type = NavType.StringType }),
-                ) {
-                    PortfolioDetailScreen(onBack = { navController.popBackStack() })
-                }
+                                    route = "portfolio/{portfolioId}",
+                                    arguments = listOf(navArgument("portfolioId") { type = NavType.StringType }),
+                                ) { backStackEntry ->
+                                    val portfolioId = backStackEntry.arguments?.getString("portfolioId") ?: ""
+                                    PortfolioDetailScreen(
+                                        onBack = { navController.popBackStack() },
+                                        onOpenAnalytics = { navController.navigate("portfolio/$portfolioId/analytics") },
+                                    )
+                                }
+                                composable(
+                                    route = "portfolio/{portfolioId}/analytics",
+                                    arguments = listOf(navArgument("portfolioId") { type = NavType.StringType }),
+                                ) {
+                                    PortfolioAnalyticsScreen(onBack = { navController.popBackStack() })
+                                }
                 composable("reports") {
                     ReportsScreen(
                         onOpenReport = { reportId ->

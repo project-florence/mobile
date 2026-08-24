@@ -191,6 +191,30 @@ fun CompanyDetailScreen(
                     }
                 }
 
+                // ---- C9: Etkinlik istatistikleri (GET /stats/{ticker}) ----
+                item {
+                    Text(
+                        text = stringResource(R.string.stats_activity_title),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                }
+                item {
+                    FlorenceCard {
+                        Column(
+                            modifier = Modifier.padding(14.dp),
+                            verticalArrangement = Arrangement.spacedBy(10.dp),
+                        ) {
+                            StatRow(stringResource(R.string.stats_info), uiState.tickerStats?.infoCount?.toString() ?: "—")
+                            StatRow(stringResource(R.string.stats_reports), uiState.tickerStats?.reportCount?.toString() ?: "—")
+                            StatRow(stringResource(R.string.stats_news), uiState.tickerStats?.newsCount?.toString() ?: "—")
+                            StatRow(stringResource(R.string.stats_history), uiState.tickerStats?.historyCount?.toString() ?: "—")
+                            StatRow(stringResource(R.string.stats_simulation), uiState.tickerStats?.simulationCount?.toString() ?: "—")
+                            StatRow(stringResource(R.string.stats_favorites), uiState.tickerStats?.favoriteCount?.toString() ?: "—")
+                            StatRow(stringResource(R.string.stats_total), uiState.tickerStats?.total?.toString() ?: "—")
+                        }
+                    }
+                }
+
                 item {
                     Text(
                         text = stringResource(R.string.detail_news),
